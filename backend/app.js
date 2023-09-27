@@ -11,6 +11,7 @@ const { environment } = require('./config');
 const isProduction = environment === 'production';
 const app = express();
 const routes = require('./routes');
+const { ValidationError } = require('sequelize');
 
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -40,6 +41,39 @@ if (!isProduction) {
   );
 
   app.use(routes);
+
+  app.use((err,req,res,next)=> {
+    if (err instanceof ValidationError) {
+      let errors = {};
+      for (let error of err.errors) {
+        errors[error.path] = error.message;
+      }
+      err.title = 'Validation error';
+      err.errors = errors;
+    }
+    next(err);
+  });
+
+  app.use((req,res,next)=> {
+    const err = new Error(`The requested resource couldn't be found.`);
+    err.title = "Resource Not Found";
+    err.errors = { message: "The requested resource couldn't be found." };
+    err.status = 404;
+    next(err);
+  });
+
+  app.use((err,req,res,next)=> {
+    res.status(err.status || 500);
+    console.error(err);
+    res.json({
+      title: err.title || 'Server Error',
+      message: err.message,
+      errors: err.errors,
+      stack: isProduction ? null : err.stack
+  });
+  })
+
+
 
 
   module.exports = app;
