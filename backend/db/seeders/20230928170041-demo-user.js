@@ -9,16 +9,22 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const demoUsers = [
   {
+    firstName:'Test',
+    lastName:'One',
     email:'test1@gmail.com',
     username:'test1',
     hashedPassword:bcrypt.hashSync('password')
   },
   {
+    firstName:'Test',
+    lastName:'Two',
     email:'test2@gmail.com',
     username:'test2',
     hashedPassword:bcrypt.hashSync('password2')
   },
   {
+    firstName:'Test',
+    lastName:'Three',
     email:'test3@gmail.com',
     username:'test3',
     hashedPassword:bcrypt.hashSync('password3')

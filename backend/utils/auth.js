@@ -7,6 +7,8 @@ const { secret, expiresIn } = jwtConfig;
 const setTokenCookie = (res,user) => {
     const payload = {
         id:user.id,
+        firstName:user.firstName,
+        lastName:user.lastName,
         email: user.email,
         username:user.username
     };

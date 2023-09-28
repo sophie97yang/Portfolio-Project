@@ -32,13 +32,16 @@ router.post('/', validateLogin, async (req,res,next) => {
             }
         },
         attributes: {
-            include:['id','email','username','hashedPassword']
+            include:['id','email','firstName','lastName','username','hashedPassword']
         }
         });
 
     if (user && bcrypt.compareSync(password,user.hashedPassword.toString())) {
+
         const safeUser = {
             id: user.id,
+            firstName:user.firstName,
+            lastName:user.lastName,
             email: user.email,
             username:user.username
         }
@@ -73,6 +76,8 @@ router.get('/', (req,res,next) => {
     if (user) {
         const safeUser = {
             id: user.id,
+            firstName:user.firstName,
+            lastName:user.lastName,
             email: user.email,
             username:user.username
         };
