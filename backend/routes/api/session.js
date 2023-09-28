@@ -50,5 +50,20 @@ router.delete('/', (req,res,next)=> {
     return res.json({message:'Success!'})
 });
 
+//get session
+router.get('/', (req,res,next) => {
+    const { user } = req;
+    //if user is not null, restore session of user
+    if (user) {
+        const safeUser = {
+            id: user.id,
+            email: user.email,
+            username:user.username
+        };
+        return res.json({user:safeUser})
+    } else {
+        return res.json({user:null})
+    }
+})
 
 module.exports = router;
