@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Group,GroupImage,User,Venue} = require('../../db/models');
+const {Group,GroupImage,User,Venue,Membership} = require('../../db/models');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
 
@@ -38,7 +38,9 @@ router.get('/',async (req,res,next)=>{
         dataGroup.createdAt = group.createdAt;
         dataGroup.updatedAt = group.updatedAt;
         dataGroup.numMembers = members.length;
+        if (group.GroupImages.length===1) {
         dataGroup.previewImage = group.GroupImages[0].url;
+        }
         data.push(dataGroup)
     };
 
@@ -125,7 +127,7 @@ router.get('/:groupId', async (req,res,next)=> {
         const err = new Error("Group couldn't be found");
         err.title = "Invalid Group Id"
         err.status=404;
-        next(err);
+        return next(err);
     }
 
     const members = await group.getUsers( {
@@ -139,7 +141,11 @@ router.get('/:groupId', async (req,res,next)=> {
         }
     });
 
-    const Organizer = await group.getUser();
+    const Organizer = await group.getUser({
+        attributes:{
+            exclude:['username']
+        }
+    });
 
     res.json({
         id:group.id,
@@ -158,6 +164,35 @@ router.get('/:groupId', async (req,res,next)=> {
         Venues:group.Venues
     });
    });
+
+   router.post('/',requireAuth, async (req,res,next)=> {
+    const {name,about,type,private,city,state} = req.body;
+    const { id } = req.user;
+    const newGroup = await Group.create({
+        organizerId:id,
+        name,
+        about,
+        type,
+        private,
+        city,
+        state
+    });
+
+    await Membership.create({
+        memberId:id,
+        groupId:newGroup.id,
+        status:'co-host'
+    });
+
+    res.status(201).json(newGroup);
+   });
+
+//    router.post('/:groupId/images',requireAuth, (req,res,next)=>{
+
+//    })
+
+
+
 
 
 
