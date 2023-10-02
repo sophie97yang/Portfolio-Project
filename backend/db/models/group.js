@@ -28,6 +28,12 @@ module.exports = (sequelize, DataTypes) => {
         models.Venue,
         {foreignKey:'groupId',onDelete:'CASCADE',hooks: true }
       );
+
+      Group.hasMany(
+        models.Event,
+        {foreignKey:'groupId',onDelete:'CASCADE',hooks: true }
+      );
+
     }
   }
   Group.init({
