@@ -261,7 +261,32 @@ router.get('/:groupId', async (req,res,next)=> {
     res.status(200).json(group);
 
 
-   })
+   });
+
+   router.delete('/:groupId',requireAuth, async (req,res,next)=> {
+    const {groupId} = req.params;
+    const {id} = req.user;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.title = "Invalid Group Id"
+        err.status=404;
+        return next(err);
+    }
+
+    if (group.organizerId!==id) {
+        const err = new Error("User does not have authorization to delete event. You must be the organizer of the event.");
+        err.title = "Permission not granted"
+        return next(err);
+    }
+
+    await group.destroy();
+
+    res.status(200).json({message:'Successfully deleted'})
+
+   });
 
 
 
