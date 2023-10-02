@@ -8,7 +8,7 @@ const memberships = [
 {
   username:'test2',
   group: 'Evening Tennis on the Water',
-  status:'co-host'
+  status:'member'
 },
 {
   username:'test3',
@@ -19,6 +19,30 @@ const memberships = [
   username:'test1',
   group: 'Morning Soccer on the Water',
   status:'pending'
+
+},
+{
+  username:'test1',
+  group: 'Afternoon Golf on the Water',
+  status:'member'
+
+},
+{
+  username:'test1',
+  group: 'Evening Tennis on the Water',
+  status:'co-host'
+
+},
+{
+  username:'test2',
+  group: 'Afternoon Golf on the Water',
+  status:'co-host'
+
+},
+{
+  username:'test3',
+  group: 'Morning Soccer on the Water',
+  status:'co-host'
 
 }
 ]

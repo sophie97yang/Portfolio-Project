@@ -8,13 +8,45 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 const groupImages = [
   {
     group:'Evening Tennis on the Water',
-    url:'https://picsum.photos/200'
+    url:'https://picsum.photos/200',
+    preview:true
+  },
+  {
+    group:'Evening Tennis on the Water',
+    url:'https://picsum.photos/200',
+    preview:false
+  },
+  {
+    group:'Morning Soccer on the Water',
+    url:'https://picsum.photos/200',
+    preview:true
+  },
+  {
+    group:'Afternoon Golf on the Water',
+    url:'https://picsum.photos/200',
+    preview:true
   }
 ]
 const eventImages = [
   {
     event:'Soccer First Meet and Greet',
-    url:'https://picsum.photos/200'
+    url:'https://picsum.photos/200',
+    preview:true
+  },
+  {
+    event:'Soccer First Meet and Greet',
+    url:'https://picsum.photos/200',
+    preview:false
+  },
+  {
+    event:'Tennis First Meet and Greet',
+    url:'https://picsum.photos/200',
+    preview:true
+  },
+  {
+    event:'Golf First Meet and Greet',
+    url:'https://picsum.photos/200',
+    preview:true
   }
 ]
 
@@ -32,28 +64,30 @@ module.exports = {
     try {
       if (GroupImage) {
         for (let groupImageInfo of groupImages) {
-          const { url } = groupImageInfo;
+          const { url,preview } = groupImageInfo;
           const foundGroup = await Group.findOne({
             where: { name: groupImageInfo.group}
           });
 
           await GroupImage.create({
             url,
-            groupId: foundGroup.id
+            groupId: foundGroup.id,
+            preview
           });
         }
       }
 
       if (EventImage) {
         for (let eventImageInfo of eventImages) {
-          const { url } = eventImageInfo;
+          const { url,preview } = eventImageInfo;
           const foundEvent = await Event.findOne({
             where: { name: eventImageInfo.event}
           });
 
           await EventImage.create({
             url,
-            eventId: foundEvent.id
+            eventId: foundEvent.id,
+            preview
           });
         }
       }

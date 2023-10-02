@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       GroupImage.belongsTo(
         models.Group,
-        { foreignKey: 'groupId' }
+        { foreignKey: 'groupId'}
       );
     }
   }
@@ -31,8 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     preview: {
       type: DataTypes.BOOLEAN,
-      allowNull:false,
-      defaultValue:true
+      allowNull:false
     }
   }, {
     sequelize,
