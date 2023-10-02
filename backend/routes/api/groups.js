@@ -187,10 +187,81 @@ router.get('/:groupId', async (req,res,next)=> {
     res.status(201).json(newGroup);
    });
 
-//    router.post('/:groupId/images',requireAuth, (req,res,next)=>{
+   router.post('/:groupId/images',requireAuth, async (req,res,next)=>{
+    const {id} = req.user;
+    const {groupId} = req.params;
+    const group = await Group.findByPk(groupId);
+    const {url,preview} = req.body;
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.title = "Invalid Group Id"
+        err.status=404;
+        return next(err);
+    }
 
-//    })
+    if (group.organizerId!==id) {
+        const err = new Error("User does not have authorization to add a photo. You must be the organizer of the event.");
+        err.title = "Permission not granted"
+        return next(err);
+    }
 
+    const newImage = await group.createGroupImage({
+        url,
+        preview
+    });
+
+    res.status(200).json({
+        id:newImage.id,
+        url:newImage.url,
+        preview:newImage.preview
+    });
+
+   });
+
+   router.put('/:groupId', requireAuth, async (req,res,next)=> {
+    const {groupId} = req.params;
+    const {id} = req.user;
+    const {name,about,type,private,city,state} = req.body;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.title = "Invalid Group Id"
+        err.status=404;
+        return next(err);
+    }
+
+    if (group.organizerId!==id) {
+        const err = new Error("User does not have authorization to edit details of event. You must be the organizer of the event.");
+        err.title = "Permission not granted"
+        return next(err);
+    }
+
+    if (name!==undefined) {
+        group.name = name
+    }
+    if (about!==undefined) {
+        group.about = about;
+    }
+    if (type!==undefined) {
+        group.type = type;
+    }
+    if (private!==undefined) {
+        group.private = about;
+    }
+    if (city!==undefined) {
+        group.city = city;
+    }
+    if (state!==undefined) {
+        group.state = state;
+    }
+
+    await group.save();
+    res.status(200).json(group);
+
+
+   })
 
 
 
