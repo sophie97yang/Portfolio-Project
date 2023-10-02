@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         models.User,
           { through: models.Membership,
             foreignKey: 'groupId',
-            otherKey: 'userId'
+            otherKey: 'memberId'
           }
           );
 
@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
       Group.hasMany(
         models.Event,
         {foreignKey:'groupId',onDelete:'CASCADE',hooks: true }
+      );
+
+      Group.hasMany(
+        models.GroupImage,
+          { foreignKey: 'groupId', onDelete: 'CASCADE',  hooks: true }
       );
 
     }

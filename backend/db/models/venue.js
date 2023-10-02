@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Venue.belongsTo(
         models.Group,
-        {foreignKey:'venueId'}
+        {foreignKey:'groupId'}
       );
 
       Venue.hasMany(

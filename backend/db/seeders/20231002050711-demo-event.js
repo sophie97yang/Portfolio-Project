@@ -66,7 +66,7 @@ module.exports = {
 
           await Event.create({
             groupId: foundGroup.id,
-            venue:foundVenue.id,
+            venueId:foundVenue.id,
             name,type,capacity,price,description,startDate,endDate
           });
         }

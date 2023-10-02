@@ -7,17 +7,17 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const attendances = [
   {
-    event:'Evening Tennis on the Water',
+    event:'Tennis First Meet and Greet',
     username:'test2',
     status:'pending'
   },
   {
-    event:'Afternoon Golf on the Water',
+    event:'Golf First Meet and Greet',
     username:'test3',
     status:'waitlist'
   },
   {
-    event:'Morning Soccer on the Water',
+    event:'Soccer First Meet and Greet',
     username:'test1',
     status:'accepted'
   }
@@ -45,9 +45,9 @@ module.exports = {
             where: { name: attendanceInfo.event }
           });
 
-          await Membership.create({
+          await Attendance.create({
             status,
-            memberId: foundUser.id,
+            userId: foundUser.id,
             eventId: foundEvent.id
           });
         }
