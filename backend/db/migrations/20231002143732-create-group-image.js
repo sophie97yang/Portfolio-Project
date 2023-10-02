@@ -12,7 +12,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      eventId: {
+      groupId: {
         type: Sequelize.INTEGER,
         allowNull:false,
         references: {
