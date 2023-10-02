@@ -1,26 +1,27 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
-const { Membership, User, Group } = require('../models');
+const { Attendance, User, Event } = require('../models');
 const options = {};
 if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
-const memberships = [
-{
-  username:'test2',
-  group: 'Evening Tennis on the Water',
-  status:'co-host'
-},
-{
-  username:'test3',
-  group: 'Afternoon Golf on the Water',
-  status:'member'
-},
-{
-  username:'test1',
-  group: 'Morning Soccer on the Water',
-  status:'pending'
+const attendances = [
+  {
+    event:'Evening Tennis on the Water',
+    username:'test2',
+    status:'pending'
+  },
+  {
+    event:'Afternoon Golf on the Water',
+    username:'test3',
+    status:'waitlist'
+  },
+  {
+    event:'Morning Soccer on the Water',
+    username:'test1',
+    status:'accepted'
+  }
 
-}
 ]
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -34,20 +35,20 @@ module.exports = {
      * }], {});
     */
     try {
-      if (Membership) {
-        for (let membershipInfo of memberships) {
-          const { status } = membershipInfo;
+      if (Attendance) {
+        for (let attendanceInfo of attendances) {
+          const { status } = attendanceInfo;
           const foundUser = await User.findOne({
-            where: { username: membershipInfo.username}
+            where: { username: attendanceInfo.username}
           });
-          const foundGroup = await Group.findOne({
-            where: { name: membershipInfo.group}
+          const foundEvent = await Event.findOne({
+            where: { name: attendanceInfo.event }
           });
 
           await Membership.create({
             status,
             memberId: foundUser.id,
-            groupId: foundGroup.id
+            eventId: foundEvent.id
           });
         }
       }
@@ -64,13 +65,12 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'Memberships';
+    options.tableName = 'Attendances';
     const {Op} = require('sequelize');
     return queryInterface.bulkDelete(options, {
       status: {
-        [Op.in]: ['co-host','member','pending']
+        [Op.in]: ['accepted','waitlist','pending']
       }
     })
-
   }
 };
