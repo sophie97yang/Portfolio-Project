@@ -58,6 +58,17 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Venue',
+    defaultScope: {
+      attributes: {
+        exclude:['createdAt','updatedAt']
+      }
+    },
+    indexes: [
+      {
+        unique:true,
+        fields:['groupId','address']
+      }
+    ]
   });
   return Venue;
 };
