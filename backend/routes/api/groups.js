@@ -392,6 +392,14 @@ router.get('/:groupId', async (req,res,next)=> {
             }
         });
 
+        if (currUserMembership.status==='member' || currUserMembership.status==='pending' || !currUserMembership) {
+            const err = new Error(`User does not have authorization to change membership status.
+                     User must be the organizer of the group or have a co-host membership status.`);
+                    err.title = "Permission not granted"
+                    err.status=403;
+                    return next(err);
+        };
+
         if (!group) {
             const err = new Error("Group couldn't be found");
             err.title = "Invalid Group Id"
@@ -407,14 +415,6 @@ router.get('/:groupId', async (req,res,next)=> {
                 memberId: "User couldn't be found"
             }
             return next(err);
-        };
-
-        if (currUserMembership.status==='member' || currUserMembership.status==='pending' || !currUserMembership) {
-            const err = new Error(`User does not have authorization to change membership status.
-                     User must be the organizer of the group or have a co-host membership status.`);
-                    err.title = "Permission not granted"
-                    err.status=403;
-                    return next(err);
         };
 
         if (memberId) {
