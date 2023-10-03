@@ -35,7 +35,12 @@ module.exports = (sequelize, DataTypes) => {
         unique:true,
         fields:['groupId','memberId']
       }
-    ]
+    ],
+    defaultScope: {
+      attributes: { // included attributes, all others are excluded
+        exclude: [ "createdAt","updatedAt"]
+    }
+    }
   });
   return Membership;
 };
