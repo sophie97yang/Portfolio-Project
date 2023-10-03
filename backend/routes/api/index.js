@@ -4,6 +4,7 @@ const { User } = require('../../db/models');
 const sessionRouter = require('./session.js');
 const userRouter = require('./users.js');
 const groupRouter = require('./groups.js');
+const venueRouter = require('./venues.js');
 
 
 router.use(restoreUser);
@@ -14,6 +15,7 @@ router.use('/users',userRouter);
 
 router.use('/groups',groupRouter);
 
+router.use('/venues',venueRouter);
 
 //test router
 router.post('/test', (req, res) => {
