@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {Group,GroupImage,User,Venue,Membership} = require('../../db/models');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth.js');
-const {Op} = require('sequelize');
+const {Op,literal} = require('sequelize');
 
 router.get('/',async (req,res,next)=>{
     const groups = await Group.findAll({
@@ -287,6 +287,51 @@ router.get('/:groupId', async (req,res,next)=> {
     res.status(200).json({message:'Successfully deleted'})
 
    });
+
+   router.get('/:groupId/members',restoreUser, async (req,res,next)=> {
+
+
+    const { groupId } = req.params;
+
+    const group = await Group.findByPk(groupId);
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.title = "Invalid Group Id"
+        err.status=404;
+        return next(err);
+    }
+
+
+    if (req.user) {
+
+        const { id } = req.user;
+
+        if (group.organizerId===id) {
+            const members = await group.getUsers();
+            return res.json(members);
+        }
+    }
+
+    const members = await group.getUsers({
+        attributes:['id','firstName','lastName'],
+        through: {
+            //not selecting just membership.status
+            attributes:['status'],
+            where: {
+                status:{
+                    [Op.in]:['member','co-host']
+                }
+            }
+        }
+    });
+
+    return res.json(members);
+
+    });
+
+
+
 
 
 
