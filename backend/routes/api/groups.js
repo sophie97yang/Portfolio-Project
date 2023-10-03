@@ -330,6 +330,51 @@ router.get('/:groupId', async (req,res,next)=> {
 
     });
 
+    router.post('/:groupId/membership', requireAuth, async (req,res,next)=> {
+        const { groupId } = req.params;
+        const { id } = req.user;
+
+        const group = await Group.findByPk(groupId);
+        const user = await User.findByPk(id);
+        const membership = await Membership.findOne({
+            where: {
+                groupId,
+                memberId:id
+            }
+        });
+
+        if (!group) {
+            const err = new Error("Group couldn't be found");
+            err.title = "Invalid Group Id"
+            err.status=404;
+            return next(err);
+        };
+
+        if (membership) {
+
+            if (membership.status === 'pending') {
+                const err = new Error('Membership has already been requested');
+                err.status = 400;
+                err.title = 'Already existing Request';
+                return next(err);
+            } else {
+                const err = new Error('User is already a member of the group');
+                err.status = 400;
+                err.title = 'Already existing Membership';
+                return next(err);
+            }
+        }
+
+        const added = await group.addUser(user);
+
+        res.json({
+            memberId:added.memberId,
+            status:added.status
+        });
+    });
+
+
+
 
 
 
