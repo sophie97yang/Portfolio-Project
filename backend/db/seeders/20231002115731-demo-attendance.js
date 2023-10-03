@@ -19,7 +19,7 @@ const attendances = [
   {
     event:'Soccer First Meet and Greet',
     username:'test1',
-    status:'accepted'
+    status:'attending'
   }
 
 ]
@@ -69,7 +69,7 @@ module.exports = {
     const {Op} = require('sequelize');
     return queryInterface.bulkDelete(options, {
       status: {
-        [Op.in]: ['accepted','waitlist','pending']
+        [Op.in]: ['attending','waitlist','pending']
       }
     })
   }
