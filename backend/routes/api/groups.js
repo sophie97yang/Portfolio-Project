@@ -201,7 +201,8 @@ router.get('/:groupId', async (req,res,next)=> {
 
     if (group.organizerId!==id) {
         const err = new Error("User does not have authorization to add a photo. You must be the organizer of the event.");
-        err.title = "Permission not granted"
+        err.title = "Permission not granted";
+        err.status = 403;
         return next(err);
     }
 
@@ -234,6 +235,7 @@ router.get('/:groupId', async (req,res,next)=> {
 
     if (group.organizerId!==id) {
         const err = new Error("User does not have authorization to edit details of event. You must be the organizer of the event.");
+        err.status = 403;
         err.title = "Permission not granted"
         return next(err);
     }
@@ -278,6 +280,7 @@ router.get('/:groupId', async (req,res,next)=> {
 
     if (group.organizerId!==id) {
         const err = new Error("User does not have authorization to delete event. You must be the organizer of the event.");
+        err.status = 403;
         err.title = "Permission not granted"
         return next(err);
     }
