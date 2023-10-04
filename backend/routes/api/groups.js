@@ -179,6 +179,7 @@ router.post('/',requireAuth, async (req,res,next)=> {
         state
     });
 
+    //create membership where status is automatically set to co-host
     await Membership.create({
         memberId:id,
         groupId:newGroup.id,

@@ -103,11 +103,10 @@ router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
     const {eventId} = req.params;
     const {url,preview} = req.body;
     const event = await Event.findByPk(eventId, {
-        attributes:["id",'groupId'],
-        include: {
-            model:User
-        }
+        attributes:["id",'groupId']
     });
+
+    res.json(event);
 
     if (!event) {
         const err = new Error("Event couldn't be found");
@@ -116,14 +115,14 @@ router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
         return next(err);
     };
 
-    let membership = await Membership.findOne({
+    const membership = await Membership.findOne({
         where: {
             memberId:id,
             groupId:event.groupId
         }
     });
 
-    let attendance = await Attendance.findOne({
+    const attendance = await Attendance.findOne({
         where: {
             userId:id,
             eventId
@@ -144,6 +143,89 @@ router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
     delete newImage.updatedAt;
 
     res.json(newImage);
+});
+
+router.put('/:eventId', requireAuth, async (req,res,next)=> {
+    const {eventId} = req.params;
+    const {id} = req.user;
+    const {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        err.title = "Invalid Event Id"
+        err.status=404;
+        return next(err);
+    };
+
+    const membership = await Membership.findOne({
+        where: {
+            memberId:id,
+            groupId:event.groupId
+        }
+    });
+
+    if (!membership || membership.status!== 'co-host') {
+        const err = new Error(`User does not have authorization to edit the details of the event.
+            User must have a co-host membership status or must be the organizer of the group.`);
+        err.title = "Permission not granted"
+        err.status=403;
+        return next(err);
+    };
+
+    if (venueId!==undefined) {
+        const venue = await Venue.findByPk(venueId);
+        if (!venue) {
+            const err = new Error("Venue couldn't be found");
+            err.title = "Invalid Venue Id"
+            err.status=404;
+            return next(err);
+        }
+        event.venueId = venueId;
+    };
+    if (name!==undefined) event.name = name;
+    if (type!==undefined) event.type = type;
+    if (capacity!==undefined) event.capacity = capacity;
+    if (price!==undefined) event.price = price;
+    if (description!==undefined) event.description = name;
+    if (startDate!==undefined) event.startDate = startDate;
+    if (endDate!==undefined) event.endDate = endDate;
+
+    await event.save();
+
+    res.json(event);
+});
+
+router.delete('/:eventId', requireAuth, async (req,res,next)=> {
+    const {eventId} = req.params;
+    const {id} = req.user;
+
+    const event = await Event.findByPk(eventId);
+
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        err.title = "Invalid Event Id"
+        err.status=404;
+        return next(err);
+    }
+    const membership = await Membership.findOne({
+        where: {
+            memberId:id,
+            groupId:event.groupId
+        }
+    });
+
+    if (!membership || membership.status !== 'co-host') {
+        const err = new Error(`User does not have authorization to delete the event.
+            User must have a co-host membership status or must be the organizer of the group.`);
+        err.title = "Permission not granted"
+        err.status=403;
+        return next(err);
+    }
+
+    await event.destroy();
+
+    res.json({message:"Successfully deleted"});
+
 });
 
 
