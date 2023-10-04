@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
   Event.init({
     venueId: {
       type:DataTypes.INTEGER,
-      allowNull:false
+      // allowNull:false
     },
     groupId: {
       type:DataTypes.INTEGER,
