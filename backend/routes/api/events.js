@@ -49,5 +49,54 @@ router.get('/', async (req,res,next)=> {
     res.json(eventsList);
 });
 
+router.get('/:eventId', async (req,res,next)=> {
+    const {eventId} = req.params;
+    let event = await Event.findByPk(eventId, {
+        attributes: {
+            include: ['capacity','price']
+        },
+        include: [
+            {
+                model:Group,
+                attributes: ['id','name','city','state','private']
+            },
+            {
+                model:Venue,
+                attributes: ['id','city','state','lat','lng']
+            },
+            {
+                model:User,
+                through: {
+                    attributes:['status']
+                }
+            },
+            {
+                model:EventImage,
+                attributes: ['id','url','preview']
+            }
+    ]
+    });
+
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        err.title = "Invalid Event Id"
+        err.status=404;
+        return next(err);
+    }
+
+    event = event.toJSON();
+
+    const users = event.Users;
+    const images = event.EventImages;
+    const attending = users.filter((user)=> {
+            return user.Attendance.status === 'attending'
+    });
+    event.numAttending = attending.length;
+    delete event.Users;
+
+
+    res.json(event);
+})
+
 
 module.exports = router;
