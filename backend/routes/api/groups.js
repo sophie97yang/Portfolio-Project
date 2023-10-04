@@ -504,14 +504,17 @@ router.post('/:groupId/events', requireAuth,async (req,res,next) => {
         return next(err);
     };
 
-    if (!venue) {
-        const err = new Error("Validations Error");
-        err.title = "Validations Error"
-        err.status=400;
-        err.errors = {
-            venueId: "Venue doesn't exist"
-        }
+    if (venueId) {
+    const venue = await Venue.findByPk(venueId);
+        if (!venue) {
+            const err = new Error("Validations Error");
+            err.title = "Validations Error"
+            err.status=400;
+            err.errors = {
+                venueId: "Venue doesn't exist"
+            }
         return next(err);
+        }
     }
 
     let newEvent =  await group.createEvent({venueId,name,type,capacity,price,description,startDate,endDate});
