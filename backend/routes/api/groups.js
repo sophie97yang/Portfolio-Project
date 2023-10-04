@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Group,GroupImage,User,Venue,Membership,Event,EventImage} = require('../../db/models');
+const {Group,GroupImage,User,Venue,Membership,Event,EventImage,Attendance} = require('../../db/models');
 const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
 const membershipRouter = require('./memberships.js');
@@ -179,6 +179,7 @@ router.post('/',requireAuth, async (req,res,next)=> {
         state
     });
 
+    //create membership where status is automatically set to co-host
     await Membership.create({
         memberId:id,
         groupId:newGroup.id,
@@ -475,6 +476,62 @@ router.get('/:groupId/events', async (req,res,next)=> {
 
     res.json(GroupEventsList);
 });
+
+router.post('/:groupId/events', requireAuth,async (req,res,next) => {
+    const { id } = req.user;
+    const { groupId } = req.params;
+    const {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
+    const group = await Group.findByPk(groupId);
+    const membership = await Membership.findOne({
+        where: {
+            groupId,
+            memberId:id
+        }
+    });
+    const venue = await Venue.findByPk(venueId);
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.title = "Invalid Group Id"
+        err.status=404;
+        return next(err);
+    }
+
+    if (id!==group.organizerId || membership.status!=='co-host') {
+        const err = new Error(`User does not have authorization to create an event.
+            User must be the organizer of the group or have a co-host membership status.`);
+        err.title = "Permission not granted"
+        err.status=403;
+        return next(err);
+    };
+
+    if (venueId) {
+    const venue = await Venue.findByPk(venueId);
+        if (!venue) {
+            const err = new Error("Validations Error");
+            err.title = "Validations Error"
+            err.status=400;
+            err.errors = {
+                venueId: "Venue doesn't exist"
+            }
+        return next(err);
+        }
+    }
+
+    let newEvent =  await group.createEvent({venueId,name,type,capacity,price,description,startDate,endDate});
+
+    //organizer who made event should automatically be considered attending?
+    await Attendance.create({userId:id,eventId:newEvent.id,status:'attending'});
+
+    newEvent = newEvent.toJSON();
+
+    delete newEvent.createdAt;
+    delete newEvent.updatedAt;
+
+    res.json(newEvent);
+
+});
+
 
 
 
