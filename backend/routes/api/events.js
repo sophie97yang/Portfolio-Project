@@ -107,8 +107,6 @@ router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
         attributes:["id",'groupId']
     });
 
-    res.json(event);
-
     if (!event) {
         const err = new Error("Event couldn't be found");
         err.title = "Invalid Event Id"
