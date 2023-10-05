@@ -4,6 +4,7 @@ const {setTokenCookie, requireAuth} = require('../../utils/auth.js');
 const {User} = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation.js');
+const {checkUsernameAndEmail} = require('../../utils/customvalidation.js');
 
 const validateSignup = [
     check('email')
@@ -35,7 +36,7 @@ const validateSignup = [
 
 const router = express.Router();
 
-router.post('/',validateSignup, async (req,res,next)=> {
+router.post('/',validateSignup, checkUsernameAndEmail, async (req,res,next)=> {
    const {firstName,lastName,email,username,password} = req.body;
    const saltedAndHashed = bcrypt.hashSync(password);
    const newUser = await User.create({firstName,lastName,email,username,hashedPassword:saltedAndHashed});
