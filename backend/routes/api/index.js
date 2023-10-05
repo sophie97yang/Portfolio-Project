@@ -20,11 +20,8 @@ router.use('/venues',venueRouter);
 
 router.use('/events',eventRouter);
 
+router.get('/group-images/:imageId', requireAuth,async (req,res,next) => {
 
-
-//test router
-router.post('/test', (req, res) => {
-    res.json({ requestBody: req.body });
-  });
+})
 
 module.exports = router;

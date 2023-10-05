@@ -1,5 +1,5 @@
 const router = require('express').Router({mergeParams:true});
-const {Event,Group,Venue,User, EventImage,Membership,Attendance} = require('../../db/models');
+const {Event,Group,User,Membership,Attendance} = require('../../db/models');
 const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
 
