@@ -3,7 +3,7 @@
 ## Database Schema Design
 ![db-schema]
 
-[db-schema]: ./images/database-schema.png
+[db-schema]: ./images/meetup_dbdiagram.png
 
 ## API Documentation
 
