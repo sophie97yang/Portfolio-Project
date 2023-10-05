@@ -4,6 +4,7 @@ const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
 const membershipRouter = require('./memberships.js');
 const {getGroupDetails,checkGroupExistence, validateGroupCreation,authorizeGroupOrganizer,validateGroupEdits} = require('../../utils/group_helper-functions');
+const {authorizeCurrentUser,validateVenueCreation} = require('../../utils/venue_helper-functions');
 
 router.get('/',async (req,res,next)=>{
     const groups = await Group.findAll({
@@ -218,31 +219,8 @@ router.use('/:groupId/membership',membershipRouter);
 
 
 //venues
-router.get('/:groupId/venues',requireAuth,async (req,res,next)=> {
-    const {id} = req.user;
+router.get('/:groupId/venues',requireAuth,checkGroupExistence,authorizeCurrentUser, async (req,res,next)=> {
     const {groupId} = req.params;
-    const group = await Group.findByPk(groupId);
-    const currUserMembership = await Membership.findOne({
-        where: {
-            groupId,
-            memberId:id
-        }
-    });
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
-
-    if (currUserMembership.status!=='co-host' || group.organizerId!==id) {
-        const err = new Error(`User does not have authorization to view venues.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    }
 
     const venues = await Venue.findAll({
         where: {groupId}
@@ -251,43 +229,16 @@ router.get('/:groupId/venues',requireAuth,async (req,res,next)=> {
     res.json({Venues: venues});
 });
 
-router.post('/:groupId/venues',requireAuth,async (req,res,next)=> {
-    const {id} = req.user;
-    const {groupId} = req.params;
+router.post('/:groupId/venues',requireAuth,checkGroupExistence,authorizeCurrentUser,validateVenueCreation,async (req,res,next)=> {
     const {address,city,state,lat,lng} = req.body;
+    const group = req.group;
 
-    const group = await Group.findByPk(groupId);
-    const currUserMembership = await Membership.findOne({
-        where: {
-            groupId,
-            memberId:id
-        }
-    });
+    let newVenue = await group.createVenue({address,city,state,lat,lng});
+    newVenue = newVenue.toJSON();
+    delete newVenue.createdAt;
+    delete newVenue.updatedAt;
 
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
-
-    if (currUserMembership.status!=='co-host' || group.organizerId!==id) {
-        const err = new Error(`User does not have authorization to view venues.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    }
-
-    const newVenue = await group.createVenue({address,city,state,lat,lng});
-    res.json({
-        id:newVenue.id,
-        groupId:newVenue.groupId,
-        city:newVenue.city,
-        state:newVenue.state,
-        lat:newVenue.lat,
-        lng:newVenue.lng
-    });
+    res.json(newVenue);
 
 });
 
