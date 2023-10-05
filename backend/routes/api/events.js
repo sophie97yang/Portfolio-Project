@@ -2,6 +2,7 @@ const router = require('express').Router();
 const {Event,Group,Venue,User, EventImage,Membership,Attendance} = require('../../db/models');
 const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
+const attendanceRouter = require('./attendances.js');
 
 router.get('/', async (req,res,next)=> {
 
@@ -228,5 +229,55 @@ router.delete('/:eventId', requireAuth, async (req,res,next)=> {
 
 });
 
+//attendances
+router.get('/:eventId/attendees',restoreUser, async (req,res,next)=> {
+    const {eventId} = req.params;
+    const {id} = req.user;
+    const event = await Event.findByPk(eventId);
+
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        err.title = "Invalid Event Id"
+        err.status=404;
+        return next(err);
+    }
+    const membership = await Membership.findOne({
+        where: {
+            memberId:id,
+            groupId:event.groupId
+        }
+    });
+
+    let attendances;
+
+    if (membership.status === "co-host") {
+        attendances = await event.getUsers();
+
+    } else {
+        attendances = await event.getUsers({
+            through: {
+                where: {
+                    status:['attending','waitlist']
+                }
+            }
+        })
+
+    }
+    const attendanceList = [];
+
+    attendances.forEach(attendee=> attendanceList.push(attendee.toJSON()));
+
+    for (let attendance of attendanceList) {
+        delete attendance.Attendance.userId;
+        delete attendance.Attendance.eventId;
+        delete attendance.Attendance.createdAt;
+        delete attendance.Attendance.updatedAt;
+    }
+
+    res.json({Attendees:attendanceList});
+
+});
+
+router.use('/:eventId/attendance',attendanceRouter)
 
 module.exports = router;
