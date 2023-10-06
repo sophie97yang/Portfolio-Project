@@ -102,6 +102,14 @@ const validateGroupEdits = [
     check('private').optional({values:null})
         .isBoolean()
         .withMessage('Private must be a boolean'),
+    check('city')
+      .optional({values:null})
+      .isLength({min:1})
+      .withMessage('City is required'),
+    check('state')
+      .optional({values:null})
+      .isLength({min:1})
+      .withMessage('State is required'),
         handleValidationErrors
   ];
 

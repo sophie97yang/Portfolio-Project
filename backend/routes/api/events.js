@@ -142,6 +142,7 @@ router.post('/:eventId/images',requireAuth, checkEventExistence,authorizeCurrent
     newImage = newImage.toJSON();
     delete newImage.createdAt;
     delete newImage.updatedAt;
+    delete newImage.eventId;
 
     res.json(newImage);
 });
@@ -193,7 +194,7 @@ router.get('/:eventId/attendees',restoreUser,checkEventExistence, async (req,res
 
     let attendances;
 
-    if (membership.status === "co-host") {
+    if (membership && membership.status === "co-host") {
         attendances = await event.getUsers();
 
     } else {

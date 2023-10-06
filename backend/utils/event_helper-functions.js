@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {Event,Venue,Membership,Attendance} = require('../db/models');
+const {Event,Venue,Membership,Attendance,Group} = require('../db/models');
 const { handleValidationErrors } = require('./validation.js');
 const { check } = require('express-validator');
 const {restoreUser} = require('./auth.js');
@@ -28,7 +28,7 @@ const getEventDetails = async (events) => {
 
 const checkEventExistence = async (req,res,next) => {
     const {eventId} = req.params;
-    const event = await Event.findByPk(eventId);
+    const event = await Event.findByPk(eventId, {include:{model:Group, attributes:['organizerId']}});
     if (!event) {
         const err = new Error("Event couldn't be found");
         err.title = "Invalid Event Id"
@@ -67,6 +67,16 @@ const validateEventCreation = [
       .exists({values:"null"})
       .isInt()
       .withMessage('Capacity must be an integer'),
+    check('price')
+      .exists({values:"null"})
+      .custom( value => {
+        if (!parseInt(value)|| value<0) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+      .withMessage('Price is invalid'),
     check('description')
       .exists({ checkFalsy: true })
       .withMessage('Description is required'),
