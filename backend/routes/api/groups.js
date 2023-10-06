@@ -5,6 +5,7 @@ const {Op} = require('sequelize');
 const membershipRouter = require('./memberships.js');
 const {getGroupDetails,checkGroupExistence, validateGroupCreation,authorizeGroupOrganizer,validateGroupEdits} = require('../../utils/group_helper-functions');
 const {authorizeCurrentUser,validateVenueCreation} = require('../../utils/venue_helper-functions');
+const {getEventDetails,validateEventCreation} = require('../../utils/event_helper-functions');
 
 router.get('/',async (req,res,next)=>{
     const groups = await Group.findAll({
@@ -119,6 +120,19 @@ router.post('/',requireAuth,validateGroupCreation, async (req,res,next)=> {
 router.post('/:groupId/images',requireAuth,checkGroupExistence,authorizeGroupOrganizer, async (req,res,next)=>{
     const group = req.group;
     const {url,preview} = req.body;
+
+    if (preview===true) {
+        const previewImages = await group.getGroupImages({
+            where: {preview:true}
+        });
+
+        if (previewImages){
+            for (let image of previewImages) {
+                image.preview=false;
+                await image.save();
+            }
+        }
+    };
 
     let newImage = await group.createGroupImage({
         url,
@@ -244,112 +258,51 @@ router.post('/:groupId/venues',requireAuth,checkGroupExistence,authorizeCurrentU
 
 
 //events
-
-router.get('/:groupId/events', async (req,res,next)=> {
-    const {groupId} = req.params;
-
-    const group = await Group.findByPk(groupId, {
-        attributes:[],
-        include: {
-            model:Event,
-            include:[
-                {
-                    model:Group,
-                    attributes: ['id','name','city','state']
-                },
-                {
-                    model:Venue,
-                    attributes: ['id','city','state']
-                },
-                {
-                    model:User,
-                    through: {
-                        attributes:['status']
-                    }
-                },
-                {
-                    model:EventImage
+router.get('/:groupId/events',checkGroupExistence, async (req,res,next)=> {
+    const group = req.group;
+    const events = await group.getEvents({
+        include:[
+            {
+                model:Group,
+                attributes: ['id','name','city','state']
+            },
+            {
+                model:Venue,
+                attributes: ['id','city','state']
+            },
+            {
+                model:User,
+                through: {
+                    attributes:['status'],
+                    where: {
+                        status:"attending"
+                    },
+                required:false
                 }
-            ]
-        }
+            },
+            {
+                model:EventImage,
+                where: {
+                    preview:true
+                },
+                required:false
+            }
+        ]
     });
+    const eventsList = await getEventDetails(events);
 
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
+    res.json({Events:eventsList});
 
-    const groupEvents = group.Events;
-
-    const GroupEventsList = [];
-
-    groupEvents.forEach(event => GroupEventsList.push(event.toJSON()));
-
-    for (let event of GroupEventsList) {
-        const users = event.Users;
-        const images = event.EventImages;
-        const attending = users.filter((user)=> {
-            return user.Attendance.status === 'attending'
-        });
-        const image = images.filter((image)=> {
-            return image.preview === true
-        });
-        event.previewImage = image[0].url;
-        event.numAttending = attending.length;
-        delete event.Users;
-        delete event.EventImages;
-    }
-
-
-    res.json(GroupEventsList);
 });
 
-router.post('/:groupId/events', requireAuth,async (req,res,next) => {
-    const { id } = req.user;
-    const { groupId } = req.params;
+router.post('/:groupId/events', requireAuth, checkGroupExistence,authorizeCurrentUser, validateEventCreation,async (req,res,next) => {
     const {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
-    const group = await Group.findByPk(groupId);
-    const membership = await Membership.findOne({
-        where: {
-            groupId,
-            memberId:id
-        }
-    });
-    const venue = await Venue.findByPk(venueId);
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
-
-    if (id!==group.organizerId || membership.status!=='co-host') {
-        const err = new Error(`User does not have authorization to create an event.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    };
-
-    if (venueId) {
-    const venue = await Venue.findByPk(venueId);
-        if (!venue) {
-            const err = new Error("Validations Error");
-            err.title = "Validations Error"
-            err.status=400;
-            err.errors = {
-                venueId: "Venue doesn't exist"
-            }
-        return next(err);
-        }
-    }
+    const {id} = req.user;
+    const group = req.group;
 
     let newEvent =  await group.createEvent({venueId,name,type,capacity,price,description,startDate,endDate});
 
-    //organizer who made event should automatically be considered attending?
+    //organizer who made event should automatically be considered attending
     await Attendance.create({userId:id,eventId:newEvent.id,status:'attending'});
 
     newEvent = newEvent.toJSON();
