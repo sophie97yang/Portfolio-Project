@@ -2,21 +2,16 @@ const router = require('express').Router({mergeParams:true});
 const {Event,Group,User,Membership,Attendance} = require('../../db/models');
 const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
+const {checkEventExistence} = require('../../utils/event_helper-functions.js');
+const {authorizeCurrentUser} = require('../../utils/venue_helper-functions.js');
+const { validateAttendanceEdits,validateAttendanceDeletion} = require('../../utils/attendance_helper-functions');
 
-router.post('/',requireAuth, async (req,res,next)=> {
+router.post('/',requireAuth,checkEventExistence, async (req,res,next)=> {
     const {id} = req.user;
     const {eventId} = req.params;
-    const event = await Event.findByPk(eventId, {
-        attributes:['groupId','id']
-    });
+    const event = req.event;
     const user = await User.findByPk(id);
 
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    }
     const membership = await Membership.findOne({
         where: {
             groupId:event.groupId,
@@ -60,46 +55,10 @@ router.post('/',requireAuth, async (req,res,next)=> {
 
 });
 
-router.put('/',requireAuth, async (req,res,next)=> {
+router.put('/',requireAuth, checkEventExistence, authorizeCurrentUser,validateAttendanceEdits,async (req,res,next)=> {
     const { eventId } = req.params;
-    const { id } = req.user;
     const { userId, status } = req.body;
 
-    const event = await Event.findByPk(eventId, {attributes:['groupId','id']});
-    const user = await User.findByPk(userId);
-
-    const currUserMembership = await Membership.findOne({
-        where: {
-            groupId:event.groupId,
-            memberId:id
-        }
-    });
-
-
-    if (currUserMembership.status==='member' || currUserMembership.status==='pending' || !currUserMembership) {
-        const err = new Error(`User does not have authorization to change membership status.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    };
-
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    };
-
-    if (!user) {
-        const err = new Error("Validations Error");
-        err.title = "Validations Error"
-        err.status=400;
-        err.errors = {
-            memberId: "User couldn't be found"
-        }
-        return next(err);
-    };
 
     const attendanceToChange = await Attendance.findOne({
         where: {
@@ -115,43 +74,23 @@ router.put('/',requireAuth, async (req,res,next)=> {
         return next(err);
     }
 
-    if (status) {
 
-        if (status==='pending') {
-            const err = new Error("Validations Error");
-            err.title = "Validations Error"
-            err.status=400;
-            err.errors = {
-                memberId: "Cannot change an attendance status to pending"
-            }
-            return next(err);
-        }
-
-        attendanceToChange.status = status;
-        await attendanceToChange.save();
-        res.json(attendanceToChange);
-    }
+    attendanceToChange.status = status;
+    await attendanceToChange.save();
+    res.json({
+        id:attendanceToChange.id,
+        eventId:attendanceToChange.eventId,
+        userId:attendanceToChange.userId,
+        status:attendanceToChange.status
+    });
 
 });
 
-router.delete('/', requireAuth, async (req,res,next)=> {
+router.delete('/', requireAuth,checkEventExistence,validateAttendanceDeletion, async (req,res,next)=> {
     const { eventId } = req.params;
     const { id } = req.user;
     const { userId } = req.body;
-    const event = await Event.findByPk(eventId, {
-        include: {
-            model:Group,
-            attributes:['organizerId']
-        }
-    });
-    const user = await User.findByPk(userId);
-
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    };
+    const event = req.event;
 
     if (userId!==id && event.Group.organizerId!==id) {
         const err = new Error(`Only the User or organizer may delete an Attendance.`);
@@ -159,16 +98,6 @@ router.delete('/', requireAuth, async (req,res,next)=> {
         err.status=403;
         return next(err);
     }
-
-    if (!user) {
-        const err = new Error("Validations Error");
-        err.title = "Validations Error"
-        err.status=400;
-        err.errors = {
-            memberId: "User couldn't be found"
-        }
-        return next(err);
-    };
 
     const attendance = await Attendance.findOne({
         where: {

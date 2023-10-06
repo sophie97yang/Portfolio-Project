@@ -6,6 +6,8 @@ const userRouter = require('./users.js');
 const groupRouter = require('./groups.js');
 const venueRouter = require('./venues.js');
 const eventRouter = require('./events.js');
+const { authorizeCurrentUser } = require('../../utils/venue_helper-functions.js');
+const {checkGroupImageExistence,checkEventImageExistence} = require('../../utils/image_helper-functions.js')
 
 
 router.use(restoreUser);
@@ -20,76 +22,18 @@ router.use('/venues',venueRouter);
 
 router.use('/events',eventRouter);
 
-router.delete('/group-images/:imageId', requireAuth,async (req,res,next) => {
-  const { imageId } = req.params;
-  const { id } = req.user;
-  const image = await GroupImage.findByPk(imageId, {
-    include: {
-      model:Group,
-      attributes:['organizerId']
-    }
-  });
-
-  if (!image) {
-    const err = new Error("Group Image couldn't be found");
-    err.title = "Invalid Image Id"
-    err.status=404;
-    return next(err);
-  }
-
-  const membership = await Membership.findOne({
-    where: {
-      groupId:image.groupId,
-      memberId:id
-    }
-  });
-
-  if (!membership || !(image.Group.organizerId===id || membership.status==='co-host')) {
-    const err = new Error(`User does not have authorization to delete group image.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-  };
+router.delete('/group-images/:gimageId', requireAuth,checkGroupImageExistence,authorizeCurrentUser,async (req,res,next) => {
+  const image = req.groupImage;
 
   await image.destroy();
-
 
   res.json({message:"Successfully deleted"});
 
 });
 
-router.delete('/event-images/:imageId', requireAuth,async (req,res,next) => {
-  const { imageId } = req.params;
-  const { id } = req.user;
-  const image = await EventImage.findByPk(imageId, {
-    include: {
-      model:Event,
-      attributes:['groupId']
-    }
-  });
+router.delete('/event-images/:eimageId', requireAuth,checkEventImageExistence,authorizeCurrentUser,async (req,res,next) => {
+  const image = req.eventImage;
 
-  if (!image) {
-    const err = new Error("Event Image couldn't be found");
-    err.title = "Invalid Image Id"
-    err.status=404;
-    return next(err);
-  }
-
-  const membership = await Membership.findOne({
-    where: {
-      groupId:image.Event.groupId,
-      memberId:id
-    }
-  });
-
-  if (!membership || membership.status!=='co-host') {
-    const err = new Error(`User does not have authorization to delete event image.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-  };
 
   await image.destroy();
 
