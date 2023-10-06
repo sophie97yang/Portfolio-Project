@@ -187,23 +187,10 @@ router.delete('/:groupId',requireAuth, checkGroupExistence, authorizeGroupOrgani
    });
 
 //membership
-router.get('/:groupId/members',restoreUser, async (req,res,next)=> {
-
-
-    const { groupId } = req.params;
-
-    const group = await Group.findByPk(groupId);
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
-
+router.get('/:groupId/members',restoreUser,checkGroupExistence, async (req,res,next)=> {
+    const group = req.group;
 
     if (req.user) {
-
         const { id } = req.user;
 
         if (group.organizerId===id) {

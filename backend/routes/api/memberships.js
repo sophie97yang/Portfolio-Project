@@ -2,13 +2,15 @@ const router = require('express').Router({mergeParams:true});
 const {Group,User,Membership} = require('../../db/models');
 const {requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
+const { checkGroupExistence } = require('../../utils/group_helper-functions');
+const { authCurrUserMembership, validateMembershipEdits,validateMembershipDeletion } = require('../../utils/membership_helper-functions');
 
 
-router.post('/', requireAuth, async (req,res,next)=> {
+router.post('/', requireAuth, checkGroupExistence, async (req,res,next)=> {
     const { groupId } = req.params;
     const { id } = req.user;
 
-    const group = await Group.findByPk(groupId);
+    const group = req.group;
     const user = await User.findByPk(id);
     const membership = await Membership.findOne({
         where: {
@@ -17,12 +19,6 @@ router.post('/', requireAuth, async (req,res,next)=> {
         }
     });
 
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    };
 
     if (membership) {
 
@@ -48,102 +44,67 @@ router.post('/', requireAuth, async (req,res,next)=> {
     });
 });
 
-router.put('/',requireAuth, async(req,res,next)=> {
-
-    const {groupId} = req.params;
-    const {id} = req.user;
+router.put('/',requireAuth,checkGroupExistence,validateMembershipEdits,authCurrUserMembership, async(req,res,next)=> {
     const { memberId , status } = req.body;
+    const {groupId} = req.params;
+    const group = req.group;
 
-    const group = await Group.findByPk(groupId);
-    const user = await User.findByPk(memberId);
-    const currUserMembership = await Membership.findOne({
+     const membershipToChange = await Membership.findOne({
         where: {
             groupId,
-            memberId:id
+            memberId
         }
     });
 
-
-    if (currUserMembership.status==='member' || currUserMembership.status==='pending' || !currUserMembership) {
-        const err = new Error(`User does not have authorization to change membership status.
-            User must be the organizer of the group or have a co-host membership status.`);
-        err.title = "Permission not granted"
-        err.status=403;
+    if (!membershipToChange) {
+        const err = new Error('Membership between the user and the group does not exist');
+        err.title = "Membership doesn't exist";
+        err.status = 404;
         return next(err);
-    };
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    };
-
-    if (!user) {
-        const err = new Error("Validations Error");
-        err.title = "Validations Error"
-        err.status=400;
-        err.errors = {
-            memberId: "User couldn't be found"
-        }
-        return next(err);
-    };
-
-    if (memberId) {
-
-        const membershipToChange = await Membership.findOne({
-            where: {
-                groupId,
-                memberId
-            }
-        });
-
-        if (!membershipToChange) {
-            const err = new Error('Membership between the user and the group does not exist');
-            err.title = "Membership doesn't exist";
-            err.status = 404;
-            return next(err);
-        }
-
-        if (status) {
-                //what about changing a status from co-host to member? What authorization should you have - Organizer?
-            if ((status === 'member' && membershipToChange.status==='pending') && (currUserMembership.status!=='co-host' || group.organizerId!==id)) {
-                const err = new Error(`User does not have authorization to change membership status.
-                    User must be the organizer of the group or have a co-host membership status.`);
-                err.title = "Permission not granted"
-                err.status=403;
-                return next(err);
-                    //do not necessarily understand how to produce a validation error here
-            } else if ((status === 'co-host'|| (status === 'member' && membershipToChange.status==='co-host')) && group.organizerId!==id) {
-                const err = new Error(`User does not have authorization to change membership status.
-                    User must be the organizer of the group.`);
-                err.title = "Permission not granted"
-                err.status=403;
-                return next(err);
-            } else if (status==='pending') {
-                const err = new Error("Validations Error");
-                err.title = "Validations Error"
-                err.status=400;
-                err.errors = {
-                    memberId: "Cannot change a membership status to pending"
-                }
-                return next(err);
-            }
-
-            membershipToChange.status = status;
-            await membershipToChange.save();
-            res.json(membershipToChange);
-        }
     }
 
+
+        // if (status) {
+        //         //what about changing a status from co-host to member? What authorization should you have - Organizer?
+        //     if ((status === 'member' && membershipToChange.status==='pending') && (currUserMembership.status!=='co-host' || group.organizerId!==id)) {
+        //         const err = new Error(`User does not have authorization to change membership status.
+        //             User must be the organizer of the group or have a co-host membership status.`);
+        //         err.title = "Permission not granted"
+        //         err.status=403;
+        //         return next(err);
+        //             //do not necessarily understand how to produce a validation error here
+        //     } else if ((status === 'co-host'|| (status === 'member' && membershipToChange.status==='co-host')) && group.organizerId!==id) {
+        //         const err = new Error(`User does not have authorization to change membership status.
+        //             User must be the organizer of the group.`);
+        //         err.title = "Permission not granted"
+        //         err.status=403;
+        //         return next(err);
+        //     } else if (status==='pending') {
+        //         const err = new Error("Validations Error");
+        //         err.title = "Validations Error"
+        //         err.status=400;
+        //         err.errors = {
+        //             memberId: "Cannot change a membership status to pending"
+        //         }
+        //         return next(err);
+        //     }
+
+        membershipToChange.status = status;
+        await membershipToChange.save();
+        res.json({
+            id:membershipToChange.id,
+            groupId:membershipToChange.groupId,
+            memberId:membershipToChange.memberId,
+            status:membershipToChange.status
+        });
+
     });
 
-router.delete('/',requireAuth,async (req,res,next)=> {
+router.delete('/',requireAuth,checkGroupExistence, validateMembershipDeletion,async (req,res,next)=> {
     const { groupId } = req.params;
     const { id } = req.user;
     const { memberId } = req.body;
-    const group = await Group.findByPk(groupId);
-    const user = await User.findByPk(memberId);
+    const group = req.group;
 
     if (memberId!==id && group.organizerId!==id) {
         const err = new Error(`User does not have authorization to delete members.
@@ -152,23 +113,6 @@ router.delete('/',requireAuth,async (req,res,next)=> {
         err.status=403;
         return next(err);
     }
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    };
-
-    if (!user) {
-        const err = new Error("Validations Error");
-        err.title = "Validations Error"
-        err.status=400;
-        err.errors = {
-            memberId: "User couldn't be found"
-        }
-        return next(err);
-    };
 
     const membership = await Membership.findOne({
         where: {
