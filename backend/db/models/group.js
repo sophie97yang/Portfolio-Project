@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull:false,
       unique:true,
       validate: {
@@ -69,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     city: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull:false
     },
     state: {
