@@ -80,6 +80,36 @@ const validateEventCreation = [
     check('description')
       .exists({ checkFalsy: true })
       .withMessage('Description is required'),
+    check('startDate')
+      .exists({ checkFalsy: true })
+      .custom(value => {
+        let currDate = new Date();
+        currDate = currDate.getTime();
+        let startDate = new Date(value);
+        startDate = startDate.getTime();
+        if (startDate<=currDate) {
+          throw new Error("Start date must be in the future");
+        } else {
+          return true;
+        }
+      })
+      .withMessage('Start date must be in the future'),
+    check('endDate')
+      .exists({ checkFalsy: true })
+      .custom((value, { req })=> {
+        let endDate = new Date(value);
+        endDate = endDate.getTime();
+        let startDate = req.body.startDate;
+        startDate = new Date(startDate);
+        startDate = startDate.getTime();
+        console.log(startDate,endDate);
+        if (startDate>endDate) {
+          throw new Error("End date is less than start date");
+        } else {
+          return true;
+        }
+      })
+      .withMessage('End date is less than start date'),
     handleValidationErrors
   ];
 
