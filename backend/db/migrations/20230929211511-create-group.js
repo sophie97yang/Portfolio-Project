@@ -22,7 +22,7 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       name: {
-        type: Sequelize.STRING(60),
+        type: Sequelize.TEXT(60),
         allowNull:false,
         unique:true
       },
@@ -39,7 +39,7 @@ module.exports = {
         allowNull:false
       },
       city: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.TEXT(15),
         allowNull:false
       },
       state: {
