@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {Group,Venue,Membership} = require('../db/models');
+const {Group,Venue,Membership,Event} = require('../db/models');
 const { handleValidationErrors } = require('./validation.js');
 const { check } = require('express-validator');
 const {restoreUser} = require('./auth.js');
@@ -20,11 +20,15 @@ const checkVenueExistence = async (req,res,next) => {
 
 const authorizeCurrentUser = [restoreUser, async (req,res,next)=> {
     const {id} = req.user;
-    let {groupId,venueId} = req.params;
+    let {groupId,venueId,eventId} = req.params;
 
     if (venueId) {
         const venue = await Venue.findByPk(venueId,{attributes:['groupId']});
         groupId = venue.groupId
+    }
+    if (eventId) {
+      const event = await Event.findByPk(eventId,{attributes:['groupId']});
+      groupId = event.groupId
     }
 
     const currUserMembership = await Membership.findOne({

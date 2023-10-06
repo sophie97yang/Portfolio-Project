@@ -26,7 +26,6 @@ module.exports =  {
     checkUsernameAndEmail: [
         check('username')
             .custom(async value => {
-                console.log(value);
             const existingUser = await User.findOne({
                 where: {
                   username:value

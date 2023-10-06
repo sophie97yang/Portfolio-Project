@@ -8,18 +8,23 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 const attendances = [
   {
     event:'Tennis First Meet and Greet',
-    username:'test2',
-    status:'pending'
+    username:'test1',
+    status:'attending'
   },
   {
     event:'Golf First Meet and Greet',
-    username:'test3',
-    status:'waitlist'
+    username:'test2',
+    status:'attending'
   },
   {
     event:'Soccer First Meet and Greet',
-    username:'test1',
+    username:'test3',
     status:'attending'
+  },
+  {
+    event:'Golf First Meet and Greet',
+    username:'test1',
+    status:'pending'
   }
 
 ]

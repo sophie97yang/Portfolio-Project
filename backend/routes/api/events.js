@@ -3,10 +3,48 @@ const {Event,Group,Venue,User, EventImage,Membership,Attendance} = require('../.
 const {restoreUser,requireAuth } = require('../../utils/auth.js');
 const {Op} = require('sequelize');
 const attendanceRouter = require('./attendances.js');
+const {getEventDetails,checkEventExistence,authorizeCurrentUserAttendance,validateEventEdits,validateQueryParams} = require('../../utils/event_helper-functions');
+const {authorizeCurrentUser} = require('../../utils/venue_helper-functions');
 
-router.get('/', async (req,res,next)=> {
+router.get('/', validateQueryParams,async (req,res,next)=> {
+    //adding query filters
+    //limit: size
+    //offset:(page-1)*size
+    let {page,size,name,type,startDate} = req.query;
+    const where = {};
+    //pagination
+    page = parseInt(page);
+    size = parseInt(size);
+    if (Number.isNaN(page) || page<=0) page = 1;
+    if (page>10) page = 10
+    if (Number.isNaN(size) || size<=0) size = 20;
+    if (size>20) size=20
+
+    const pagination = {
+        limit:size,
+        offset:(page-1)*size
+    }
+
+    //search filters
+    if (name) where.name = name;
+    if (type) {
+        if (type==='"Online"') {
+            where.type = 'Online';
+        }
+        if (type === '"In person') {
+            where.type = 'In person';
+        }
+
+    }
+    if (startDate) {
+        const length=startDate.length;
+        startDate = startDate.slice(1,length-1);
+        let date = new Date(startDate);
+        where.startDate = date;
+    }
 
     const events = await Event.findAll({
+        where,
         include:[
         {
             model:Group,
@@ -19,42 +57,34 @@ router.get('/', async (req,res,next)=> {
         {
             model:User,
             through: {
-                attributes:['status']
+                attributes:['status'],
+                where: {
+                    status:"attending"
+                },
+            required:false
             }
         },
         {
-            model:EventImage
+            model:EventImage,
+            where: {
+                preview:true
+            },
+            required:false
         }
-    ]
+    ],
+    ...pagination
     });
 
-    const eventsList = [];
+    const eventsList = await getEventDetails(events);
 
-    events.forEach(event => eventsList.push(event.toJSON()));
-
-    for (let event of eventsList) {
-        const users = event.Users;
-        const images = event.EventImages;
-        const attending = users.filter((user)=> {
-            return user.Attendance.status === 'attending'
-        });
-        const image = images.filter((image)=> {
-            return image.preview === true
-        });
-        event.previewImage = image[0].url;
-        event.numAttending = attending.length;
-        delete event.Users;
-        delete event.EventImages;
-    }
-
-    res.json(eventsList);
+    res.json({Events:eventsList});
 });
 
-router.get('/:eventId', async (req,res,next)=> {
+router.get('/:eventId',checkEventExistence, async (req,res,next)=> {
     const {eventId} = req.params;
     let event = await Event.findByPk(eventId, {
         attributes: {
-            include: ['capacity','price']
+            include: ['capacity','price','description']
         },
         include: [
             {
@@ -62,78 +92,50 @@ router.get('/:eventId', async (req,res,next)=> {
                 attributes: ['id','name','city','state','private']
             },
             {
-                model:Venue,
-                attributes: ['id','city','state','lat','lng']
+                model:Venue
             },
             {
                 model:User,
                 through: {
-                    attributes:['status']
+                    attributes:['status'],
+                where: {
+                    status:"attending"
+                },
+                required:false
                 }
             },
             {
-                model:EventImage,
-                attributes: ['id','url','preview']
+                model:EventImage
             }
     ]
     });
 
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    }
-
     event = event.toJSON();
-
-    const users = event.Users;
-    const images = event.EventImages;
-    const attending = users.filter((user)=> {
-            return user.Attendance.status === 'attending'
-    });
-    event.numAttending = attending.length;
+    event.numAttending = event.Users.length;
     delete event.Users;
 
 
     res.json(event);
 });
 
-router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
+router.post('/:eventId/images',requireAuth, checkEventExistence,authorizeCurrentUserAttendance, async (req,res,next)=> {
     const {id} = req.user;
     const {eventId} = req.params;
     const {url,preview} = req.body;
-    const event = await Event.findByPk(eventId, {
-        attributes:["id",'groupId']
-    });
+    const event = req.event;
 
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    };
+    //there can only be 1 image that has a preview of true
+    if (preview===true) {
+        const previewImages = await event.getEventImages({
+            where: {preview:true}
+        });
 
-    const membership = await Membership.findOne({
-        where: {
-            memberId:id,
-            groupId:event.groupId
+        if (previewImages){
+            for (let image of previewImages) {
+                image.preview=false;
+                await image.save();
+            }
         }
-    });
-
-    const attendance = await Attendance.findOne({
-        where: {
-            userId:id,
-            eventId
-        }
-    });
-
-    if (!membership || !attendance || (membership.status!== 'co-host' && attendance.status!=="attending")) {
-        const err = new Error(`User does not have authorization to add an image to the event.
-            User must have a co-host membership status or must be an attendee of the event.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
     };
 
     let newImage = await event.createEventImage({url,preview});
@@ -144,82 +146,32 @@ router.post('/:eventId/images',requireAuth, async (req,res,next)=> {
     res.json(newImage);
 });
 
-router.put('/:eventId', requireAuth, async (req,res,next)=> {
-    const {eventId} = req.params;
-    const {id} = req.user;
+router.put('/:eventId', requireAuth,checkEventExistence,authorizeCurrentUser, validateEventEdits,async (req,res,next)=> {
+    //is venue existence a 404 or 400 error?
     const {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
-    const event = await Event.findByPk(eventId);
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    };
-
-    const membership = await Membership.findOne({
-        where: {
-            memberId:id,
-            groupId:event.groupId
-        }
-    });
-
-    if (!membership || membership.status!== 'co-host') {
-        const err = new Error(`User does not have authorization to edit the details of the event.
-            User must have a co-host membership status or must be the organizer of the group.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    };
-
-    if (venueId!==undefined) {
-        const venue = await Venue.findByPk(venueId);
-        if (!venue) {
-            const err = new Error("Venue couldn't be found");
-            err.title = "Invalid Venue Id"
-            err.status=404;
-            return next(err);
-        }
-        event.venueId = venueId;
-    };
+    const {eventId} = req.params;
+    let event = req.event;
+    if (venueId!==undefined) event.venueId = venueId;
     if (name!==undefined) event.name = name;
     if (type!==undefined) event.type = type;
     if (capacity!==undefined) event.capacity = capacity;
     if (price!==undefined) event.price = price;
-    if (description!==undefined) event.description = name;
+    if (description!==undefined) event.description = description;
     if (startDate!==undefined) event.startDate = startDate;
     if (endDate!==undefined) event.endDate = endDate;
 
     await event.save();
 
-    res.json(event);
+    const newEvent = await Event.findByPk(eventId, {attributes: {
+        include: ['capacity','price']
+    }});
+
+    res.json(newEvent);
 });
 
-router.delete('/:eventId', requireAuth, async (req,res,next)=> {
-    const {eventId} = req.params;
-    const {id} = req.user;
+router.delete('/:eventId', requireAuth,checkEventExistence,authorizeCurrentUser, async (req,res,next)=> {
 
-    const event = await Event.findByPk(eventId);
-
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    }
-    const membership = await Membership.findOne({
-        where: {
-            memberId:id,
-            groupId:event.groupId
-        }
-    });
-
-    if (!membership || membership.status !== 'co-host') {
-        const err = new Error(`User does not have authorization to delete the event.
-            User must have a co-host membership status or must be the organizer of the group.`);
-        err.title = "Permission not granted"
-        err.status=403;
-        return next(err);
-    }
+    const event = req.event;
 
     await event.destroy();
 
