@@ -187,45 +187,53 @@ router.delete('/:groupId',requireAuth, checkGroupExistence, authorizeGroupOrgani
    });
 
 //membership
-router.get('/:groupId/members',restoreUser, async (req,res,next)=> {
-
-
-    const { groupId } = req.params;
-
-    const group = await Group.findByPk(groupId);
-
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        err.title = "Invalid Group Id"
-        err.status=404;
-        return next(err);
-    }
-
+router.get('/:groupId/members',restoreUser,checkGroupExistence, async (req,res,next)=> {
+    const group = req.group;
+    let members;
 
     if (req.user) {
-
         const { id } = req.user;
-
         if (group.organizerId===id) {
-            const members = await group.getUsers();
-            return res.json(members);
+            members = await group.getUsers();
+        } else {
+            members = await group.getUsers({
+                attributes:['id','firstName','lastName'],
+                through: {
+                    //not selecting just membership.status
+                    attributes:['status'],
+                    where: {
+                        status:{
+                            [Op.in]:['member','co-host']
+                        }
+                    }
+                }
+            });
         }
-    }
-
-    const members = await group.getUsers({
-        attributes:['id','firstName','lastName'],
-        through: {
-            //not selecting just membership.status
-            attributes:['status'],
-            where: {
-                status:{
-                    [Op.in]:['member','co-host']
+    } else {
+        members = await group.getUsers({
+            attributes:['id','firstName','lastName'],
+            through: {
+                //not selecting just membership.status
+                attributes:['status'],
+                where: {
+                    status:{
+                        [Op.in]:['member','co-host']
+                    }
                 }
             }
-        }
+        });
+    }
+    const membersList = [];
+    members.forEach(member=> {
+        membersList.push(member.toJSON());
     });
 
-    return res.json(members);
+    for (let member of membersList) {
+        delete member.Membership.memberId;
+        delete member.Membership.groupId;
+    }
+
+    return res.json({Members:membersList});
 
 });
 

@@ -180,17 +180,10 @@ router.delete('/:eventId', requireAuth,checkEventExistence,authorizeCurrentUser,
 });
 
 //attendances
-router.get('/:eventId/attendees',restoreUser, async (req,res,next)=> {
-    const {eventId} = req.params;
+router.get('/:eventId/attendees',restoreUser,checkEventExistence, async (req,res,next)=> {
     const {id} = req.user;
-    const event = await Event.findByPk(eventId);
+    const event = req.event;
 
-    if (!event) {
-        const err = new Error("Event couldn't be found");
-        err.title = "Invalid Event Id"
-        err.status=404;
-        return next(err);
-    }
     const membership = await Membership.findOne({
         where: {
             memberId:id,

@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {Group,Venue,Membership,Event} = require('../db/models');
+const {Group,Venue,Membership,Event,GroupImage,EventImage} = require('../db/models');
 const { handleValidationErrors } = require('./validation.js');
 const { check } = require('express-validator');
 const {restoreUser} = require('./auth.js');
@@ -20,7 +20,7 @@ const checkVenueExistence = async (req,res,next) => {
 
 const authorizeCurrentUser = [restoreUser, async (req,res,next)=> {
     const {id} = req.user;
-    let {groupId,venueId,eventId} = req.params;
+    let {groupId,venueId,eventId,gimageId,eimageId} = req.params;
 
     if (venueId) {
         const venue = await Venue.findByPk(venueId,{attributes:['groupId']});
@@ -29,6 +29,19 @@ const authorizeCurrentUser = [restoreUser, async (req,res,next)=> {
     if (eventId) {
       const event = await Event.findByPk(eventId,{attributes:['groupId']});
       groupId = event.groupId
+    }
+    if (gimageId) {
+      const image = await GroupImage.findByPk(gimageId, {
+        attributes:['groupId']
+      });
+      groupId = image.groupId;
+    }
+    if (eimageId) {
+      const image = await EventImage.findByPk(eimageId, {include: {
+        model:Event,
+        attributes:['groupId']
+      }});
+      groupId = image.Event.groupId;
     }
 
     const currUserMembership = await Membership.findOne({
