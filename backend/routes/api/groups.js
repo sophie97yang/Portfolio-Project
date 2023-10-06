@@ -304,9 +304,12 @@ router.get('/:groupId/events',checkGroupExistence, async (req,res,next)=> {
 });
 
 router.post('/:groupId/events', requireAuth, checkGroupExistence,authorizeCurrentUser, validateEventCreation,async (req,res,next) => {
-    const {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
+    let {venueId,name,type,capacity,price,description,startDate,endDate} = req.body;
     const {id} = req.user;
     const group = req.group;
+
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
 
     let newEvent =  await group.createEvent({venueId,name,type,capacity,price,description,startDate,endDate});
 

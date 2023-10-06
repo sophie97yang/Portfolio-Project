@@ -26,7 +26,11 @@ router.get('/', validateQueryParams,async (req,res,next)=> {
     }
 
     //search filters
-    if (name) where.name = name;
+    if (name) {
+        const length=name.length;
+        name = name.slice(1,length-1);
+        where.name = name;
+    };
     if (type) {
         if (type==='"Online"') {
             where.type = 'Online';
@@ -42,6 +46,7 @@ router.get('/', validateQueryParams,async (req,res,next)=> {
         let date = new Date(startDate);
         where.startDate = date;
     }
+    console.log(where);
 
     const events = await Event.findAll({
         where,
