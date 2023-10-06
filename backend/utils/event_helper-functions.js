@@ -102,7 +102,6 @@ const validateEventCreation = [
         let startDate = req.body.startDate;
         startDate = new Date(startDate);
         startDate = startDate.getTime();
-        console.log(startDate,endDate);
         if (startDate>endDate) {
           throw new Error("End date is less than start date");
         } else {
