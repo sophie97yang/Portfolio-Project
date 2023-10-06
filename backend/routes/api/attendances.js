@@ -116,7 +116,7 @@ router.delete('/', requireAuth,checkEventExistence,validateAttendanceDeletion, a
 
     await attendance.destroy();
 
-    res.json({message: "Successfully deleted attendance from group"});
+    res.json({message: "Successfully deleted attendance from event"});
 });
 
 module.exports = router;
