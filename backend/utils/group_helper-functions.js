@@ -117,7 +117,7 @@ const authorizeGroupOrganizer = [restoreUser, async (req,res,next)=> {
     const {groupId} = req.params;
     const group = await Group.findByPk(groupId,{attributes:['organizerId']});
     if (req.user.id!==group.organizerId) {
-        const err = new Error("User does not have authorization to do this. User must be the organizer of the group.");
+        const err = new Error("Forbidden");
         err.status=403;
         err.title = "Permission not granted"
         return next(err);

@@ -110,8 +110,7 @@ router.delete('/',requireAuth,checkGroupExistence, validateMembershipDeletion,as
     const group = req.group;
 
     if (memberId!==id && group.organizerId!==id) {
-        const err = new Error(`User does not have authorization to delete members.
-        User must be the organizer of the group or the member who is being deleted.`);
+        const err = new Error(`Forbidden`);
         err.title = "Permission not granted"
         err.status=403;
         return next(err);

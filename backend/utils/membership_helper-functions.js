@@ -23,7 +23,7 @@ const authCurrUserMembership = [restoreUser, async (req,res,next)=> {
         if (currUserMembership && currUserMembership.status==='co-host') {
             return next();
         } else {
-            const err = new Error("User does not have authorization to do this. User must be the organizer of the group or have a co-host membership status.");
+            const err = new Error("Forbidden");
             err.status=403;
             err.title = "Permission not granted"
             return next(err);
@@ -31,7 +31,7 @@ const authCurrUserMembership = [restoreUser, async (req,res,next)=> {
     }
     if (status === 'co-host') {
         if (req.user.id!==group.organizerId) {
-            const err = new Error("User does not have authorization to do this. User must be the organizer of the group.");
+            const err = new Error("Forbidden");
             err.status=403;
             err.title = "Permission not granted"
             return next(err);
