@@ -11,10 +11,10 @@ module.exports = {
             errorObj[error.path] = error.msg;
         });
 
-        const err = new Error('Bad request!');
+        const err = new Error('Bad request');
         err.errors = errorObj;
         err.status = 400;
-        err.title = 'Bad request!';
+        err.title = 'Bad request';
         next(err);
     } else {
         next();

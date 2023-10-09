@@ -15,7 +15,7 @@ const customValidationErrors = (req,res,next)=> {
         const err = new Error('User already exists');
         err.errors = errorObj;
         err.status = 500;
-        err.title = 'Bad request!';
+        err.title = 'Bad request';
         next(err);
     } else {
         next();
