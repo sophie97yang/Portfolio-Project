@@ -70,16 +70,17 @@ router.delete('/', (req,res,next)=> {
 });
 
 //get session
-router.get('/', (req,res,next) => {
+router.get('/', async (req,res,next) => {
     const { user } = req;
     //if user is not null, restore session of user
     if (user) {
+        const username = await User.findByPk(user.id,{attributes:['username']});
         const safeUser = {
             id: user.id,
             firstName:user.firstName,
             lastName:user.lastName,
             email: user.email,
-            username:user.username
+            username:username.username
         };
         return res.json({user:safeUser})
     } else {

@@ -53,6 +53,9 @@ router.put('/',requireAuth,checkGroupExistence,validateMembershipEdits,authCurrU
         where: {
             groupId,
             memberId
+        },
+        attributes: {
+            include:['id']
         }
     });
 
