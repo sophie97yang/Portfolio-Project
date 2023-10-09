@@ -190,11 +190,18 @@ router.delete('/:groupId',requireAuth, checkGroupExistence, authorizeGroupOrgani
 //membership
 router.get('/:groupId/members',restoreUser,checkGroupExistence, async (req,res,next)=> {
     const group = req.group;
+    const {groupId} = req.params;
     let members;
 
     if (req.user) {
         const { id } = req.user;
-        if (group.organizerId===id) {
+        const currUserMembership = await Membership.findOne({
+            where: {
+                groupId,
+                memberId:id
+            }
+        });
+        if (group.organizerId===id || (currUserMembership && currUserMembership.status==='co-host')) {
             members = await group.getUsers();
         } else {
             members = await group.getUsers({

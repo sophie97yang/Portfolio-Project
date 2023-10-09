@@ -96,7 +96,10 @@ router.get('/:eventId',checkEventExistence, async (req,res,next)=> {
                 attributes: ['id','name','city','state','private']
             },
             {
-                model:Venue
+                model:Venue,
+                attributes: {
+                    exclude:['groupId']
+                }
             },
             {
                 model:User,
