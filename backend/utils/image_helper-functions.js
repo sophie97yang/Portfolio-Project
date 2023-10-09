@@ -6,7 +6,6 @@ const {restoreUser} = require('./auth.js');
 
 const checkGroupImageExistence = async (req,res,next) => {
     const {gimageId} = req.params;
-    console.log(gimageId);
     const image = await GroupImage.findByPk(gimageId);
 
     if (!image) {

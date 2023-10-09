@@ -9,7 +9,6 @@ const authCurrUserMembership = [restoreUser, async (req,res,next)=> {
     const {groupId} = req.params;
     const group = req.group;
     const {status} = req.body;
-    console.log(status);
 
     const currUserMembership = await Membership.findOne({
         where: {
