@@ -234,7 +234,7 @@ const validateEventCreation = [
         check('type')
         .optional({values:null})
         .custom(value => {
-            if (!(value==='"Online"'|| value==='"In person"')) {
+            if (!(value==="Online"|| value==="In person")) {
                 return false
             }
             else {
@@ -245,9 +245,9 @@ const validateEventCreation = [
         check('startDate')
         .optional({values:null})
         .custom(value => {
-          const length = value.length;
-          let input = value.slice(1,length-1)
-          input = new Date(input);
+          // const length = value.length;
+          // let input = value.slice(1,length-1)
+          input = new Date(value);
           if (!isNaN(input)) {
             return true;
           } else {

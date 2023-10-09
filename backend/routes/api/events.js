@@ -27,22 +27,23 @@ router.get('/', validateQueryParams,async (req,res,next)=> {
 
     //search filters
     if (name) {
-        const length=name.length;
-        name = name.slice(1,length-1);
+        // const length=name.length;
+        // name = name.slice(1,length-1);
         where.name = name;
     }
     if (type) {
-        if (type==='"Online"') {
-            where.type = 'Online';
-        }
-        if (type === '"In person') {
-            where.type = 'In person';
-        }
+        // if (type==='"Online"') {
+        //     where.type = 'Online';
+        // }
+        // if (type === '"In person') {
+        //     where.type = 'In person';
+        // }
+        where.type=type;
 
     }
     if (startDate) {
-        const length=startDate.length;
-        startDate = startDate.slice(1,length-1);
+        // const length=startDate.length;
+        // startDate = startDate.slice(1,length-1);
         let date = new Date(startDate);
         where.startDate = date;
     }
