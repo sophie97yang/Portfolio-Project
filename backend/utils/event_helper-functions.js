@@ -201,8 +201,7 @@ const validateEventCreation = [
     if ((membership && membership.status==='co-host') || (attendance && attendance.status==='attending')) {
         return next();
     }else {
-        const err = new Error(`User does not have authorization to add an image to the event.
-            User must have a co-host membership status or must be an attendee of the event.`);
+        const err = new Error(`Forbidden`);
         err.title = "Permission not granted"
         err.status=403;
         return next(err);

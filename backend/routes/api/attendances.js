@@ -20,8 +20,7 @@ router.post('/',requireAuth,checkEventExistence, async (req,res,next)=> {
     });
 
     if (!membership || membership.status==='pending') {
-        const err = new Error(`User does not have authorization to request attendance for the event.
-        User must be a member of the group.`);
+        const err = new Error(`Forbidden`);
         err.title = "Permission not granted"
         err.status=403;
         return next(err);
@@ -98,7 +97,7 @@ router.delete('/', requireAuth,checkEventExistence,validateAttendanceDeletion, a
     const event = req.event;
 
     if (userId!==id && event.Group.organizerId!==id) {
-        const err = new Error(`Only the User or organizer may delete an Attendance.`);
+        const err = new Error(`Forbidden`);
         err.title = "Permission not granted"
         err.status=403;
         return next(err);
