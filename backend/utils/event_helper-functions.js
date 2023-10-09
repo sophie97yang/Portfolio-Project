@@ -221,7 +221,15 @@ const validateEventCreation = [
         .withMessage('Size must be greater than or equal to 1'),
         check('name')
           .optional({values:null})
-          .isString()
+          // .isString()
+          .custom(value=> {
+            let isItNum = ParseInt(value);
+            if (isItNum) {
+              throw new Error('Name must be a string')
+            } else {
+              return true;
+            }
+          })
         .withMessage('Name must be a string'),
         check('type')
         .optional({values:null})
