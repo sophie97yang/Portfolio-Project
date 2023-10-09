@@ -223,9 +223,9 @@ const validateEventCreation = [
           .optional({values:null})
           // .isString()
           .custom(value=> {
-            let isItNum = ParseInt(value);
+            let isItNum = parseInt(value);
             if (isItNum) {
-              throw new Error('Name must be a string')
+              throw new Error('Name must be a string');
             } else {
               return true;
             }
@@ -242,11 +242,19 @@ const validateEventCreation = [
             }
           })
         .withMessage("Type must be 'Online' or 'In person'"),
-        // check('startDate')
-        // .optional({values:null})
-        // // .isDate()
-        // .matches(regex)
-        // .withMessage("Start date must be a valid datetime"),
+        check('startDate')
+        .optional({values:null})
+        .custom(value => {
+          const length = value.length;
+          let input = value.slice(1,length-1)
+          input = new Date(input);
+          if (!isNaN(input)) {
+            return true;
+          } else {
+            throw new Error('Start date must be a valid datetime');
+          }
+        })
+        .withMessage("Start date must be a valid datetime"),
     handleValidationErrors
       ];
 module.exports = {getEventDetails,checkEventExistence,validateEventCreation,authorizeCurrentUserAttendance,validateEventEdits,validateQueryParams}

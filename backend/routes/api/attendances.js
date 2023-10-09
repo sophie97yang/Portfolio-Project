@@ -80,7 +80,6 @@ router.put('/',requireAuth, checkEventExistence, authorizeCurrentUser,validateAt
 
     attendanceToChange.status = status;
     await attendanceToChange.save();
-    console.log(attendanceToChange)
     res.json({
         id:attendanceToChange.id,
         eventId:attendanceToChange.eventId,
