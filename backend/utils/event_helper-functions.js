@@ -125,10 +125,9 @@ const validateEventCreation = [
     })
     .withMessage('Venue does not exist'),
     check('name').optional({values:null})
-      .exists({checkFalsy:true})
       .isLength({min:5})
       .withMessage('Name must be at least 5 characters'),
-      check('type')
+    check('type')
       .exists({checkFalsy:true})
       .custom( value => {
         if (!(value==='Online'|| value==='In person')) return false;
@@ -136,12 +135,47 @@ const validateEventCreation = [
       })
       .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity').optional({values:null})
-      .exists({values:"null"})
       .isInt()
       .withMessage('Capacity must be an integer'),
     check('description').optional({values:null})
-      .exists({ checkFalsy: true })
+      .exists({checkFalsy: true})
       .withMessage('Description is required'),
+      check('price').optional({values:null})
+      .custom( value => {
+        if (!parseInt(value)|| value<0) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+      .withMessage('Price is invalid'),
+    check('startDate').optional({values:null})
+      .custom(value => {
+        let currDate = new Date();
+        currDate = currDate.getTime();
+        let startDate = new Date(value);
+        startDate = startDate.getTime();
+        if (startDate<=currDate) {
+          throw new Error("Start date must be in the future");
+        } else {
+          return true;
+        }
+      })
+      .withMessage('Start date must be in the future'),
+    check('endDate').optional({values:null})
+      .custom((value, { req })=> {
+        let endDate = new Date(value);
+        endDate = endDate.getTime();
+        let startDate = req.body.startDate;
+        startDate = new Date(startDate);
+        startDate = startDate.getTime();
+        if (startDate>endDate) {
+          throw new Error("End date is less than start date");
+        } else {
+          return true;
+        }
+      })
+      .withMessage('End date is less than start date'),
     handleValidationErrors
   ];
 

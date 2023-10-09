@@ -164,7 +164,7 @@ router.put('/:eventId', requireAuth,checkEventExistence,authorizeCurrentUser, va
     await event.save();
 
     const newEvent = await Event.findByPk(eventId, {attributes: {
-        include: ['capacity','price']
+        include: ['capacity','price','description']
     }});
 
     res.json(newEvent);

@@ -51,7 +51,10 @@ router.post('/',requireAuth,checkEventExistence, async (req,res,next)=> {
 
     const added = await event.addUser(user);
     const newMember = added[0];
-    res.json(newMember);
+    res.json({
+        userId:newMember.userId,
+        status:newMember.status
+    });
 
 });
 
@@ -64,7 +67,8 @@ router.put('/',requireAuth, checkEventExistence, authorizeCurrentUser,validateAt
         where: {
             eventId,
             userId
-        }
+        },
+        attributes: ['status','id','eventId','userId']
     });
 
     if (!attendanceToChange) {
@@ -77,6 +81,7 @@ router.put('/',requireAuth, checkEventExistence, authorizeCurrentUser,validateAt
 
     attendanceToChange.status = status;
     await attendanceToChange.save();
+    console.log(attendanceToChange)
     res.json({
         id:attendanceToChange.id,
         eventId:attendanceToChange.eventId,

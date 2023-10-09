@@ -63,7 +63,7 @@ router.get('/:groupId',checkGroupExistence, async (req,res,next)=> {
     let group = await Group.findByPk(groupId, {
         include:[
         {
-            model:GroupImage
+            model:GroupImage, attributes:{exclude:['groupId','createdAt','updatedAt']}
         },
         {
           model:Venue
@@ -89,6 +89,7 @@ router.get('/:groupId',checkGroupExistence, async (req,res,next)=> {
     group.numMembers = members.length;
     group.Organizer = group.User;
     delete group.User;
+
 
 
     res.json(group);
