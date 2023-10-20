@@ -24,7 +24,10 @@ export const logIn = (credentials) => async dispatch => {
         const user = await res.json();
         dispatch(setUser(user));
         return user
-    } else return res.json();
+    } else {
+        const data= await res.json();
+        return data;
+    }
 };
 
 

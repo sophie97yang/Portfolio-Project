@@ -1,0 +1,28 @@
+form {
+    border: 1px solid gray;
+    border-radius: 5px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+    padding:32px 32px 60px;
+    margin: 40px 0px 64px;
+    font-family: Graphik Meetup,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+
+}
+
+.errors {
+    color: #C80000;
+    font-size: 12px;
+}
+
+button {
+    background-color:#e32359;
+    border-color: #e32359;
+    border-radius:8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+    border-style:none;
+
+}
