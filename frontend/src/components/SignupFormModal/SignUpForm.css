@@ -7,3 +7,27 @@ button:disabled {
     flex-direction:column;
     flex-grow:1;
 }
+
+.form-signup {
+    border: 1px solid;
+    border-color:rgb(230 230 230/1);
+    border-radius: 0.5rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+    padding:20px 150px;
+    margin: 0px auto;
+    font-family: Graphik Meetup,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    display:inline-flex;
+    margin: 0px auto;
+
+}
+.form-signup .userInput {
+    display: flex;
+    flex-direction:column;
+}
+
+.form-signup .userInput>input {
+    margin:10px;
+}

@@ -3,6 +3,8 @@ import { signUpUser } from "../../store/session";
 import { useDispatch, useSelector } from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import { useModal } from "../../context/modal";
+import OpenModalButton from "../OpenModalButton";
+import LoginFormModal from "../LoginFormModal";
 import './SignUpForm.css';
 
 
@@ -58,9 +60,13 @@ const SignUpFormModal = () => {
 
     return (
         <div className="signUpForm">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='form-signup'>
             <h2>Sign Up</h2>
-
+            <h4>Already a member? <span><OpenModalButton
+                    buttonText="Log In"
+                    modalComponent={<LoginFormModal />}
+                    />
+            </span></h4>
             <div className='userInput'>
             <label>First Name</label>
                 <input
@@ -127,7 +133,7 @@ const SignUpFormModal = () => {
             </div>
 
 
-            <button type="submit" disabled={disabled}>Sign Up</button>
+            <button type="submit" disabled={disabled} className='submitButton'>Sign Up</button>
         </form>
         </div>
     )

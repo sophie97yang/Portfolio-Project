@@ -1,7 +1,8 @@
 import {useState, useEffect } from 'react';
 import { useDispatch} from 'react-redux';
 import * as sessionActions from '../../store/session';
-import { Link } from 'react-router-dom';
+import OpenModalButton from '../OpenModalButton';
+import SignUpFormModal from "../SignupFormModal";
 import {useModal} from '../../context/modal';
 import "./LoginForm.css";
 
@@ -46,9 +47,14 @@ const LoginFormModal = () => {
 
     return (
         <div className="loginForm">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='form-login'>
             <h2>Log In</h2>
-            <h4>Not a member yet? <span><Link to='/signup'>Sign up</Link></span></h4>
+            <h4>Not a member yet? <span>
+                <OpenModalButton
+                    buttonText="Sign Up"
+                    modalComponent={<SignUpFormModal />}
+                    />
+            </span></h4>
             <div className='userInput'>
             <label>Username or Email</label>
                 <input
@@ -82,7 +88,7 @@ const LoginFormModal = () => {
             Keep me signed in
             </label>
 
-            <button type="submit" disabled={disabled}>Log in</button>
+            <button type="submit" disabled={disabled} className='submitButton'>Log in</button>
         </form>
         </div>
     )
