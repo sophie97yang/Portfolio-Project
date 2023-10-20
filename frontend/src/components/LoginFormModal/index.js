@@ -29,8 +29,19 @@ const LoginFormModal = () => {
         setFormErrors(errorsForm);
     },[credential,password])
 
+    useEffect(() => {
+        const handleEnter = (e)=> {
+            if (e.key==='Enter') {
+                e.preventDefault();
+            }
+        }
+        document.addEventListener("keypress",handleEnter);
+        return () => document.removeEventListener("keypress", handleEnter);
+    }, []);
+
 
     const handleSubmit = async (e) => {
+        console.log(e);
         e.preventDefault();
         setErrors({});
         const user = {credential,password};
@@ -88,7 +99,11 @@ const LoginFormModal = () => {
             Keep me signed in
             </label>
 
-            <button type="submit" disabled={disabled} className='submitButton'>Log in</button>
+            <button
+            type="submit"
+            disabled={disabled}
+            className='submitButton'
+            >Log in</button>
         </form>
         </div>
     )

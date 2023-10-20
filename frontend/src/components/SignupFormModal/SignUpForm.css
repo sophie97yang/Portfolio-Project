@@ -31,3 +31,7 @@ button:disabled {
 .form-signup .userInput>input {
     margin:10px;
 }
+
+.form-signup > .submitButton {
+    width:150%;
+}

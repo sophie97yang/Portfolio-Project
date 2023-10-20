@@ -38,6 +38,9 @@
     margin:10px;
 
 }
+.form-login > .submitButton {
+    width:150%;
+}
 
 h4 button {
     border:none;

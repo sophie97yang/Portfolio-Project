@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { signUpUser } from "../../store/session";
-import { useDispatch, useSelector } from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import { useDispatch} from 'react-redux';
 import { useModal } from "../../context/modal";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
@@ -20,7 +19,6 @@ const SignUpFormModal = () => {
     const [disabled, setDisabled] = useState(true);
     const {closeModal} = useModal();
 
-    const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
 
 
@@ -39,7 +37,15 @@ const SignUpFormModal = () => {
         setFormErrors(errorsForm);
     },[firstName,lastName,username,password,confirm])
 
-    if (sessionUser) return <Redirect to='/'/>
+    useEffect(() => {
+        const handleEnter = (e)=> {
+            if (e.key==='Enter') {
+                e.preventDefault();
+            }
+        }
+        document.addEventListener("keypress",handleEnter);
+        return () => document.removeEventListener("keypress", handleEnter);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
