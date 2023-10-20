@@ -1,7 +1,7 @@
-import {useState,useEffect} from 'react';
+import {useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as sessionActions from '../../store/session';
-import { Redirect } from 'react-router-dom';
+import { Redirect,Link } from 'react-router-dom';
 import "./LoginForm.css";
 
 const LoginFormPage = () => {
@@ -9,10 +9,25 @@ const LoginFormPage = () => {
     const [password,setPassword] = useState('');
     const [sustainUser, setSustainUser] = useState(false);
     const [errors,setErrors] = useState({});
+    const [formError,setFormErrors] = useState({empty:'true'});
+    const [disabled,setDisabled] = useState(true);
     const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
 
-    if (sessionUser) return <Redirect to='/' />
+
+    useEffect(()=> {
+        if (Object.keys(formError).length) setDisabled(true);
+        else setDisabled(false);
+    },[formError])
+
+    useEffect(()=> {
+        const errorsForm = {};
+        if (credential.length<4) errorsForm.credential = true;
+        if (password.length<6) errorsForm.password = true;
+        setFormErrors(errorsForm);
+    },[credential,password])
+
+    // if (sessionUser) return <Redirect to='/' />;
 
 
     const handleSubmit = async (e) => {
@@ -32,9 +47,9 @@ const LoginFormPage = () => {
         <div className="loginForm">
         <form onSubmit={handleSubmit}>
             <h2>Log In</h2>
-            <h4>Not a member yet? <span>Sign up</span></h4>
+            <h4>Not a member yet? <span><Link to='/signup'>Sign up</Link></span></h4>
             <div className='userInput'>
-            <label>Email</label>
+            <label>Username or Email</label>
                 <input
                     type='text'
                     value={credential}
@@ -66,7 +81,7 @@ const LoginFormPage = () => {
             Keep me signed in
             </label>
 
-            <button type="submit">Log in</button>
+            <button type="submit" disabled={disabled}>Log in</button>
         </form>
         </div>
     )

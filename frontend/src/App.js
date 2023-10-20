@@ -3,6 +3,7 @@ import LoginFormPage from "./components/LoginFormPage";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
+import SignUpPage from "./components/SignupFormPage";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -19,6 +20,10 @@ function App() {
     <Switch>
     <Route path='/login'>
       <LoginFormPage />
+    </Route>
+
+    <Route path='/signup'>
+      <SignUpPage />
     </Route>
     </Switch>
 
