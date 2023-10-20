@@ -36,12 +36,6 @@ ul {
     flex-direction:row;
 }
 
-a {
-    text-decoration: none;
-    color:black;
-    padding:10px;
-}
-
 .niceTo {
     font-size:small;
     font-style: italic;
@@ -54,4 +48,22 @@ a {
 
 nav {
     border-bottom:1px solid rgb(230 230 230/1);
+}
+
+.NavLinks button {
+    margin:0 10px;
+    background-color:#e32359;
+    border-color: #e32359;
+    border-radius:8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+    border-style:none;
+    /* background-color:white;
+    color:black;
+    border:none; */
+}
+
+.userInfo>p{
+    border-bottom:1px rgb(230 230 230/1);
 }

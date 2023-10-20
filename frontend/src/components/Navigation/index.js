@@ -22,11 +22,13 @@ const Navigation = ({isLoaded}) => {
                 <li>
                     <OpenModalButton
                     buttonText="Log In"
-                    modalComponent={<LoginFormModal />}
+                    modalComponent={<LoginFormModal
+                    />}
                     />
                     <OpenModalButton
                     buttonText="Sign Up"
-                    modalComponent={<SignUpFormModal />}
+                    modalComponent={<SignUpFormModal
+                    />}
                     />
                 </li>
                 </div>

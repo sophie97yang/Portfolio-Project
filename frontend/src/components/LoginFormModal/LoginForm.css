@@ -2,9 +2,10 @@
     display:flex;
     flex-direction:column;
     flex-grow:1;
+    width:fit-content;
 }
 
-form {
+.form-login {
     border: 1px solid;
     border-color:rgb(230 230 230/1);
     border-radius: 0.5rem;
@@ -12,11 +13,12 @@ form {
     flex-direction:column;
     align-items:center;
     justify-content: center;
-    padding:32px 32px 60px;
+    padding:60px 150px;
     margin: 0px auto;
     font-family: Graphik Meetup,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
     display:inline-flex;
     margin: 0px auto;
+
 
 }
 
@@ -25,7 +27,7 @@ form {
     font-size: 12px;
 }
 
-button {
+.submitButton {
     background-color:#e32359;
     border-color: #e32359;
     border-radius:8px;
@@ -33,10 +35,21 @@ button {
     cursor: pointer;
     color: #fff;
     border-style:none;
+    margin:10px;
 
 }
+.form-login > .submitButton {
+    width:150%;
+}
 
-.userInput {
+h4 button {
+    border:none;
+    text-decoration:underline;
+    background-color:white;
+    color:#00798a;
+}
+
+.form-login .userInput {
     display: flex;
     flex-direction:column;
     padding: 10px
@@ -44,5 +57,15 @@ button {
 
 input {
     border-color: rgb(202, 194, 194);
-    border-radius:0.2rem;
+    border-radius:0.5em;
+    height:2em;
+}
+
+.form-login .userInput>input {
+    margin:8px;
+}
+
+
+.userInput {
+    width:150%;
 }
