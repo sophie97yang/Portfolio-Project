@@ -62,6 +62,16 @@ export const signUpUser = (newUser) => async dispatch => {
     }
 }
 
+export const logOut = () => async dispatch => {
+    const res = await csrfFetch('/api/session', {
+        method:'DELETE'
+    });
+
+    if (res.ok) {
+        dispatch(removeUser());
+    } return res;
+}
+
 
 const initialState={user:null}
 

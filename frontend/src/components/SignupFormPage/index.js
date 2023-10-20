@@ -19,7 +19,6 @@ const SignUpPage = () => {
     const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
 
-    // if (sessionUser) return <Redirect to='/'/>
 
     useEffect(()=> {
         if (Object.keys(formError).length) setDisabled(true);
@@ -36,6 +35,7 @@ const SignUpPage = () => {
         setFormErrors(errorsForm);
     },[firstName,lastName,username,password,confirm])
 
+    if (sessionUser) return <Redirect to='/'/>
 
     const handleSubmit = (e) => {
         e.preventDefault();

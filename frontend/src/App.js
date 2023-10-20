@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
 import SignUpPage from "./components/SignupFormPage";
+import Navigation from "./components/Navigation";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -16,8 +17,9 @@ function App() {
 
   return (
     <div>
-    <h1>MeetYou</h1>
-    <Switch>
+    <Navigation isLoaded={isLoaded}/>
+
+    {isLoaded && (<Switch>
     <Route path='/login'>
       <LoginFormPage />
     </Route>
@@ -26,7 +28,7 @@ function App() {
       <SignUpPage />
     </Route>
     </Switch>
-
+    )}
     </div>
   );
 }

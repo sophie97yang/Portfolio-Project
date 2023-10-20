@@ -27,7 +27,7 @@ const LoginFormPage = () => {
         setFormErrors(errorsForm);
     },[credential,password])
 
-    // if (sessionUser) return <Redirect to='/' />;
+    if (sessionUser) return <Redirect to='/' />;
 
 
     const handleSubmit = async (e) => {
