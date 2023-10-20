@@ -9,7 +9,6 @@ const eventRouter = require('./events.js');
 const { authorizeCurrentUser } = require('../../utils/venue_helper-functions.js');
 const {checkGroupImageExistence,checkEventImageExistence} = require('../../utils/image_helper-functions.js')
 
-
 router.use(restoreUser);
 
 router.use('/session',sessionRouter);
