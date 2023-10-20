@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { signUpUser } from "../../store/session";
 import { useDispatch, useSelector } from 'react-redux';
 import {Redirect} from 'react-router-dom';
+import { useModal } from "../../context/modal";
 import './SignUpForm.css';
 
 
-const SignUpPage = () => {
+const SignUpFormModal = () => {
     const [firstName,setFirstName] = useState('');
     const [lastName,setLastName] = useState('');
     const [email,setEmail] = useState('');
@@ -15,6 +16,7 @@ const SignUpPage = () => {
     const [errors,setErrors] = useState({});
     const [formError,setFormErrors] = useState({empty:'true'});
     const [disabled, setDisabled] = useState(true);
+    const {closeModal} = useModal();
 
     const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
@@ -41,11 +43,11 @@ const SignUpPage = () => {
         e.preventDefault();
         setErrors({});
 
-        // if (password!==confirm) return setErrors({...errors, confirm:'Confirm password does not match password'});
-
         const newUser = {firstName,lastName,email,username,password};
 
-        return dispatch(signUpUser(newUser)).catch(
+        return dispatch(signUpUser(newUser))
+        .then(closeModal)
+        .catch(
             async (res) => {
                 res = await res.json();
                 if (res?.errors) setErrors(res.errors);
@@ -131,4 +133,4 @@ const SignUpPage = () => {
     )
 };
 
-export default SignUpPage;
+export default SignUpFormModal;

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import logo from './Meet-U.png';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from "../LoginFormModal";
+import SignUpFormModal from "../SignupFormModal";
 import './navigation.css';
 
 const Navigation = ({isLoaded}) => {
@@ -18,11 +19,16 @@ const Navigation = ({isLoaded}) => {
             {isLoaded && (!sessionUser ?
                 <>
                 <div className='NavLinks'>
-                <li><OpenModalButton
+                <li>
+                    <OpenModalButton
                     buttonText="Log In"
                     modalComponent={<LoginFormModal />}
-                /></li>
-                <li><NavLink to='/signup'> Sign Up </NavLink></li>
+                    />
+                    <OpenModalButton
+                    buttonText="Sign Up"
+                    modalComponent={<SignUpFormModal />}
+                    />
+                </li>
                 </div>
                 </>
                 :

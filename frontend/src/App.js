@@ -3,7 +3,7 @@ import { Route,Switch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
-import SignUpPage from "./components/SignupFormPage";
+// import SignUpPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
 function App() {
   const dispatch = useDispatch();
@@ -19,16 +19,7 @@ function App() {
     <div>
     <Navigation isLoaded={isLoaded}/>
 
-    {isLoaded && (<Switch>
-    {/* <Route path='/login'>
-      <LoginFormPage />
-    </Route> */}
-
-    <Route path='/signup'>
-      <SignUpPage />
-    </Route>
-    </Switch>
-    )}
+    {isLoaded && (<Switch></Switch>)}
     </div>
   );
 }
