@@ -1,0 +1,9 @@
+button:disabled {
+    opacity: 0.3;
+}
+
+.signUpForm {
+    display:flex;
+    flex-direction:column;
+    flex-grow:1;
+}
