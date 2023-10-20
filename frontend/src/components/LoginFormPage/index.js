@@ -29,10 +29,11 @@ const LoginFormPage = () => {
     }
 
     return (
+        <div className="loginForm">
         <form onSubmit={handleSubmit}>
             <h2>Log In</h2>
             <h4>Not a member yet? <span>Sign up</span></h4>
-
+            <div className='userInput'>
             <label>Email</label>
                 <input
                     type='text'
@@ -46,7 +47,8 @@ const LoginFormPage = () => {
             Email has invalid format
             Password is required
             */}
-
+            </div>
+            <div className='userInput'>
             <label> Password </label>
                 <input
                     type='password'
@@ -55,6 +57,7 @@ const LoginFormPage = () => {
                 />
 
             <div className='errors'>{errors?.password}</div>
+            </div>
             <label>
             <input type='checkbox'
             value={sustainUser}
@@ -65,6 +68,7 @@ const LoginFormPage = () => {
 
             <button type="submit">Log in</button>
         </form>
+        </div>
     )
 };
 

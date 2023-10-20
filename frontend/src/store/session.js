@@ -22,13 +22,26 @@ export const logIn = (credentials) => async dispatch => {
 
     if (res.ok) {
         const user = await res.json();
-        dispatch(setUser(user));
+        dispatch(setUser(user.user));
         return user
     } else {
         const data= await res.json();
         return data;
     }
 };
+
+export const restoreUser = () => async dispatch => {
+    const res = await csrfFetch('/api/session');
+
+    if (res.ok) {
+        const user = await res.json();
+        dispatch (setUser(user.user));
+        return user;
+    } else {
+        const data = await res.json();
+        return data;
+    }
+}
 
 
 const initialState={user:null}
