@@ -1,18 +1,19 @@
 import {useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import * as sessionActions from '../../store/session';
-import { Redirect,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import {useModal} from '../../context/modal';
 import "./LoginForm.css";
 
-const LoginFormPage = () => {
+const LoginFormModal = () => {
     const [credential,setCredential] = useState('');
     const [password,setPassword] = useState('');
     const [sustainUser, setSustainUser] = useState(false);
     const [errors,setErrors] = useState({});
     const [formError,setFormErrors] = useState({empty:'true'});
     const [disabled,setDisabled] = useState(true);
-    const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
+    const {closeModal} = useModal();
 
 
     useEffect(()=> {
@@ -27,14 +28,14 @@ const LoginFormPage = () => {
         setFormErrors(errorsForm);
     },[credential,password])
 
-    if (sessionUser) return <Redirect to='/' />;
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
         const user = {credential,password};
-        return await dispatch(sessionActions.logIn(user)).catch(
+        return await dispatch(sessionActions.logIn(user))
+        .then(closeModal)
+        .catch(
            async (res) => {
             res = await res.json();
 
@@ -87,4 +88,4 @@ const LoginFormPage = () => {
     )
 };
 
-export default LoginFormPage;
+export default LoginFormModal;

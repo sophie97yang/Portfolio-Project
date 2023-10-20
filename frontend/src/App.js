@@ -1,5 +1,5 @@
 import { Route,Switch } from "react-router-dom";
-import LoginFormPage from "./components/LoginFormPage";
+// import LoginFormPage from "./components/LoginFormPage";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
@@ -20,9 +20,9 @@ function App() {
     <Navigation isLoaded={isLoaded}/>
 
     {isLoaded && (<Switch>
-    <Route path='/login'>
+    {/* <Route path='/login'>
       <LoginFormPage />
-    </Route>
+    </Route> */}
 
     <Route path='/signup'>
       <SignUpPage />
