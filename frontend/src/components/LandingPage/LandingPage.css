@@ -21,3 +21,46 @@
 .lp-start-true  a {
     cursor:not-allowed;
 }
+
+.lp-section-two {
+    display: flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.lp-groups a,.lp-events a,.lp-start-false a {
+    color:teal;
+    text-decoration:none;
+}
+
+.lp-groups a:hover,.lp-events a:hover,.lp-start-false a:hover {
+    text-decoration:underline;
+}
+
+.lp-section-one  button {
+    background-color:teal;
+    color:white;
+    padding:10px;
+    border-radius:5px;
+    border-color:teal;
+    box-shadow:none;
+    cursor:pointer;
+}
+
+.lp-section-one {
+    display:flex;
+    flex-direction:row;
+    padding-left:50px;
+}
+
+.lp-section-one img {
+    width: 40%;
+}
+
+.lp-section-three img {
+    width:300px;
+    height:200px;
+}
+.lp-start-true img {
+    opacity:0.5;
+}
