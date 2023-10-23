@@ -39,9 +39,21 @@ const LoginFormModal = () => {
         return () => document.removeEventListener("keypress", handleEnter);
     }, []);
 
+    const handleDemoUserClick = async (e) => {
+        e.preventDefault();
+        const user = {credential:'test1',password:'password'};
+        return await dispatch(sessionActions.logIn(user))
+        .then(closeModal)
+        .catch(
+           async (res) => {
+            res = await res.json();
+            if (res?.errors) setErrors(res.errors);
+            }
+        )
+    };
+
 
     const handleSubmit = async (e) => {
-        console.log(e);
         e.preventDefault();
         setErrors({});
         const user = {credential,password};
@@ -98,12 +110,20 @@ const LoginFormModal = () => {
             />
             Keep me signed in
             </label> */}
-
             <button
             type="submit"
             disabled={disabled}
             className='submitButton'
             >Log in</button>
+
+            <div>
+                <button
+                    className="demo-user"
+                    onClick={handleDemoUserClick}
+                >
+                    Demo User
+                </button>
+            </div>
         </form>
         </div>
     )

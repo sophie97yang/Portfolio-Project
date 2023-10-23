@@ -42,11 +42,12 @@
     width:150%;
 }
 
-h4 button {
+h4 button, .demo-user {
     border:none;
     text-decoration:underline;
     background-color:white;
     color:#00798a;
+    font-size:16px;
 }
 
 .form-login .userInput {
