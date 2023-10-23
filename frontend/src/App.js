@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
+import Groups from './components/Groups';
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -21,6 +22,7 @@ function App() {
     {isLoaded && (
     <Switch>
       <Route exact path='/'> <LandingPage /> </Route>
+      <Route path='/groups'> <Groups /> </Route>
     </Switch>)}
     </div>
   );

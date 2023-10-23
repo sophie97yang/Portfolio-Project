@@ -1,14 +1,13 @@
 import OpenModalButton from '../OpenModalButton/index';
 import SignUpFormModal from "../SignupFormModal/index";
 import { Link } from 'react-router-dom';
-import './LandingPage.css';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import mainImage from './main-image.png';
 import groupsIcon from './groups.png';
 import eventsIcon from './events.png';
 import startIcon from './start.png';
-
+import './LandingPage.css';
 const LandingPage = () => {
     const [disabled,setDisabled] = useState(true);
     const sessionUser = useSelector(state=> state.session.user);
