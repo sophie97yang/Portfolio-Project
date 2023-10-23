@@ -2,6 +2,8 @@ import { csrfFetch } from "./csrf";
 
 export const GET_GROUPS='groups/GET_GROUPS';
 export const GET_DETAILS = 'groups/GET_DETAILS';
+export const GET_EVENTS = 'groups/GET_EVENTS';
+
 
 export const getGroups = (groups) => ({
     type:GET_GROUPS,
@@ -11,6 +13,10 @@ export const getGroups = (groups) => ({
 export const getDetails = (group) => ({
     type:GET_DETAILS,
     group
+});
+export const getEvents = (events) => ({
+    type:GET_EVENTS,
+    events
 });
 
 
@@ -41,8 +47,21 @@ export const fetchDetails = (groupId) => async dispatch => {
 
 };
 
+export const groupEvents = (groupId) => async dispatch => {
+    const res = await csrfFetch(`/api/groups/${groupId}/events`);
 
-const initialState = {groups:null,group:null};
+    if (res.ok) {
+        const events = await res.json();
+        dispatch(getEvents(events));
+        return events;
+    } else {
+        const data = await res.json();
+        return data;
+    }
+}
+
+
+const initialState = {groups:null,group:null,groupEvents:null};
 
 const groupsReducer = (state=initialState,action) => {
     switch(action.type) {
@@ -50,6 +69,8 @@ const groupsReducer = (state=initialState,action) => {
             return {...state, groups:action.groups}
         case GET_DETAILS:
             return {...state, group:action.group}
+        case GET_EVENTS:
+            return {...state, groupEvents: action.events}
         default:
             return state;
     }
