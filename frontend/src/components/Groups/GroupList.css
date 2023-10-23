@@ -1,0 +1,54 @@
+.groupsPage {
+    width:700px;
+    margin: 10px auto;
+
+}
+.groups-nav {
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+}
+.groups-nav>h2 {
+    padding-left:20px;
+}
+
+#events-link {
+    color:grey;
+    font-weight:normal;
+    text-decoration:none;
+}
+
+#events-link:hover {
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+#groups-link {
+    color:teal;
+    cursor:default;
+    font-weight:normal;
+}
+
+.groups-list {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    text-decoration: none;
+}
+
+.group-details {
+    display:flex;
+    flex-direction:row;
+    padding-bottom:20px;
+}
+
+.group-details-right {
+    padding-left:20px;
+}
+
+.groups-list a {
+    text-decoration:none;
+    color:black;
+
+
+}
