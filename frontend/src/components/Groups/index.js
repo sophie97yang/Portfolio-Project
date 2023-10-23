@@ -1,8 +1,7 @@
-import { Link,NavLink,Switch,Route} from "react-router-dom";
+import { Link,NavLink} from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import {useEffect} from 'react';
 import { allGroups } from "../../store/groups";
-import GroupDetails from '../GroupDetails';
 import './GroupList.css';
 
 const Groups = () => {
@@ -41,11 +40,6 @@ const Groups = () => {
                 ))}
             </ul>
         </div>
-        <Switch>
-            <Route path='/groups/:id'>
-                <GroupDetails groups={groups.groups}/>
-            </Route>
-        </Switch>
     </div>
     )
 }
