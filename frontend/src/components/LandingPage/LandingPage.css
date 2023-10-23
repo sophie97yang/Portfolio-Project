@@ -1,0 +1,23 @@
+.lp-section-three {
+    display:flex;
+    flex-direction:row;
+}
+
+.lp-groups,.lp-events,.lp-start-true,.lp-start-false {
+    padding:15px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.lp-section-three p {
+    text-align:center;
+}
+
+.lp-start-true  a, .lp-start-true  p {
+    color:grey;
+    text-decoration:none;
+}
+
+.lp-start-true  a {
+    cursor:not-allowed;
+}

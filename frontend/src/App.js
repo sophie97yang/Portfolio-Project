@@ -1,10 +1,9 @@
-import { Switch } from "react-router-dom";
-// import LoginFormPage from "./components/LoginFormPage";
+import { Switch,Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { restoreUser } from "./store/session";
-// import SignUpPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
+import LandingPage from "./components/LandingPage";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -19,7 +18,10 @@ function App() {
     <div>
     <Navigation isLoaded={isLoaded}/>
 
-    {isLoaded && (<Switch></Switch>)}
+    {isLoaded && (
+    <Switch>
+      <Route exact path='/'> <LandingPage /> </Route>
+    </Switch>)}
     </div>
   );
 }

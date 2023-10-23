@@ -9,7 +9,7 @@ import "./LoginForm.css";
 const LoginFormModal = () => {
     const [credential,setCredential] = useState('');
     const [password,setPassword] = useState('');
-    const [sustainUser, setSustainUser] = useState(false);
+    // const [sustainUser, setSustainUser] = useState(false);
     const [errors,setErrors] = useState({});
     const [formError,setFormErrors] = useState({empty:'true'});
     const [disabled,setDisabled] = useState(true);
@@ -39,9 +39,21 @@ const LoginFormModal = () => {
         return () => document.removeEventListener("keypress", handleEnter);
     }, []);
 
+    const handleDemoUserClick = async (e) => {
+        e.preventDefault();
+        const user = {credential:'test1',password:'password'};
+        return await dispatch(sessionActions.logIn(user))
+        .then(closeModal)
+        .catch(
+           async (res) => {
+            res = await res.json();
+            if (res?.errors) setErrors(res.errors);
+            }
+        )
+    };
+
 
     const handleSubmit = async (e) => {
-        console.log(e);
         e.preventDefault();
         setErrors({});
         const user = {credential,password};
@@ -91,19 +103,27 @@ const LoginFormModal = () => {
 
             <div className='errors'>{errors?.password}</div>
             </div>
-            <label>
+            {/* <label>
             <input type='checkbox'
             value={sustainUser}
             onChange={(e)=> setSustainUser(!sustainUser)}
             />
             Keep me signed in
-            </label>
-
+            </label> */}
             <button
             type="submit"
             disabled={disabled}
             className='submitButton'
             >Log in</button>
+
+            <div>
+                <button
+                    className="demo-user"
+                    onClick={handleDemoUserClick}
+                >
+                    Demo User
+                </button>
+            </div>
         </form>
         </div>
     )
