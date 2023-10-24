@@ -1,13 +1,12 @@
 import { Link,NavLink} from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import {useEffect} from 'react';
-import { allEvents, getDetails } from "../../store/events";
+import { allEvents} from "../../store/events";
 import './EventsList.css';
 
 const Events = () => {
     const dispatch = useDispatch();
     const events = useSelector(state=>state.events);
-    const eventDetails = useSelector(state=>state.event);
 
 
     useEffect(()=> {
@@ -27,7 +26,7 @@ const Events = () => {
         <div>
             <span>Events in MeetU</span>
             <ul className='events-list'>
-                {events.events.map(({id,previewImage,name,Venue,startDate}) => (
+                {events.events.map(({id,previewImage,name,Venue,startDate,description}) => (
                     <li key={id}>
                     <NavLink to={`/events/${id}`}>
                         <div className='event-details'>
@@ -35,8 +34,8 @@ const Events = () => {
                             <div className='event-details-right'>
                                 <p className='time'>{startDate.slice(0,10)} · {startDate.slice(11,16)}</p>
                                 <h3>{name}</h3>
-                                <p className="ed-grey-details">{Venue.city},{Venue.state}</p>
-                                <p>Event Description</p>
+                                <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : ''}</p>
+                                <p>{description}</p>
                             </div>
                         </div>
                     </NavLink>

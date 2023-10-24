@@ -40,16 +40,14 @@ export const eventDetails = (eventId) => async dispatch => {
     }
 }
 
-const initialState = {events:null,event:{}}
+const initialState = {events:null,event:null}
 
 const eventsReducer = (state=initialState,action) => {
     switch (action.type) {
         case GET_EVENTS:
             return {...state,events:action.events}
         case GET_DETAILS:{
-            const newState = {...state};
-            newState.event[action.event.id]= action.event
-            return newState
+            return {...state, event:action.event}
         }
         default:
             return state;

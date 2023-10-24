@@ -7,6 +7,7 @@ import LandingPage from "./components/LandingPage";
 import Groups, { CurrentGroups } from './components/Groups';
 import GroupDetails from "./components/GroupDetails";
 import Events from "./components/Events";
+import EventDetails from "./components/EventDetails";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -40,7 +41,7 @@ function App() {
       </Route>
 
       <Route path='/events/:id'>
-        <h2>Coming Soon...</h2>
+        <EventDetails />
       </Route>
 
       <Route path='/events'>

@@ -20,6 +20,7 @@ const ProfileButton = ({user}) => {
   const logout = (e) => {
     e.preventDefault();
     dispatch(logOut());
+    history.push('/')
   };
 
   const viewGroups = (e) => {

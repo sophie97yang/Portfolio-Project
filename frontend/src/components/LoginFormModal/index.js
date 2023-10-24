@@ -1,4 +1,5 @@
 import {useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
@@ -14,6 +15,7 @@ const LoginFormModal = () => {
     const [formError,setFormErrors] = useState({empty:'true'});
     const [disabled,setDisabled] = useState(true);
     const dispatch = useDispatch();
+    const history = useHistory();
     const {closeModal} = useModal();
 
 
@@ -44,6 +46,7 @@ const LoginFormModal = () => {
         const user = {credential:'test1',password:'password'};
         return await dispatch(sessionActions.logIn(user))
         .then(closeModal)
+        .then(history.push('/'))
         .catch(
            async (res) => {
             res = await res.json();
@@ -59,6 +62,7 @@ const LoginFormModal = () => {
         const user = {credential,password};
         return await dispatch(sessionActions.logIn(user))
         .then(closeModal)
+        .then(history.push('/'))
         .catch(
            async (res) => {
             res = await res.json();
