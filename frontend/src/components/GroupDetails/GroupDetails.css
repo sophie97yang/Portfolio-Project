@@ -20,7 +20,7 @@
 }
 
 .gd-section-one>img {
-    width:600px;
+    width:500px;
     height:300px;
 }
 
@@ -75,10 +75,12 @@
     font-size:13px;
     display:flex;
     flex-direction:row;
+    color:teal;
 }
 
 .time p {
     padding-right: 10px;
+    color:teal;
 }
 
 #e-description {

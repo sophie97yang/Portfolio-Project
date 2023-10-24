@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 export const GET_GROUPS='groups/GET_GROUPS';
+export const GET_CURRENT='groups/GET_CURRENT';
 export const GET_DETAILS = 'groups/GET_DETAILS';
 export const GET_EVENTS = 'groups/GET_EVENTS';
 
@@ -10,14 +11,21 @@ export const getGroups = (groups) => ({
     groups
 });
 
+export const getCurrent = (groups) => ({
+    type:GET_CURRENT,
+    groups
+});
+
 export const getDetails = (group) => ({
     type:GET_DETAILS,
     group
 });
+
 export const getEvents = (events) => ({
     type:GET_EVENTS,
     events
 });
+
 
 
 export const allGroups = () => async dispatch => {
@@ -32,6 +40,19 @@ export const allGroups = () => async dispatch => {
         return data;
     }
 };
+
+export const currentGroups = () => async dispatch => {
+    const res = await csrfFetch('/api/groups/current');
+
+    if (res.ok) {
+        const current = await res.json();
+        dispatch(getCurrent(current.Groups));
+        return current;
+    } else {
+        const data = await res.json();
+        return data;
+    }
+}
 
 export const fetchDetails = (groupId) => async dispatch => {
     const res = await csrfFetch(`/api/groups/${groupId}`);
@@ -61,12 +82,14 @@ export const groupEvents = (groupId) => async dispatch => {
 }
 
 
-const initialState = {groups:null,group:null,groupEvents:null};
+const initialState = {groups:null,group:null,groupEvents:null,current:null};
 
 const groupsReducer = (state=initialState,action) => {
     switch(action.type) {
         case GET_GROUPS:
             return {...state, groups:action.groups}
+        case GET_CURRENT:
+            return {...state,current:action.groups}
         case GET_DETAILS:
             return {...state, group:action.group}
         case GET_EVENTS:

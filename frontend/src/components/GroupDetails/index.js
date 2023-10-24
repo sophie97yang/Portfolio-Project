@@ -1,4 +1,4 @@
-import { useParams,NavLink,useHistory } from "react-router-dom";
+import { useParams,NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchDetails,groupEvents } from "../../store/groups";
 import { useEffect } from "react";
@@ -8,7 +8,6 @@ import './GroupDetails.css';
 const GroupDetails = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
-    const history = useHistory();
     const group = useSelector(state => state.groups.group);
     const events = useSelector(state=>state.groups.groupEvents);
     const sessionUser = useSelector(state => state.session.user);
@@ -42,7 +41,7 @@ const GroupDetails = () => {
                     <h2>{group.name}</h2>
                     <p>{group.city}, {group.state}</p>
                     <p>{events.Events.length} {events.Events.length===1 ? 'Event' : 'Events' } · {group.private ? 'Private' : 'Public'}</p>
-                    <p> Organized by (insert organizer name here)</p>
+                    <p> Organized by {group.Organizer.firstName} {group.Organizer.lastName}</p>
                     <div className='gd-manage-buttons'>
                     <NavLink to={`/groups/${id}/events/new`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Create An Event</button></NavLink>
                     <NavLink to={`/groups/${id}/edit`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Update Group</button></NavLink>
@@ -54,7 +53,7 @@ const GroupDetails = () => {
 
             <div className='gd-section-two'>
                 <h3>Organizer</h3>
-                <p id='gd-organizer'>Organizer name here</p>
+                <p id='gd-organizer'>{group.Organizer.firstName} {group.Organizer.lastName}</p>
 
                 <h3> What we're about</h3>
                 <p>{group.about}</p>

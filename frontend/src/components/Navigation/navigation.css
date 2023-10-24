@@ -65,6 +65,10 @@ nav {
     border:none; */
 }
 
-.userInfo>p{
-    border-bottom:1px rgb(230 230 230/1);
+.userInfo {
+    border-bottom:1px solid rgb(206, 206, 206);
+}
+
+#viewGroups {
+    background-color:teal;
 }

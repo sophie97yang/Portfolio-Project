@@ -1,5 +1,5 @@
 const {Op} = require('sequelize');
-const {Group} = require('../db/models');
+const {Group,User} = require('../db/models');
 const { handleValidationErrors } = require('./validation.js');
 const { check } = require('express-validator');
 const {restoreUser} = require('./auth.js');
@@ -26,7 +26,9 @@ const getGroupDetails = async (groups) => {
    for (let i=0;i<groupList.length;i++) {
     const group = groupList[i];
     const members = membersList[i];
-
+    //updated 10/24 based on frontend requirements
+    const organizerInfo = await User.findByPk(group.organizerId);
+    group.Organizer = organizerInfo;
     group.numMembers = members.length;
 
         if (group.GroupImages.length>=1) {
