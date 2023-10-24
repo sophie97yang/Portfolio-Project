@@ -60,7 +60,7 @@ const GroupDetails = () => {
 
             {upcomingEvents ? <h3>Upcoming Events<span> ({upcomingEvents.length}) </span></h3>: <span></span>}
             {upcomingEvents ? upcomingEvents.map(({id,previewImage,name,startDate,Venue}) => (
-                <div className='group-event-details'>
+                <div className='group-event-details' key={id}>
                 <NavLink to={`/events/${id}`} key={id}>
                     <div className='ged-sec-one'>
                     <img src={previewImage} alt={name}></img>
