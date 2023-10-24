@@ -41,7 +41,7 @@ const GroupDetails = () => {
                 <div className='gd-sec-one-right'>
                     <h2>{group.name}</h2>
                     <p>{group.city}, {group.state}</p>
-                    <p>{group.private ? 'Private' : 'Public'}</p>
+                    <p>{events.Events.length} {events.Events.length===1 ? 'Event' : 'Events' } · {group.private ? 'Private' : 'Public'}</p>
                     <p> Organized by (insert organizer name here)</p>
                     <div className='gd-manage-buttons'>
                     <button onClick={handleJoinGroup} className={(sessionUser && sessionUser.id!==group.organizerId) ? 'gd-active' : 'gd-hidden'}>Join This Group</button>
@@ -54,7 +54,7 @@ const GroupDetails = () => {
 
             <div className='gd-section-two'>
                 <h3>Organizer</h3>
-                <p>Organizer name here</p>
+                <p id='gd-organizer'>Organizer name here</p>
 
                 <h3> What we're about</h3>
                 <p>{group.about}</p>

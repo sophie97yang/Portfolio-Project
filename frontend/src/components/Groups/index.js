@@ -23,16 +23,16 @@ const Groups = () => {
 
         <div>
             <ul className='groups-list'>
-                {groups.groups.map(({id,name,city,state,about,previewImage}) => (
-                    <li key={id}>
-                    <NavLink to={`/groups/${id}`}>
+                {groups.groups.map((group) => (
+                    <li key={group.id}>
+                    <NavLink to={`/groups/${group.id}`}>
                         <div className='group-details'>
-                            <img src={previewImage} alt={name}></img>
+                            <img src={group.previewImage} alt={group.name}></img>
                             <div className='group-details-right'>
-                                <h3>{name}</h3>
-                                <p>{city},{state}</p>
-                                <p>{about}</p>
-                                <p>More Group Details: # of events and public/private</p>
+                                <h3>{group.name}</h3>
+                                <p className="gd-grey-details">{group.city},{group.state}</p>
+                                <p>{group.about}</p>
+                                <p className="gd-grey-details"> # events · {group.private ? "Private" : "Public"}</p>
                             </div>
                         </div>
                     </NavLink>
