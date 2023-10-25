@@ -1,8 +1,9 @@
 import { useParams,NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchDetails,groupEvents } from "../../store/groups";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import './GroupDetails.css';
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const GroupDetails = () => {
@@ -11,16 +12,27 @@ const GroupDetails = () => {
     const group = useSelector(state => state.groups.group);
     const events = useSelector(state=>state.groups.groupEvents);
     const sessionUser = useSelector(state => state.session.user);
+    const [redirect,setRedirect]=useState(false);
 
 
     useEffect(()=> {
-        dispatch(fetchDetails(id));
+        dispatch(fetchDetails(id))
+        .catch(async res => {
+            const error = await res.json();
+            if (error.message==="Group couldn't be found") setRedirect(true);
+        });
     },[dispatch,id]);
 
     useEffect(()=> {
-        dispatch(groupEvents(id));
+        dispatch(groupEvents(id))
+        .catch(async res => {
+            const error = await res.json();
+            if (error.message==="Group couldn't be found") setRedirect(true);
+        });
+        ;
     },[dispatch,id])
 
+    if (redirect===true) return <Redirect to='/page-not-found' />
     if (!group || !events || !group.GroupImages) return null;
 
     const image = group.GroupImages.filter(image => image.preview===true)[0];
@@ -57,8 +69,8 @@ const GroupDetails = () => {
                 <h3> What we're about</h3>
                 <p>{group.about}</p>
 
-            {upcomingEvents ? <h3>Upcoming Events<span> ({upcomingEvents.length}) </span></h3>: <span></span>}
-            {upcomingEvents ? upcomingEvents.map(({id,previewImage,name,startDate,Venue}) => (
+            {upcomingEvents.length ? <h3>Upcoming Events<span> ({upcomingEvents.length}) </span></h3>: <h3>No Upcoming Events</h3>}
+            {upcomingEvents.length ? upcomingEvents.map(({id,previewImage,name,startDate,Venue}) => (
                 <div className='group-event-details' key={id}>
                 <NavLink to={`/events/${id}`} key={id}>
                     <div className='ged-sec-one'>

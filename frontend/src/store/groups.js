@@ -1,13 +1,16 @@
 import { csrfFetch } from "./csrf";
 
+//Action Type Constants
 export const GET_GROUPS='groups/GET_GROUPS';
 export const GET_CURRENT='groups/GET_CURRENT';
 export const GET_DETAILS = 'groups/GET_DETAILS';
 export const GET_EVENTS = 'groups/GET_EVENTS';
 export const ADD_GROUP = 'groups/ADD_GROUP';
-export const ADD_IMAGE = 'groups/ADD_IMAGE'
+export const ADD_IMAGE = 'groups/ADD_IMAGE';
+export const EDIT_GROUP = 'groups/EDIT_GROUP';
 
 
+//Action Creators
 export const getGroups = (groups) => ({
     type:GET_GROUPS,
     groups
@@ -38,8 +41,14 @@ export const addImage = (image) => ({
     image
 })
 
+export const editGroup = (groupId,group) => ({
+    type:EDIT_GROUP,
+    group,
+    groupId
+})
 
 
+//Thunk Action Creators
 export const allGroups = () => async dispatch => {
     const res = await csrfFetch('/api/groups');
 
@@ -103,7 +112,7 @@ export const createGroup = (payload) => async dispatch => {
     if (res.ok) {
         const newGroup = await res.json();
         dispatch(addGroup(newGroup));
-        dispatch(getDetails(newGroup))
+        // dispatch(fetchDetails(newGroup.id));
         return newGroup;
     } else {
         const data = await res.json();
@@ -128,6 +137,26 @@ export const addGroupImage = (payload,groupId) => async dispatch => {
     }
 }
 
+export const updateGroup = (payload,groupId) => async dispatch => {
+    const res = await csrfFetch(`/api/groups/${groupId}`, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+        const updatedGroup = await res.json();
+        dispatch(editGroup(groupId,updatedGroup))
+        // dispatch(addGroup(updatedGroup));
+        // dispatch(fetchDetails(updatedGroup.id));
+        return updatedGroup
+    } else {
+        const data = await res.json();
+        return data;
+    }
+
+}
+
 const initialState = {groups:[],group:null,groupEvents:null,current:null,image:null};
 
 const groupsReducer = (state=initialState,action) => {
@@ -144,6 +173,12 @@ const groupsReducer = (state=initialState,action) => {
             return {...state, groups:[...state.groups,action.group]}
         case ADD_IMAGE:
             return {...state, image: action.image}
+        case EDIT_GROUP: {
+            const newState = [...state.groups];
+            const index = newState.findIndex(group => group.id===action.groupId);
+            newState[index]=action.group;
+            return {...state,groups:newState}
+        }
         default:
             return state;
     }

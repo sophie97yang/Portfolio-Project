@@ -14,6 +14,8 @@ const Groups = () => {
 
     if (!groups.groups) return null;
 
+    const events = {}
+
     return (
     < div className='groupsPage'>
         <div className='groups-nav'>
