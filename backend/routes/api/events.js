@@ -50,6 +50,10 @@ router.get('/', validateQueryParams,async (req,res,next)=> {
 
     const events = await Event.findAll({
         where,
+        //update made on 10/24 in order to accommodate for frontend requests
+        attributes: {
+            include: ['description']
+        },
         include:[
         {
             model:Group,

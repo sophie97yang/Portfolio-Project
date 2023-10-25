@@ -1,0 +1,80 @@
+#group-form {
+    padding:10px 20px;
+    width:800px;
+    margin:0px auto;
+    display:flex;
+    flex-direction:column;
+}
+#group-form h2 {
+    font-weight:normal;
+}
+
+#group-form input, #group-form textarea {
+    width:300px;
+    background-color:aliceblue;
+}
+
+.group-form-section {
+    padding:0px 20px 20px 20px;
+    border-bottom:1px solid grey;
+}
+.group-form-section p {
+    font-size:13px;
+}
+
+.group-form-section li {
+    font-size:13px;
+    list-style-type: decimal;
+
+}
+
+#gfs-four ol {
+    padding-left:25px;
+}
+
+#gfs-one h3{
+    color:teal;
+    font-size:14px;
+    font-weight:normal;
+}
+
+#gfs-one {
+    padding-bottom:0px;
+}
+
+#gfs-four textarea {
+    height:200px;
+    border-color: rgb(202, 194, 194);
+    border-radius:0.5em;
+    border-width:2px;
+    border-style:inset;
+    background-color:aliceblue;
+}
+
+#gfs-five label {
+    display:flex;
+    flex-direction:column;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+#gfs-five input {
+    margin-top:10px;
+}
+
+#gfs-five select {
+    width:110px;
+    margin-top:10px;
+    padding:5px;
+    border-color: rgb(202, 194, 194);
+    border-radius:0.5em;
+    border-width:2px;
+    border-style:inset;
+    background-color:aliceblue;
+}
+
+#group-form button {
+    width:150px;
+    padding:10px;
+    border-style: outset;
+}

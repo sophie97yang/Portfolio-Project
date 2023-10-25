@@ -34,7 +34,13 @@ const Navigation = ({isLoaded}) => {
                 </div>
                 </>
                 :
-                <ProfileButton user={sessionUser}/>)
+                <>
+                <div className='user-dropdown'>
+                <NavLink to='/groups/new'>Start a new group</NavLink>
+                <ProfileButton user={sessionUser}/>
+                </div>
+                </>
+                )
             }
             </ul>
         </nav>
