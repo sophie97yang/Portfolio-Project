@@ -17,7 +17,8 @@ const UpdateGroup = () => {
     },[sessionUser,group])
 
     useEffect(()=> {
-        dispatch(fetchDetails(id));
+        dispatch(fetchDetails(id))
+        .catch(() => setRedirect(true))
     },[dispatch,id])
 
 

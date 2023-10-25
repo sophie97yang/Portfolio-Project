@@ -2,7 +2,7 @@ import { useState} from 'react';
 import { useDispatch,useSelector} from 'react-redux';
 import { addGroupImage, createGroup, updateGroup } from '../../store/groups';
 import { useHistory } from 'react-router-dom';
-
+import './GroupForm.css';
 const GroupForm = ({formDetails,formType}) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -99,10 +99,12 @@ const GroupForm = ({formDetails,formType}) => {
 
     }
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} id='group-form'>
+        <div className='group-form-section' id='gfs-one'>
         {formType==='Create Group' ? <h3>START A NEW GROUP</h3> : <h3>UPDATE YOUR GROUP'S INFORMATION</h3>}
         {formType==='Create Group' ? <h2>We'll walk you through a few steps to build your local community</h2> : <h2>We'll walk you through a few steps to update your group's information</h2>}
-        <div>
+        </div>
+        <div className='group-form-section' id='gfs-two'>
         <h2>First set your group's location.</h2>
         <p>MeetU groups meet locally,in person and online.
             We'll connect you with people in your area, and more can join you online</p>
@@ -116,7 +118,7 @@ const GroupForm = ({formDetails,formType}) => {
         <div className='errors'>{validationErrors.locationFormat}</div>
         </div>
 
-        <div>
+        <div className='group-form-section' id='gfs-three'>
         <h2>What will your group's name be?</h2>
         <p>Choose a name that will give people a clear idea of what the group is about.
             Feel free to get creative! {formType==='Create Group' ? <span>You can edit this later if you change your mind.</span> : <span></span>}
@@ -130,7 +132,7 @@ const GroupForm = ({formDetails,formType}) => {
         <div className='errors'>{validationErrors.name}</div>
         </div>
 
-        <div>
+        <div className='group-form-section' id='gfs-four'>
         <h2>Now describe what your group will be about</h2>
         <p>People will see this when we promote your group, but you will be able to add to it later, too.</p>
             <ol>
@@ -138,8 +140,7 @@ const GroupForm = ({formDetails,formType}) => {
                 <li>Who should join?</li>
                 <li>What is the purpose of the group?</li>
             </ol>
-        <input
-            type='text'
+        <textarea
             placeholder='Please write at least 50 characters'
             value={about}
             onChange={e => setAbout(e.target.value)}
@@ -147,7 +148,7 @@ const GroupForm = ({formDetails,formType}) => {
         <div className='errors'>{validationErrors.about}</div>
         </div>
 
-        <div>
+        <div className='group-form-section' id='gfs-five'>
         <h2>Final steps...</h2>
 
         <label>Is this an in person or online group?
@@ -183,6 +184,7 @@ const GroupForm = ({formDetails,formType}) => {
             />
             <div className='errors'>{validationErrors.imageUrl}</div>
         </label>
+
         </div>
 
         <button className='submitButton'> {formType} </button>
