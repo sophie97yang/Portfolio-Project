@@ -83,3 +83,8 @@ nav {
     text-decoration:none;
     color:teal;
 }
+
+#profile-button .User {
+    width:70px;
+    padding:15px;
+}

@@ -42,11 +42,11 @@ const ProfileButton = ({user}) => {
   }, [clicked]);
 
     return (
-    <div>
+    <div id='profile-button'>
         <button className="User submitButton"
         onClick={handleClick}
         >
-          <i className="fas fa-user-circle" />
+          <i className="fa-solid fa-user-circle fa-lg"/>
         </button>
 
         <div className={`${clicked} profileMenu`}>
