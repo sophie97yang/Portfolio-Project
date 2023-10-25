@@ -38,7 +38,7 @@ const EventDetails = () => {
                 <div className='ed-sec-two-right'>
                     <NavLink to={`/groups/${event.groupId}`}id='ed-group-details'>
                         <img src={groupImage.url} alt={group.name}></img>
-                        <div class='ed-gd-right'>
+                        <div className='ed-gd-right'>
                             <h4>{event.Group.name}</h4>
                             <p>{event.Group.private==='true' ? 'Private' : 'Public'}</p>
                         </div>

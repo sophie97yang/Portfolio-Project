@@ -1,6 +1,6 @@
 import { useState} from 'react';
 import { useDispatch,useSelector} from 'react-redux';
-import { createGroup } from '../../store/groups';
+import { addGroupImage, createGroup } from '../../store/groups';
 import { useHistory } from 'react-router-dom';
 
 const GroupForm = () => {
@@ -20,6 +20,7 @@ const GroupForm = () => {
         e.preventDefault();
         const errors = {};
         if (!name) errors.name='Name is required';
+        if (name.length>60) errors.nameLength = 'Name must be less than 50 characters';
         if (!location) errors.location='Location is required';
         if (about.length<50) errors.about='Description must be at least 50 characters long';
         if (!type) errors.type='Group type is required';
@@ -29,8 +30,10 @@ const GroupForm = () => {
 
         const indexOfSeparation = location.indexOf(',');
         if (indexOfSeparation===-1) errors.locationFormat = "Please enter location in a valid format (ex. San Diego,CA)"
+
         setValidationErrors(errors);
 
+        if (!Object.keys(errors)[0]) {
         const city = location.slice(0,indexOfSeparation);
         const state = location.slice(indexOfSeparation+1,location.length)
         const payload = {
@@ -42,10 +45,28 @@ const GroupForm = () => {
             private:privacy,
            organizerId:sessionUser.id
         }
-        console.log(payload);
-        const newGroup = await dispatch(createGroup(payload));
-        console.log(newGroup);
-        history.push(`/groups/${newGroup.id}`);
+        const image = {
+            url:imageUrl,
+            preview:true
+        };
+
+        const newGroup = await dispatch(createGroup(payload))
+        .catch(async res => {
+            const data = await res.json();
+            return data;
+        });
+
+        if (!newGroup.errors) {
+        const newImage = await dispatch(addGroupImage(image,newGroup.id))
+        .catch(async res => {
+            const data = await res.json();
+            return data
+        });
+            if (!newImage.errors) history.push(`/groups/${newGroup.id}`);
+        } else {
+            setValidationErrors(newGroup.errors);
+        }
+    }
     }
     return (
         <form onSubmit={handleSubmit}>
@@ -61,6 +82,8 @@ const GroupForm = () => {
             value={location}
             onChange={e => setLocation(e.target.value)}
         />
+        <div className='errors'>{validationErrors.location}</div>
+        <div className='errors'>{validationErrors.locationFormat}</div>
         </div>
 
         <div>
@@ -74,6 +97,7 @@ const GroupForm = () => {
             value={name}
             onChange={e => setName(e.target.value)}
         />
+        <div className='errors'>{validationErrors.name}</div>
         </div>
 
         <div>
@@ -90,6 +114,7 @@ const GroupForm = () => {
             value={about}
             onChange={e => setAbout(e.target.value)}
         />
+        <div className='errors'>{validationErrors.about}</div>
         </div>
 
         <div>
@@ -104,6 +129,7 @@ const GroupForm = () => {
             <option value='In person'>In person</option>
             <option value='Online'>Online</option>
         </select>
+        <div className='errors'>{validationErrors.type}</div>
         </label>
 
         <label>Is this group private or public?
@@ -115,6 +141,7 @@ const GroupForm = () => {
             <option value={true}>Private</option>
             <option value={false}>Public</option>
         </select>
+        <div className='errors'>{validationErrors.privacy}</div>
         </label>
 
         <label>Please add an image url for your group below:
@@ -124,6 +151,7 @@ const GroupForm = () => {
                 value={imageUrl}
                 onChange={e => setImageUrl(e.target.value)}
             />
+            <div className='errors'>{validationErrors.imageUrl}</div>
         </label>
         </div>
 

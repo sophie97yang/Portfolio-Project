@@ -55,7 +55,7 @@ return (
         </div>
         <div className={`lp-start-${disabled}`}>
             <img src={startIcon} alt='startGroup'></img>
-            <h3>{disabled ? <Link onClick={e => e.preventDefault()}>Start a New Group</Link> :<Link to='/groups/new'>Start a New Group</Link>}</h3>
+            <h3>{disabled ? <Link onClick={e => e.preventDefault()} to='/'>Start a New Group</Link> :<Link to='/groups/new'>Start a New Group</Link>}</h3>
             <p>Create your new MeetU group, and draw from a community of millions.</p>
         </div>
     </div>

@@ -21,8 +21,7 @@ const GroupDetails = () => {
         dispatch(groupEvents(id));
     },[dispatch,id])
 
-    if (!group || !events) return null;
-
+    if (!group || !events || !group.GroupImages) return null;
 
     const image = group.GroupImages.filter(image => image.preview===true)[0];
     const upcomingEvents = events.Events.filter(event => new Date(event.startDate)> new Date());
@@ -36,7 +35,7 @@ const GroupDetails = () => {
         <div className='group-details-page'>
             <span> {'<'} </span> <NavLink to='/groups'>Groups</NavLink>
             <div className='gd-section-one'>
-                <img src={image.url} alt={group.name}></img>
+                {image ? <img src={image.url} alt={group.name}></img>: <h2>Loading Image...</h2>}
                 <div className='gd-sec-one-right'>
                     <h2>{group.name}</h2>
                     <p>{group.city}, {group.state}</p>
