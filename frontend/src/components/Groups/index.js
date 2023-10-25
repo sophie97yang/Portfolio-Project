@@ -6,15 +6,13 @@ import './GroupList.css';
 
 const Groups = () => {
     const dispatch = useDispatch();
-    const groups = useSelector(state => state.groups);
+    const groups = useSelector(state => state.groups.groups);
 
     useEffect(()=> {
         dispatch(allGroups());
     },[dispatch]);
 
-    if (!groups.groups) return null;
-
-    const events = {}
+    if (!groups) return null;
 
     return (
     < div className='groupsPage'>
@@ -26,7 +24,7 @@ const Groups = () => {
         <div>
             <span>Groups in MeetU</span>
             <ul className='groups-list'>
-                {groups.groups.map((group) => (
+                {groups.map((group) => (
                     <li key={group.id}>
                     <NavLink to={`/groups/${group.id}`}>
                         <div className='group-details'>

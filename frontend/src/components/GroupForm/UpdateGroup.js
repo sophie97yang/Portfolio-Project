@@ -22,7 +22,6 @@ const UpdateGroup = () => {
 
 
 
-
     if (redirect===true) return <Redirect to='/'/>
 
     if (!group) return null;

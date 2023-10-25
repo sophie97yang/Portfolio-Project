@@ -8,6 +8,7 @@ export const GET_EVENTS = 'groups/GET_EVENTS';
 export const ADD_GROUP = 'groups/ADD_GROUP';
 export const ADD_IMAGE = 'groups/ADD_IMAGE';
 export const EDIT_GROUP = 'groups/EDIT_GROUP';
+export const REMOVE_GROUP = 'groups/REMOVE_GROUP';
 
 
 //Action Creators
@@ -45,7 +46,12 @@ export const editGroup = (groupId,group) => ({
     type:EDIT_GROUP,
     group,
     groupId
-})
+});
+
+export const removeGroup = (groupId) => ({
+    type:REMOVE_GROUP,
+    groupId
+});
 
 
 //Thunk Action Creators
@@ -112,7 +118,6 @@ export const createGroup = (payload) => async dispatch => {
     if (res.ok) {
         const newGroup = await res.json();
         dispatch(addGroup(newGroup));
-        // dispatch(fetchDetails(newGroup.id));
         return newGroup;
     } else {
         const data = await res.json();
@@ -147,17 +152,28 @@ export const updateGroup = (payload,groupId) => async dispatch => {
     if (res.ok) {
         const updatedGroup = await res.json();
         dispatch(editGroup(groupId,updatedGroup))
-        // dispatch(addGroup(updatedGroup));
-        // dispatch(fetchDetails(updatedGroup.id));
         return updatedGroup
     } else {
         const data = await res.json();
         return data;
     }
 
+};
+
+export const deleteGroup = (groupId) => async dispatch => {
+    const res = await csrfFetch(`/api/groups/${groupId}`, {
+        method:'DELETE'
+    });
+    const data = await res.json();
+    if (res.ok) {
+        await dispatch(removeGroup(groupId));
+        return data;
+    } else {
+        return data;
+    }
 }
 
-const initialState = {groups:[],group:null,groupEvents:null,current:null,image:null};
+const initialState = {groups:[],group:null,groupEvents:null,current:[],image:null};
 
 const groupsReducer = (state=initialState,action) => {
     switch(action.type) {
@@ -175,9 +191,30 @@ const groupsReducer = (state=initialState,action) => {
             return {...state, image: action.image}
         case EDIT_GROUP: {
             const newState = [...state.groups];
-            const index = newState.findIndex(group => group.id===action.groupId);
+            if (newState.length) {
+            const index = newState.findIndex(group => group.id===Number(action.groupId));
             newState[index]=action.group;
-            return {...state,groups:newState}
+            }
+            const currGroupsState = [...state.current];
+            if (currGroupsState.length) {
+                const groupIndex =currGroupsState.findIndex(group => group.id === Number(action.groupId));
+                currGroupsState[groupIndex] = action.group
+            }
+            return {...state,group:action.group,groups:newState}
+        }
+        case REMOVE_GROUP: {
+            const newState = [...state.groups];
+            if (newState) {
+                const index = newState.findIndex(group => group.id === Number(action.groupId));
+                newState.splice(index,1);
+            }
+            const currGroupsState = [...state.current];
+            if (currGroupsState) {
+                const groupIndex =currGroupsState.findIndex(group => group.id === Number(action.groupId));
+                currGroupsState.splice(groupIndex,1);
+            }
+
+            return {...state, groups:newState,group:null,current:currGroupsState}
         }
         default:
             return state;

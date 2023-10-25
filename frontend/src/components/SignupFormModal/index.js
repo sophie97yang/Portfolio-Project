@@ -5,6 +5,7 @@ import { useModal } from "../../context/modal";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import './SignUpForm.css';
+import { useHistory } from "react-router-dom";
 
 
 const SignUpFormModal = () => {
@@ -20,6 +21,7 @@ const SignUpFormModal = () => {
     const {closeModal} = useModal();
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
 
     useEffect(()=> {
@@ -55,6 +57,7 @@ const SignUpFormModal = () => {
 
         return dispatch(signUpUser(newUser))
         .then(closeModal)
+        .then(history.push('/'))
         .catch(
             async (res) => {
                 res = await res.json();

@@ -2,8 +2,12 @@ import { useParams,NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchDetails,groupEvents } from "../../store/groups";
 import { useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
+import OpenModalButton from "../OpenModalButton";
+import DeleteModal from "../DeleteModal";
+
 import './GroupDetails.css';
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+
 
 
 const GroupDetails = () => {
@@ -56,7 +60,12 @@ const GroupDetails = () => {
                     <div className='gd-manage-buttons'>
                     <NavLink to={`/groups/${id}/events/new`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Create An Event</button></NavLink>
                     <NavLink to={`/groups/${id}/edit`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Update Group</button></NavLink>
-                    <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Delete Group</button>
+                    <OpenModalButton
+                        buttonText="Delete Group"
+                        modalComponent={<DeleteModal groupId={id}
+                        />}
+                        className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}
+                    />
                     <button onClick={handleJoinGroup} className={(sessionUser && sessionUser.id!==group.organizerId) ? 'gd-active' : 'gd-hidden'}>Join This Group</button>
                     </div>
                 </div>
