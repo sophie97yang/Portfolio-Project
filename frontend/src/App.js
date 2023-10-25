@@ -8,6 +8,7 @@ import Groups, { CurrentGroups } from './components/Groups';
 import GroupDetails from "./components/GroupDetails";
 import Events from "./components/Events";
 import EventDetails from "./components/EventDetails";
+import GroupForm from "./components/GroupForm";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -28,7 +29,9 @@ function App() {
       <Route exact path='/'>
           <LandingPage />
       </Route>
-
+      <Route exact path='/groups/new'>
+        <GroupForm />
+      </Route>
       <Route exact path='/groups/current'>
         <CurrentGroups />
       </Route>

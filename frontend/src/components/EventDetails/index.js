@@ -60,8 +60,8 @@ const EventDetails = () => {
                             <p>{event.type}</p>
                         </div>
 
-                        <button className={(sessionUser && sessionUser.id!==group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
-                        <button className={(sessionUser && sessionUser.id!==group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button>
+                        <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
+                        <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button>
                     </div>
                 </div>
             </div>

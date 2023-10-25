@@ -34,7 +34,11 @@ const Navigation = ({isLoaded}) => {
                 </div>
                 </>
                 :
-                <ProfileButton user={sessionUser}/>)
+                <>
+                <NavLink to='/groups/new'>Start a new group</NavLink>
+                <ProfileButton user={sessionUser}/>
+                </>
+                )
             }
             </ul>
         </nav>
