@@ -70,7 +70,7 @@ const validateEventCreation = [
     check('price')
       .exists({values:"null"})
       .custom( value => {
-        if (!parseInt(value)|| value<0) {
+        if (parseInt(value)===NaN|| value<0) {
           return false;
         } else {
           return true;

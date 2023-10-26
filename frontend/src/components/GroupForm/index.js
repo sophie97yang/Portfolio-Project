@@ -22,15 +22,18 @@ const GroupForm = ({formDetails,formType}) => {
         e.preventDefault();
         const errors = {};
         if (!name) errors.name='Name is required';
-        if (name.length>60) errors.nameLength = 'Name must be less than 50 characters';
+        if (name.length>60) errors.nameLength = 'Name must be less than 60 characters';
         if (!location) errors.location='Location is required';
         if (about.length<50) errors.about='Description must be at least 50 characters long';
         if (!type) errors.type='Group type is required';
         if (privacy==='') errors.privacy='Visibility preferences are required';
 
-        if (formType==='Create Group') {
+        if (formType==='Create Group' || (formType==='Update Group' && imageUrl)) {
         const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
         if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';
+        // eslint-disable-next-line
+        const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
+        if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
         }
 
         const indexOfSeparation = location.indexOf(',');
@@ -86,16 +89,37 @@ const GroupForm = ({formDetails,formType}) => {
                 private:privacy,
                 organizerId:sessionUser.id
             }
+
             const updatedGroup = await dispatch(updateGroup(payload,formDetails.id))
             .catch(async res => {
                 const data= await res.json();
                 return data;
             });
 
+            if (!updatedGroup.errors && imageUrl) {
+
+                const image= {
+                    url:imageUrl,
+                    preview:false
+                };
+
+                const newImage = await dispatch(addGroupImage(image,updatedGroup.id))
+                .catch(async res => {
+                    const data = await res.json();
+                    return data
+                });
+
+                if (!newImage.errors) history.push(`/groups/${updatedGroup.id}`);
+                else {
+                    setValidationErrors(newImage.errors);
+                    return;
+                }
+            }
+
             if (!updatedGroup.errors) history.push(`/groups/${formDetails.id}`);
+
             else setValidationErrors(updatedGroup.errors);
         }
-
 
     }
     return (
@@ -130,6 +154,7 @@ const GroupForm = ({formDetails,formType}) => {
             onChange={e => setName(e.target.value)}
         />
         <div className='errors'>{validationErrors.name}</div>
+        <div className='errors'>{validationErrors.nameLength}</div>
         </div>
 
         <div className='group-form-section' id='gfs-four'>
@@ -183,6 +208,7 @@ const GroupForm = ({formDetails,formType}) => {
                 onChange={e => setImageUrl(e.target.value)}
             />
             <div className='errors'>{validationErrors.imageUrl}</div>
+            <div className='errors'>{validationErrors.url? "Please enter a valid URL": ""}</div>
         </label>
 
         </div>

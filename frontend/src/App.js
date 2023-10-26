@@ -10,6 +10,7 @@ import Events from "./components/Events";
 import EventDetails from "./components/EventDetails";
 import UpdateGroup from "./components/GroupForm/UpdateGroup";
 import CreateGroup from "./components/GroupForm/CreateGroup";
+import CreateEvent from "./components/EventForm/CreateEvent";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded,setIsLoaded] = useState(false);
@@ -30,15 +31,27 @@ function App() {
       <Route exact path='/'>
           <LandingPage />
       </Route>
+
       <Route exact path='/groups/new'>
         <CreateGroup />
       </Route>
+
       <Route exact path='/groups/current'>
         <CurrentGroups />
       </Route>
+
+      <Route path='/groups/:id/events/new'>
+        <CreateEvent />
+      </Route>
+
       <Route path='/groups/:id/edit'>
         <UpdateGroup />
       </Route>
+
+      <Route path='/groups/:id/join'>
+        <h2>Feature coming soon!</h2>
+      </Route>
+
       <Route path='/groups/:id'>
           <GroupDetails/>
       </Route>
@@ -46,7 +59,9 @@ function App() {
       <Route path='/groups'>
           <Groups />
       </Route>
-
+      <Route path='/events/:id/edit'>
+        <h2>Feature Coming Soon!</h2>
+      </Route>
       <Route path='/events/:id'>
         <EventDetails />
       </Route>
