@@ -2,8 +2,10 @@ import { useParams,NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import {eventDetails} from "../../store/events";
 import { useEffect } from "react";
-import './EventDetails.css';
 import { fetchDetails } from "../../store/groups";
+import noImage from '../GroupDetails/Image_not_available.png';
+import './EventDetails.css';
+
 
 const EventDetails = () => {
     const {id} = useParams();
@@ -34,7 +36,9 @@ const EventDetails = () => {
                 <p>Hosted by {group.Organizer.firstName} {group.Organizer.lastName}</p>
             </div>
             <div className='ed-section-two'>
-                <img src={image.url} alt={event.name}></img>
+                <div id='ed-sec-two-left'>
+                {image ? <img src={image.url} alt={event.name}></img>: <img src={noImage} alt="not-available"></img>}
+                </div>
                 <div className='ed-sec-two-right'>
                     <NavLink to={`/groups/${event.groupId}`}id='ed-group-details'>
                         <img src={groupImage.url} alt={group.name}></img>
@@ -59,9 +63,10 @@ const EventDetails = () => {
                             <i className='fas fa-location-dot'></i>
                             <p>{event.type}</p>
                         </div>
-
-                        <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
-                        <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button>
+                        <div className='ed-details-buttons'>
+                            <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
+                            <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>

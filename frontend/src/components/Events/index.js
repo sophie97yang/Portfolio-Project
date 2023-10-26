@@ -2,6 +2,7 @@ import { Link,NavLink} from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import {useEffect} from 'react';
 import { allEvents} from "../../store/events";
+import noImage from '../GroupDetails/Image_not_available.png';
 import './EventsList.css';
 
 const Events = () => {
@@ -26,15 +27,17 @@ const Events = () => {
         <div>
             <span>Events in MeetU</span>
             <ul className='events-list'>
-                {events.events.map(({id,previewImage,name,Venue,startDate,description}) => (
+                {events.events.map(({id,previewImage,name,Venue,startDate,description,Group}) => (
                     <li key={id}>
                     <NavLink to={`/events/${id}`}>
                         <div className='event-details'>
-                            <img src={previewImage} alt={name}></img>
+                            <div id='ed-left'>
+                                {previewImage!=='Preview image is not available' ?<img src={previewImage} alt={name}></img> : <img src={noImage} alt='not-available'></img> }
+                            </div>
                             <div className='event-details-right'>
                                 <p className='time'>{startDate.slice(0,10)} · {startDate.slice(11,16)}</p>
                                 <h3>{name}</h3>
-                                <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : ''}</p>
+                                <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : `${Group.city}, ${Group.state}`}</p>
                                 <p>{description}</p>
                             </div>
                         </div>

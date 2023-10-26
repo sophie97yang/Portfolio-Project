@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
-
+import noImage from './Image_not_available.png';
 import './GroupDetails.css';
 
 
@@ -22,6 +22,7 @@ const GroupDetails = () => {
     useEffect(()=> {
         dispatch(fetchDetails(id))
         .catch(async res => {
+            console.log('response',res);
             const error = await res.json();
             if (error.message==="Group couldn't be found") setRedirect(true);
         });
@@ -37,6 +38,7 @@ const GroupDetails = () => {
     },[dispatch,id])
 
     if (redirect===true) return <Redirect to='/page-not-found' />
+    console.log('group',group);
     if (!group || !events || !group.GroupImages) return null;
 
     const image = group.GroupImages.filter(image => image.preview===true)[0];
@@ -51,10 +53,10 @@ const GroupDetails = () => {
         <div className='group-details-page'>
             <span> {'<'} </span> <NavLink to='/groups'>Groups</NavLink>
             <div className='gd-section-one'>
-                {image ? <img src={image.url} alt={group.name}></img>: <h2>Loading Image...</h2>}
+                {image ? <img src={image.url} alt={group.name}></img>: <img src={noImage} alt="not-available"></img>}
                 <div className='gd-sec-one-right'>
                     <h2>{group.name}</h2>
-                    <p>{group.city}, {group.state}</p>
+                    <p>{ group.city }, {group.state}</p>
                     <p>{events.Events.length} {events.Events.length===1 ? 'Event' : 'Events' } · {group.private ? 'Private' : 'Public'}</p>
                     <p> Organized by {group.Organizer.firstName} {group.Organizer.lastName}</p>
                     <div className='gd-manage-buttons'>
@@ -90,7 +92,7 @@ const GroupDetails = () => {
                             <p> {startDate.slice(11,16)}</p>
                         </div>
                         <h4>{name}</h4>
-                        <p>{Venue.city}, {Venue.state} </p>
+                        <p>{Venue ? Venue.city : group.city}, {Venue ? Venue.state : group.state} </p>
                     </div>
                     </div>
                     <p id='e-description'>Event Description</p>
