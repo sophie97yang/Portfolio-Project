@@ -48,6 +48,10 @@ function App() {
         <UpdateGroup />
       </Route>
 
+      <Route path='/groups/:id/join'>
+        <h2>Feature coming soon!</h2>
+      </Route>
+
       <Route path='/groups/:id'>
           <GroupDetails/>
       </Route>
@@ -55,7 +59,9 @@ function App() {
       <Route path='/groups'>
           <Groups />
       </Route>
-
+      <Route path='/events/:id/edit'>
+        <h2>Feature Coming Soon!</h2>
+      </Route>
       <Route path='/events/:id'>
         <EventDetails />
       </Route>

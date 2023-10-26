@@ -1,7 +1,7 @@
-import { useParams,NavLink } from "react-router-dom";
+import { useParams,NavLink,Redirect } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import {eventDetails} from "../../store/events";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchDetails } from "../../store/groups";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
@@ -15,15 +15,22 @@ const EventDetails = () => {
     const event = useSelector(state=>state.events.event);
     const group = useSelector(state => state.groups.group);
     const sessionUser = useSelector(state => state.session.user);
+    const [redirect,setRedirect] = useState(false);
 
     useEffect(()=> {
-        dispatch(eventDetails(id));
+        dispatch(eventDetails(id))
+        .catch(async res => {
+            const error = await res.json();
+            if (error.message==="Event couldn't be found") setRedirect(true);
+        })
+        ;
     },[dispatch,id]);
 
     useEffect(()=> {
         if (event) dispatch(fetchDetails(event.groupId));
     },[event,dispatch])
 
+    if (redirect===true) return <Redirect to='/page-not-found' />
     if (!event) return null;
     if (!group) return null;
 
