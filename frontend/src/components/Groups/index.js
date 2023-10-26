@@ -1,7 +1,7 @@
 import { Link,NavLink,Redirect} from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import {useEffect, useState} from 'react';
-import { allGroups, currentGroups } from "../../store/groups";
+import { allGroups, currentGroups} from "../../store/groups";
 import './GroupList.css';
 
 const Groups = () => {
@@ -35,7 +35,7 @@ const Groups = () => {
                                 <h3>{group.name}</h3>
                                 <p className="gd-grey-details">{group.city},{group.state}</p>
                                 <p>{group.about}</p>
-                                <p className="gd-grey-details"> # events · {group.private ? "Private" : "Public"}</p>
+                                <p className="gd-grey-details"> {group.numEvents} {group.numEvents===1 ? 'event' : 'events'} · {group.private ? "Private" : "Public"}</p>
                             </div>
                         </div>
                     </NavLink>
@@ -52,7 +52,7 @@ export const CurrentGroups = () => {
     const groups = useSelector(state => state.groups);
     const [redirect,setRedirect] = useState(false);
 
-    // if (!sessionUser) return  <Redirect to='/page-not-found' />
+
 
     useEffect(()=> {
         dispatch(currentGroups())
@@ -80,7 +80,7 @@ export const CurrentGroups = () => {
                                 <h3>{group.name}</h3>
                                 <p className="gd-grey-details">{group.city},{group.state}</p>
                                 <p>{group.about}</p>
-                                <p className="gd-grey-details"> # events · {group.private ? "Private" : "Public"}</p>
+                                <p className="gd-grey-details"> {group.numEvents} {group.numEvents===1 ? 'event' : 'events'} · {group.private ? "Private" : "Public"}</p>
                             </div>
                         </div>
                     </NavLink>

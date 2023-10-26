@@ -99,7 +99,8 @@ module.exports = (sequelize, DataTypes) => {
     defaultScope: {
       attributes: {
         exclude:['createdAt','updatedAt','capacity','price','description']
-      }
+      },
+      order:[['startDate','DESC']]
     }
   });
   return Event;

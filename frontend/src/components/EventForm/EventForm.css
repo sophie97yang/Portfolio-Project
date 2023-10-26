@@ -5,7 +5,10 @@
     display:flex;
     flex-direction:column;
 }
-
+#event-form a {
+    text-decoration:none;
+    color:teal;
+}
 #event-form h2 {
     font-weight:normal;
 }

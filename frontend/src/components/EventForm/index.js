@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
-import {useHistory} from 'react-router-dom';
+import {useHistory,NavLink} from 'react-router-dom';
 import { fetchDetails } from "../../store/groups";
 import { createEvent } from "../../store/events";
 import './EventForm.css';
@@ -38,12 +38,15 @@ const EventForm = ({formType, groupInfo}) => {
         if (!startDate) errors.startDate='Start Date is required';
         if (new Date(startDate) < new Date()) errors.startDateTime = 'Start Date must be in the future';
         if (!endDate) errors.endDate='End Date is required';
-        if (new Date(endDate)< new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';        if (formType==='Create Event') {
-        const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
-        if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';
-        } // eslint-disable-next-line
-        const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
-        if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
+        if (new Date(endDate)< new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';
+
+        if (formType==='Create Event') {
+            const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
+            if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';// eslint-disable-next-line
+            const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
+            if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
+        }
+
 
         setValidationErrors(errors);
 
@@ -81,7 +84,7 @@ const EventForm = ({formType, groupInfo}) => {
     return (
         <form onSubmit={handleSubmit} id='event-form'>
             <div className='event-form-section'>
-                <h2>Create an Event for <span> {group.name} </span></h2>
+                <h2>Create an Event for <NavLink to={`/groups/${group.id}`}> {group.name} </NavLink></h2>
                 <label>
                     What is the name of your event?
                     <input

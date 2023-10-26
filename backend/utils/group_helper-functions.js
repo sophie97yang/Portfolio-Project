@@ -7,9 +7,11 @@ const {restoreUser} = require('./auth.js');
 const getGroupDetails = async (groups) => {
     const groupList = [];
     const membersList = [];
+    const eventsList = [];
 
     for (let group of groups) {
         groupList.push(group.toJSON());
+
         membersList.push(
         //NumMembers only count members that don't have a pending status
         await group.getUsers({
@@ -20,16 +22,22 @@ const getGroupDetails = async (groups) => {
                     }
                 }
             }
-        }))
+        }));
+
+        eventsList.push(
+            await group.getEvents()
+        );
     }
 
    for (let i=0;i<groupList.length;i++) {
     const group = groupList[i];
     const members = membersList[i];
+    const events = eventsList[i];
     //updated 10/24 based on frontend requirements
     const organizerInfo = await User.findByPk(group.organizerId);
     group.Organizer = organizerInfo;
     group.numMembers = members.length;
+    group.numEvents = events.length;
 
         if (group.GroupImages.length>=1) {
             let previewImage = group.GroupImages[0];

@@ -138,14 +138,16 @@ const GroupDetails = () => {
                  <div className='group-event-details'>
                  <NavLink to={`/events/${id}`} key={id}>
                      <div className='ged-sec-one'>
-                     <img src={previewImage} alt={name}></img>
+                     <div id='ged-left'>
+                            <img src={previewImage} alt={name}></img>
+                        </div>
                      <div className='ged-right'>
                          <div className='time'>
                              <p>{date} · </p>
                              <p> {time}</p>
                          </div>
                          <h4>{name}</h4>
-                         <p>{Venue.city}, {Venue.state} </p>
+                         <p>{Venue ? Venue.city : group.city}, {Venue ? Venue.state : group.state} </p>
                      </div>
                      </div>
                      <p id='e-description'>{description}</p>
