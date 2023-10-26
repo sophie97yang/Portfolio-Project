@@ -1,0 +1,71 @@
+#event-form {
+    padding:10px 20px;
+    width:800px;
+    margin:0px auto;
+    display:flex;
+    flex-direction:column;
+}
+
+#event-form h2 {
+    font-weight:normal;
+}
+
+#event-form input, #event-form textarea {
+    width:300px;
+    background-color:aliceblue;
+}
+
+.event-form-section {
+    padding:0px 20px 20px 20px;
+    border-bottom:1px solid grey;
+    display:flex;
+    flex-direction:column;
+}
+
+.event-form-section>label {
+    font-size:13px;
+    margin-top:10px;
+}
+
+.event-form-section input, .event-form-section textarea, .event-form-section select{
+    display:block;
+    margin: 10px 0px;
+}
+.event-form-section select {
+    width:110px;
+    padding:5px;
+    border-color: rgb(202, 194, 194);
+    border-radius:0.5em;
+    border-width:2px;
+    border-style:inset;
+    background-color:aliceblue;
+}
+
+#event-form button {
+    width:150px;
+    padding:10px;
+    border-style: outset;
+}
+
+#event-form textarea {
+    height:200px;
+    border-color: rgb(202, 194, 194);
+    border-radius:0.5em;
+    border-width:2px;
+    border-style:inset;
+    background-color:aliceblue;
+}
+
+.ef-dates,#ef-price {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.ef-dates input {
+    margin-right:20px;
+}
+#ef-price input {
+    margin-left:10px;
+    width:285px;
+}

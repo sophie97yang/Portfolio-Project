@@ -11,7 +11,7 @@
     text-align:center;
     border:1px solid rgb(230 230 230/1);
     border-radius:0.8em;
-    padding: 10px;
+    padding: 10px 50px;
     margin-top:10px;
     background-color:white;
     box-shadow:3px;
@@ -71,6 +71,8 @@ nav {
 
 #viewGroups {
     background-color:teal;
+    border-style:outset;
+    border-color:teal;
 }
 
 .user-dropdown {
@@ -87,4 +89,5 @@ nav {
 #profile-button .User {
     width:70px;
     padding:15px;
+    border-style:outset;
 }

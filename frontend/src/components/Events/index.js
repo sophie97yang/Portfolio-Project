@@ -11,7 +11,8 @@ const Events = () => {
 
 
     useEffect(()=> {
-        dispatch(allEvents());
+        dispatch(allEvents())
+        .catch(res => console.log(res));
     },[dispatch]);
 
     if (!events.events) return null;
@@ -37,7 +38,7 @@ const Events = () => {
                             <div className='event-details-right'>
                                 <p className='time'>{startDate.slice(0,10)} · {startDate.slice(11,16)}</p>
                                 <h3>{name}</h3>
-                                <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : `${Group.city}, ${Group.state}`}</p>
+                                {Group ? <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : `${Group.city}, ${Group.state}`}</p>: <p>city,state</p>}
                                 <p>{description}</p>
                             </div>
                         </div>

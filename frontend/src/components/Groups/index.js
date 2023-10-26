@@ -9,7 +9,9 @@ const Groups = () => {
     const groups = useSelector(state => state.groups.groups);
 
     useEffect(()=> {
-        dispatch(allGroups());
+        dispatch(allGroups())
+        .catch(res => console.log(res))
+        ;
     },[dispatch]);
 
     if (!groups) return null;

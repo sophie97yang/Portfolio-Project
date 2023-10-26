@@ -52,7 +52,9 @@ const GroupDetails = () => {
         <div className='group-details-page'>
             <span> {'<'} </span> <NavLink to='/groups'>Groups</NavLink>
             <div className='gd-section-one'>
+                <div className='gd-sec-one-left'>
                 {image ? <img src={image.url} alt={group.name}></img>: <img src={noImage} alt="not-available"></img>}
+                </div>
                 <div className='gd-sec-one-right'>
                     <h2>{group.name}</h2>
                     <p>{ group.city }, {group.state}</p>

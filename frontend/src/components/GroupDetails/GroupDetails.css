@@ -20,18 +20,24 @@
     color:grey;
 }
 
-.gd-section-one>img {
+.gd-section-one img {
     width:500px;
+    object-fit:cover;
+    object-position:50% 50%;
     height:300px;
+    border-radius:10px;
+    margin:0px auto;
+}
+.gd-sec-one-left {
+    flex:1;
 }
 
 .gd-active{
-   padding:20px;
+    padding:15px;
    margin-right:520px;
    background-color:#FF5A5F;
    color:white;
    cursor:pointer;
-   align-self:center;
 }
 
 .gd-section-two {
@@ -113,7 +119,7 @@
 .gd-manage-buttons {
     display:flex;
     flex-direction:row;
-    justify-content:flex-end;
+    justify-content:flex-start;
     align-items:flex-end;
     height:100%;
 
@@ -122,7 +128,7 @@
 .gd-manage-buttons .gd-active-organizer {
     width:100px;
     margin-top:10px;
-    margin-left:20px;
+    margin-right:20px
 }
 
 .gd-delete-button {

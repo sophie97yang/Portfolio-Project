@@ -51,7 +51,8 @@
 }
 
 #ed-left {
-    width:300px;
+    min-width:325px;
+    max-width:325px;
 }
 
 .event-details-right {

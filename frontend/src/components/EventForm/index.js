@@ -3,6 +3,7 @@ import { useDispatch,useSelector } from "react-redux";
 import {useHistory} from 'react-router-dom';
 import { fetchDetails } from "../../store/groups";
 import { createEvent } from "../../store/events";
+import './EventForm.css';
 
 const EventForm = ({formType, groupInfo}) => {
     const {id} = groupInfo;
@@ -77,8 +78,8 @@ const EventForm = ({formType, groupInfo}) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form onSubmit={handleSubmit} id='event-form'>
+            <div className='event-form-section'>
                 <h2>Create an Event for <span> {group.name} </span></h2>
                 <label>
                     What is the name of your event?
@@ -89,9 +90,10 @@ const EventForm = ({formType, groupInfo}) => {
                         onChange={e => setName(e.target.value)}
                     />
                 </label>
+                <div className='errors'>{validationErrors.name}</div>
             </div>
 
-            <div>
+            <div className='event-form-section'>
                 <label>
                     Is this an in person or online event?
                     <select
@@ -107,12 +109,15 @@ const EventForm = ({formType, groupInfo}) => {
 
                 <label>
                     What is the price for your event?
-                    $<input
+                    <div id='ef-price'>
+                    <i className="fa-light fa-dollar-sign"></i>
+                    <input
                         type='number'
                         value={price}
                         min={0}
                         onChange={e => setPrice(e.target.value)}
                     />
+                    </div>
                 </label>
 
                 <label>
@@ -123,34 +128,44 @@ const EventForm = ({formType, groupInfo}) => {
                         value={capacity}
                         onChange={e => setCapacity(e.target.value)}
                     />
+                    <div className='errors'>{validationErrors.capacityMin}</div>
+                    <div className='errors'>{validationErrors.capacity}</div>
                 </label>
             </div>
 
-            <div>
+            <div className='event-form-section'>
                 <label>
                     When does your event start?
+                    <div className='ef-dates'>
                     <input
                         type='text'
                         placeholder='MM/DD/YYYY HH:mm AM'
                         value={startDate}
                         onChange={e=> setStartDate(e.target.value)}
                     />
-                    <i className='fas fa-calendar' />
+                    <i className='fas fa-calendar fa-2x' />
+                    </div>
+                    <div className='errors'>{validationErrors.startDate}</div>
+                    <div className='errors'>{validationErrors.startDateTime}</div>
                 </label>
 
                 <label>
                     When does your event end?
+                    <div className='ef-dates'>
                     <input
                         type='text'
                         placeholder='MM/DD/YYYY HH:mm PM'
                         value={endDate}
                         onChange={e => setEndDate(e.target.value)}
                     />
-                    <i className='fas fa-calendar' />
+                    <i className='fas fa-calendar fa-2x' />
+                    </div>
+                    <div className='errors'>{validationErrors.endDate}</div>
+                    <div className='errors'>{validationErrors.endDateTime}</div>
                 </label>
              </div>
 
-             <div>
+             <div className='event-form-section'>
                 <label>
                     Please add in an image URL for your event below:
                     <input
@@ -159,10 +174,11 @@ const EventForm = ({formType, groupInfo}) => {
                         value={imageUrl}
                         onChange={e=> setImageUrl(e.target.value)}
                         />
+                     <div className='errors'>{validationErrors.imageUrl}</div>
                 </label>
             </div>
 
-            <div>
+            <div className='event-form-section'>
                 <label>
                     Please describe your event:
                     <textarea
@@ -170,6 +186,7 @@ const EventForm = ({formType, groupInfo}) => {
                         value={description}
                         onChange={e=> setDescription(e.target.value)}
                         />
+                     <div className='errors'>{validationErrors.description}</div>
                 </label>
 
                 <button className='submitButton'>{formType}</button>
