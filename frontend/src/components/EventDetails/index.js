@@ -3,6 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {eventDetails} from "../../store/events";
 import { useEffect } from "react";
 import { fetchDetails } from "../../store/groups";
+import OpenModalButton from "../OpenModalButton";
+import DeleteModal from "../DeleteModal";
 import noImage from '../GroupDetails/Image_not_available.png';
 import './EventDetails.css';
 
@@ -65,7 +67,13 @@ const EventDetails = () => {
                         </div>
                         <div className='ed-details-buttons'>
                             <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
-                            <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button>
+                            {/* <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button> */}
+                                <OpenModalButton
+                                    buttonText="Delete"
+                                    modalComponent={<DeleteModal id={id} deleteType='Event'
+                                    />}
+                                    className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'}
+                                />
                         </div>
                     </div>
                 </div>

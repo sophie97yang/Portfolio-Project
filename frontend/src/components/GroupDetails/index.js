@@ -38,7 +38,6 @@ const GroupDetails = () => {
     },[dispatch,id])
 
     if (redirect===true) return <Redirect to='/page-not-found' />
-    console.log('group',group);
     if (!group || !events || !group.GroupImages) return null;
 
     const image = group.GroupImages.filter(image => image.preview===true)[0];
@@ -64,9 +63,9 @@ const GroupDetails = () => {
                     <NavLink to={`/groups/${id}/edit`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Update Group</button></NavLink>
                     <OpenModalButton
                         buttonText="Delete Group"
-                        modalComponent={<DeleteModal groupId={id}
+                        modalComponent={<DeleteModal id={id} deleteType='Group'
                         />}
-                        className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}
+                        className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer gd-delete-button' : 'gd-hidden'}
                     />
                     <button onClick={handleJoinGroup} className={(sessionUser && sessionUser.id!==group.organizerId) ? 'gd-active' : 'gd-hidden'}>Join This Group</button>
                     </div>
@@ -81,11 +80,13 @@ const GroupDetails = () => {
                 <p>{group.about}</p>
 
             {upcomingEvents.length ? <h3>Upcoming Events<span> ({upcomingEvents.length}) </span></h3>: <h3>No Upcoming Events</h3>}
-            {upcomingEvents.length ? upcomingEvents.map(({id,previewImage,name,startDate,Venue}) => (
+            {upcomingEvents.length ? upcomingEvents.map(({id,previewImage,name,startDate,Venue,description}) => (
                 <div className='group-event-details' key={id}>
                 <NavLink to={`/events/${id}`} key={id}>
                     <div className='ged-sec-one'>
-                    <img src={previewImage} alt={name}></img>
+                        <div id='ged-left'>
+                            <img src={previewImage} alt={name}></img>
+                        </div>
                     <div className='ged-right'>
                         <div className='time'>
                             <p>{startDate.slice(0,10)} · </p>
@@ -95,7 +96,7 @@ const GroupDetails = () => {
                         <p>{Venue ? Venue.city : group.city}, {Venue ? Venue.state : group.state} </p>
                     </div>
                     </div>
-                    <p id='e-description'>Event Description</p>
+                    <p id='e-description'>{description}</p>
                 </NavLink>
                 </div>
                 ))
@@ -103,7 +104,7 @@ const GroupDetails = () => {
             }
 
             {pastEvents.length ? <h3>Past Events <span> ({pastEvents.length}) </span></h3> : <span></span>}
-            {pastEvents.length ? pastEvents.map(({id,previewImage,name,startDate,Venue}) => (
+            {pastEvents.length ? pastEvents.map(({id,previewImage,name,startDate,Venue,description}) => (
                  <div className='group-event-details'>
                  <NavLink to={`/events/${id}`} key={id}>
                      <div className='ged-sec-one'>
@@ -117,7 +118,7 @@ const GroupDetails = () => {
                          <p>{Venue.city}, {Venue.state} </p>
                      </div>
                      </div>
-                     <p id='e-description'>Event Description</p>
+                     <p id='e-description'>{description}</p>
                  </NavLink>
                  </div>
                  ))

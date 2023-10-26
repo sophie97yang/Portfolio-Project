@@ -4,6 +4,7 @@ import {csrfFetch} from './csrf';
 export const GET_EVENTS='events/GET-EVENTS';
 export const GET_DETAILS ='events/GET-DETAILS';
 export const ADD_EVENT = 'events/ADD_EVENT';
+export const REMOVE_EVENT ='events/REMOVE_EVENT'
 
 //Action Creators
 export const getEvents = (events) => ({
@@ -14,12 +15,17 @@ export const getEvents = (events) => ({
 export const getDetails = (event) => ({
     type:GET_DETAILS,
     event
-})
+});
 
 export const addEvent = (event) => ({
 
     type:ADD_EVENT,
     event
+});
+
+export const removeEvent = (eventId) => ({
+    type:REMOVE_EVENT,
+    eventId
 })
 
 //Thunk Action Creators
@@ -83,6 +89,19 @@ export const createEvent = (payload,imagePayload,groupId) => async dispatch => {
     }
 };
 
+export const deleteEvent = (eventId) => async dispatch => {
+    const res = await csrfFetch(`/api/events/${eventId}`,{
+        method:'DELETE'
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+        dispatch(removeEvent(eventId));
+        return data;
+    } else return data;
+
+}
+
 
 const initialState = {events:[],event:null}
 
@@ -95,6 +114,14 @@ const eventsReducer = (state=initialState,action) => {
         }
         case ADD_EVENT:
             return {...state,events:[...state.events,action.event]}
+        case REMOVE_EVENT: {
+            const newState = [...state.events];
+            if (newState) {
+            const index = newState.findIndex(event => event.id === Number(action.eventId));
+            newState.splice(index,1);
+            }
+            return {...state, events:newState, event:null}
+        }
         default:
             return state;
     }

@@ -277,6 +277,10 @@ router.post('/:groupId/venues',requireAuth,checkGroupExistence,authorizeCurrentU
 router.get('/:groupId/events',checkGroupExistence, async (req,res,next)=> {
     const group = req.group;
     const events = await group.getEvents({
+        //update made on 10/24 in order to accommodate for frontend requests
+        attributes: {
+            include: ['description']
+        },
         include:[
             {
                 model:Group,
