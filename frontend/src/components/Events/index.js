@@ -17,6 +17,14 @@ const Events = () => {
 
     if (!events.events) return null;
 
+   events.events.forEach(event => {
+    const startDate = new Date(event.startDate).toLocaleString();
+    const index = startDate.indexOf(',');
+    const date = startDate.slice(0,index);
+    const time = startDate.slice(index+1,startDate.length);
+    event.date = date;
+    event.time =time;
+   });
 
     return (
     <div className='eventsPage'>
@@ -28,7 +36,7 @@ const Events = () => {
         <div>
             <span>Events in MeetU</span>
             <ul className='events-list'>
-                {events.events.map(({id,previewImage,name,Venue,startDate,description,Group}) => (
+                {events.events.map(({id,previewImage,name,Venue,time,date,description,Group}) => (
                     <li key={id}>
                     <NavLink to={`/events/${id}`}>
                         <div className='event-details'>
@@ -36,7 +44,7 @@ const Events = () => {
                                 {previewImage!=='Preview image is not available' ?<img src={previewImage} alt={name}></img> : <img src={noImage} alt='not-available'></img> }
                             </div>
                             <div className='event-details-right'>
-                                <p className='time'>{startDate.slice(0,10)} · {startDate.slice(11,16)}</p>
+                                <p className='time'>{date} · {time}</p>
                                 <h3>{name}</h3>
                                 {Group ? <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : `${Group.city}, ${Group.state}`}</p>: <p>city,state</p>}
                                 <p>{description}</p>

@@ -36,6 +36,11 @@ const EventDetails = () => {
 
     const image = event.EventImages.filter(image => image.preview===true)[0];
     const groupImage = group.GroupImages.filter(image => image.preview === true)[0];
+    const startDate = new Date(event.startDate).toLocaleString();
+    const indexOfSeparation = startDate.indexOf(',');
+    const endDate = new Date(event.endDate).toLocaleString();
+    const indexOfEndDate = endDate.indexOf(',');
+
 
     return (
         <div className='event-details-page'>
@@ -60,8 +65,8 @@ const EventDetails = () => {
                         <div className='ed-details-section'>
                             <i className="fas fa-clock"></i>
                             <div id='startEnd'>
-                                <p>START <span>{event.startDate.slice(0,10)} · {event.startDate.slice(11,16)}</span></p>
-                                <p>END <span>{event.endDate.slice(0,10)} · {event.endDate.slice(11,16)}</span></p>
+                                <p>START <span>{startDate.slice(0,indexOfSeparation)} · {startDate.slice(indexOfSeparation+1,startDate.length)}</span></p>
+                                <p>END <span>{endDate.slice(0,indexOfEndDate)} · {endDate.slice(indexOfEndDate+1,endDate.length)}</span></p>
                             </div>
                         </div>
                         <div className='ed-details-section'>
@@ -73,7 +78,7 @@ const EventDetails = () => {
                             <p>{event.type}</p>
                         </div>
                         <div className='ed-details-buttons'>
-                            <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button>
+                            <NavLink to={`/events/${id}/edit`}><button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-update'>Update</button></NavLink>
                             {/* <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button> */}
                                 <OpenModalButton
                                     buttonText="Delete"

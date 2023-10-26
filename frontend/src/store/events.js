@@ -73,20 +73,25 @@ export const createEvent = (payload,imagePayload,groupId) => async dispatch => {
     });
 
     let imageRes;
+    let event;
 
     if (res.ok) {
-        const event = await res.json();
+        event = await res.json();
         imageRes = await dispatch(addEventImage(imagePayload,event.id));
 
         if (imageRes.ok) {
-            dispatch(addEvent(event));
+            await dispatch(addEvent(event));
             return event;
+        } else {
+            const imageData = await imageRes.json();
+            return {data:event,imageData:imageData};
         }
     } else {
         const data = await res.json();
-        const imageData = await imageRes.json();
-        return {data,imageData};
+        return data;
     }
+
+
 };
 
 export const deleteEvent = (eventId) => async dispatch => {

@@ -41,10 +41,11 @@ const EventForm = ({formType, groupInfo}) => {
         if (new Date(endDate)< new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';        if (formType==='Create Event') {
         const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
         if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';
-        }
+        } // eslint-disable-next-line
+        const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
+        if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
 
         setValidationErrors(errors);
-        console.log(errors);
 
         if (!Object.keys(errors)[0] && formType==='Create Event') {
 
@@ -64,8 +65,8 @@ const EventForm = ({formType, groupInfo}) => {
 
         const newEvent = await dispatch(createEvent(payload,image,id))
         .catch(async res => {
+
             const data = await res.json();
-            console.log('createEventData',data);
             return data;
         });
 
@@ -73,7 +74,7 @@ const EventForm = ({formType, groupInfo}) => {
         else {
             setValidationErrors(newEvent.errors);
             return;
-            }
+        }
         }
     }
 
@@ -175,6 +176,7 @@ const EventForm = ({formType, groupInfo}) => {
                         onChange={e=> setImageUrl(e.target.value)}
                         />
                      <div className='errors'>{validationErrors.imageUrl}</div>
+                     <div className='errors'>{validationErrors.url ? 'Please enter a valid URL' :''}</div>
                 </label>
             </div>
 
