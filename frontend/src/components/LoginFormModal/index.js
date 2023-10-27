@@ -107,13 +107,6 @@ const LoginFormModal = () => {
 
             <div className='errors'>{errors?.password}</div>
             </div>
-            {/* <label>
-            <input type='checkbox'
-            value={sustainUser}
-            onChange={(e)=> setSustainUser(!sustainUser)}
-            />
-            Keep me signed in
-            </label> */}
             <button
             type="submit"
             disabled={disabled}

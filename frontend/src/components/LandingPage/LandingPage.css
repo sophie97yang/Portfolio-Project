@@ -50,11 +50,21 @@
 .lp-section-one {
     display:flex;
     flex-direction:row;
-    padding-left:50px;
+    width:1000px;
+    margin:0px auto;
+}
+
+.lp-section-one h1 {
+    font-weight:900;
+    font-size:40px;
+}
+
+#lp-sec-one-text {
+    width:750px;
 }
 
 .lp-section-one img {
-    width: 40%;
+    width: 45%;
 }
 
 .lp-section-three img {
@@ -63,4 +73,8 @@
 }
 .lp-start-true img {
     opacity:0.5;
+}
+
+.hidden-join {
+    display:none;
 }

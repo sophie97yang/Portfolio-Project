@@ -1,6 +1,20 @@
 .event-details-page {
     padding:10px 40px;
 }
+
+.event-details-page>span{
+    font-size:15px;
+
+}
+
+.event-details-page > a {
+    color:teal;
+    margin-left:5px;
+}
+
+.event-details-page > a:hover {
+    font-weight:bold;
+}
 .ed-section-one>p{
     font-size:13px;
     color:grey;

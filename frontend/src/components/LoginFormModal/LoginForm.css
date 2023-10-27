@@ -70,3 +70,11 @@ input {
 .userInput {
     width:150%;
 }
+
+.demo-user {
+    cursor: pointer;
+}
+
+.submitButton:disabled {
+    cursor:default;
+}

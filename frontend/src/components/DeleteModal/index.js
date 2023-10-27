@@ -6,7 +6,7 @@ import { deleteEvent } from "../../store/events";
 import './DeleteModal.css';
 
 
-const DeleteModal  = ({id,deleteType}) => {
+const DeleteModal  = ({id,deleteType,groupId}) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const {closeModal} = useModal();
@@ -34,7 +34,7 @@ const DeleteModal  = ({id,deleteType}) => {
             })
             if (!attemptedDelete.errors) {
                 closeModal();
-                history.push('/events');
+                history.push(`/groups/${groupId}`);
             }
         }
     }

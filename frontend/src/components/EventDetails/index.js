@@ -71,7 +71,7 @@ const EventDetails = () => {
                         </div>
                         <div className='ed-details-section'>
                             <i className="fas fa-dollar-sign"></i>
-                            <p>$ {event.price || 'FREE'}</p>
+                            <p> {event.price ? `$ ${event.price}` : 'FREE'}</p>
                         </div>
                         <div className='ed-details-section'>
                             <i className='fas fa-location-dot'></i>
@@ -82,7 +82,7 @@ const EventDetails = () => {
                             {/* <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'} id='ed-delete'>Delete</button> */}
                                 <OpenModalButton
                                     buttonText="Delete"
-                                    modalComponent={<DeleteModal id={id} deleteType='Event'
+                                    modalComponent={<DeleteModal id={id} deleteType='Event' groupId={group.id}
                                     />}
                                     className={(sessionUser && sessionUser.id===group.organizerId) ? 'ed-active' :'ed-hidden'}
                                 />
