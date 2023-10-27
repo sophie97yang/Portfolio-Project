@@ -65,6 +65,10 @@
     width:600px;
 }
 
+.group-event-details:hover {
+    border-style:outset;
+    box-shadow: inset;
+}
 .group-event-details a {
     color:black;
     text-decoration:none;

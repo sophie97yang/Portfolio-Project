@@ -77,6 +77,10 @@
     padding-top: 20px
 }
 
+.events-list li:hover {
+    background-color:rgb(228, 227, 227);
+}
+
 .eventsPage span {
     color:grey;
     padding-left:20px

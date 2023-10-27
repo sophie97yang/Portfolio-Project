@@ -79,6 +79,7 @@ const LoginFormModal = () => {
             <h4>Not a member yet? <span>
                 <OpenModalButton
                     buttonText="Sign Up"
+                    className='redirect-buttons'
                     modalComponent={<SignUpFormModal />}
                     />
             </span></h4>
@@ -91,11 +92,6 @@ const LoginFormModal = () => {
                 />
 
             <div className='errors'>{errors?.credential}</div>
-            {/* On real MeetUp, errors are calculated once user clicks out of field and every time the user inputs something
-            Error message: Email is required
-            Email has invalid format
-            Password is required
-            */}
             </div>
             <div className='userInput'>
             <label> Password </label>
@@ -115,10 +111,10 @@ const LoginFormModal = () => {
 
             <div>
                 <button
-                    className="demo-user"
+                    className="demo-user redirect-buttons"
                     onClick={handleDemoUserClick}
                 >
-                    Demo User
+                    Log In as Demo User
                 </button>
             </div>
         </form>

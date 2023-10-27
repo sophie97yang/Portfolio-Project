@@ -58,8 +58,11 @@ h4 button, .demo-user {
 
 input {
     border-color: rgb(202, 194, 194);
+    border-width:1px;
+    box-shadow:none;
     border-radius:0.5em;
     height:2em;
+    background-color:aliceblue;
 }
 
 .form-login .userInput>input {

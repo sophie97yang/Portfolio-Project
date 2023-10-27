@@ -66,6 +66,13 @@ export const CurrentGroups = () => {
     if (redirect) return <Redirect to='/groups'/>;
 
     if (!groups.current) return null;
+
+    if (!groups.current.length) return (
+        <div className='groupsPage'id='no-groups'>
+        <h2> You have no groups 🧍🏻</h2>
+        <NavLink to='/groups/new'><button id='start-new-group'>Make new friends by starting a group here!</button></NavLink>
+        </div>
+    )
     return (
     < div className='groupsPage'>
         <h2>Your Groups</h2>

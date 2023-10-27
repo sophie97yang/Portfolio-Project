@@ -73,6 +73,7 @@ const SignUpFormModal = () => {
             <h2>Sign Up</h2>
             <h4>Already a member? <span><OpenModalButton
                     buttonText="Log In"
+                    className='redirect-buttons'
                     modalComponent={<LoginFormModal />}
                     />
             </span></h4>
@@ -85,7 +86,7 @@ const SignUpFormModal = () => {
                     required
                 />
 
-            <div className='errors'>{errors?.firstName}</div>
+            <div className='errors'>{errors.firstName?.includes('Validation') ? 'Invalid Name' :errors?.firstName}</div>
             </div>
 
             <div className='userInput'>
@@ -96,7 +97,7 @@ const SignUpFormModal = () => {
                     onChange={(e)=> setLastName(e.target.value)}
                 />
 
-            <div className='errors'>{errors?.lastName}</div>
+            <div className='errors'>{errors.lastName?.includes('Validation') ? 'Invalid Name' :errors?.lastName}</div>
             </div>
 
             <div className='userInput'>

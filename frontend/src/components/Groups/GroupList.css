@@ -3,10 +3,27 @@
     margin: 10px auto;
 
 }
+
 .groups-nav {
     display:flex;
     flex-direction:row;
     align-items:flex-start;
+}
+
+#start-new-group {
+    padding:10px;
+    background-color:teal;
+    color:white;
+    font-weight:bolder;
+    border-color:teal;
+    border-radius:10px;
+    cursor:pointer;
+
+}
+#no-groups {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 .groups-nav>h2 {
     padding-left:20px;
@@ -73,4 +90,9 @@
 .groupsPage span {
     color:grey;
     padding-left:20px
+}
+
+.groups-list li:hover {
+    background-color:rgb(228, 227, 227);
+
 }
