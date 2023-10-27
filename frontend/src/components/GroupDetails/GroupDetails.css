@@ -2,6 +2,18 @@
     padding:10px 40px;
 }
 
+.group-details-page > span{
+    font-size:15px;
+}
+
+.group-details-page > a {
+    color:teal;
+    margin-left:5px;
+}
+
+.group-details-page > a:hover {
+    font-weight:bold;
+}
 .gd-section-one {
     display:flex;
     flex-direction:row;

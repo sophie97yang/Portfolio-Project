@@ -36,12 +36,15 @@ const EventForm = ({formType, groupInfo}) => {
         if (parseInt(capacity)!==Number(capacity)) errors.capacity='Capacity must be an integer';
         if (capacity<=0) errors.capacityMin='Capacity must be greater than 0';
         if (!startDate) errors.startDate='Start Date is required';
+        const DateRegEx = /^(1[0-2]|0[1-9])\/(3[01]|[12][0-9]|0[1-9])\/[0-9]{4} ((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))$/g;
+        if (!startDate.match(DateRegEx)) errors.startDateFormat = 'Please enter a valid date format';
         if (new Date(startDate) < new Date()) errors.startDateTime = 'Start Date must be in the future';
         if (!endDate) errors.endDate='End Date is required';
         if (new Date(endDate)< new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';
+        if (!endDate.match(DateRegEx)) errors.endDateFormat = 'Please enter a valid date format';
 
         if (formType==='Create Event') {
-            const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
+            const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length).toLowerCase();
             if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';// eslint-disable-next-line
             const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
             if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
@@ -119,6 +122,7 @@ const EventForm = ({formType, groupInfo}) => {
                         type='number'
                         value={price}
                         min={0}
+                        step='any'
                         onChange={e => setPrice(e.target.value)}
                     />
                     </div>
@@ -151,6 +155,7 @@ const EventForm = ({formType, groupInfo}) => {
                     </div>
                     <div className='errors'>{validationErrors.startDate}</div>
                     <div className='errors'>{validationErrors.startDateTime}</div>
+                    <div className='errors'>{validationErrors.startDateFormat}</div>
                 </label>
 
                 <label>
@@ -166,6 +171,7 @@ const EventForm = ({formType, groupInfo}) => {
                     </div>
                     <div className='errors'>{validationErrors.endDate}</div>
                     <div className='errors'>{validationErrors.endDateTime}</div>
+                    <div className='errors'>{validationErrors.endDateFormat}</div>
                 </label>
              </div>
 
@@ -173,8 +179,8 @@ const EventForm = ({formType, groupInfo}) => {
                 <label>
                     Please add in an image URL for your event below:
                     <input
-                        type='text'
-                        placeholder='Image URL'
+                        type='url'
+                        placeholder='Image URL (https://example.com/image.png)'
                         value={imageUrl}
                         onChange={e=> setImageUrl(e.target.value)}
                         />

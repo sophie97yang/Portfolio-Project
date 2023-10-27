@@ -29,7 +29,7 @@ const GroupForm = ({formDetails,formType}) => {
         if (privacy==='') errors.privacy='Visibility preferences are required';
 
         if (formType==='Create Group' || (formType==='Update Group' && imageUrl)) {
-        const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length);
+        const checkUrl = imageUrl.slice(imageUrl.length-6,imageUrl.length).toLowerCase();
         if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';
         // eslint-disable-next-line
         const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
@@ -37,13 +37,13 @@ const GroupForm = ({formDetails,formType}) => {
         }
 
         const indexOfSeparation = location.indexOf(',');
-        if (indexOfSeparation===-1) errors.locationFormat = "Please enter location in a valid format (ex. San Diego,CA)"
+        if (indexOfSeparation===-1 || location.slice(indexOfSeparation+1,location.length).trim().length!==2) errors.locationFormat = "Please enter location in a valid format (ex. San Diego,CA)"
 
         setValidationErrors(errors);
 
         if (!Object.keys(errors)[0] && formType==='Create Group') {
         const city = location.slice(0,indexOfSeparation).trim();
-        const state = location.slice(indexOfSeparation+1,location.length).trim();
+        const state = location.slice(indexOfSeparation+1,location.length).trim().toUpperCase();
         const payload = {
             name,
             city,
@@ -79,7 +79,7 @@ const GroupForm = ({formDetails,formType}) => {
 
         if (!Object.keys(errors)[0] && formType==='Update Group') {
             const city = location.slice(0,indexOfSeparation).trim();
-            const state = location.slice(indexOfSeparation+1,location.length).trim();
+            const state = location.slice(indexOfSeparation+1,location.length).trim().toUpperCase();
             const payload = {
                 name,
                 city,
@@ -202,8 +202,8 @@ const GroupForm = ({formDetails,formType}) => {
 
         <label>Please add an image url for your group below:
             <input
-                type='text'
-                placeholder='Image Url'
+                type='url'
+                placeholder='Image Url (https://exampl.com/image.png)'
                 value={imageUrl}
                 onChange={e => setImageUrl(e.target.value)}
             />

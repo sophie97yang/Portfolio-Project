@@ -21,7 +21,7 @@ return (
     <div>
 
     <div className='lp-section-one'>
-        <div>
+        <div id='lp-sec-one-text'>
             <h1> The People Platform - Where Interests become Friendships</h1>
             <p> Whatever your interest, from hiking and reading to networking and skill sharing,
                 there are thousands of people who share it on MeetU.
@@ -29,6 +29,7 @@ return (
             </p>
         <OpenModalButton
             buttonText="Join MeetU"
+            className={sessionUser ? "hidden-join" : "active-join"}
             modalComponent={<SignUpFormModal
         />}
         />
