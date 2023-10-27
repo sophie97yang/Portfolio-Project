@@ -7,24 +7,29 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const attendances = [
   {
-    event:'Tennis First Meet and Greet',
-    username:'test1',
+    event:"Red (Taylor's Version) Release Party",
+    username:'t.swizzle',
     status:'attending'
   },
   {
-    event:'Golf First Meet and Greet',
-    username:'test2',
+    event:"1989 (Taylor's Version) Release Party",
+    username:'t.swizzle',
     status:'attending'
   },
   {
-    event:'Soccer First Meet and Greet',
-    username:'test3',
+    event:'Kansas City Chiefs vs Miami Dolphins',
+    username:'t.swizzle',
     status:'attending'
   },
   {
-    event:'Golf First Meet and Greet',
-    username:'test1',
-    status:'pending'
+    event:'Pre-season Social',
+    username:'demo-user',
+    status:'attending'
+  },
+  {
+    event:'Pb Run',
+    username:'demo-user',
+    status:'attending'
   }
 
 ]

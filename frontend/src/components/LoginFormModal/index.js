@@ -43,7 +43,7 @@ const LoginFormModal = () => {
 
     const handleDemoUserClick = async (e) => {
         e.preventDefault();
-        const user = {credential:'test1',password:'password'};
+        const user = {credential:'demo-user',password:'password'};
         return await dispatch(sessionActions.logIn(user))
         .then(closeModal)
         .then(history.push('/'))

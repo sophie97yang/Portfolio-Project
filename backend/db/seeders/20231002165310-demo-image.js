@@ -7,45 +7,45 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const groupImages = [
   {
-    group:'Evening Tennis on the Water',
-    url:'https://picsum.photos/200',
+    group:"Fan Club - Taylor's Version",
+    url:'https://i.pinimg.com/originals/0f/65/65/0f656523dd5232d4b12e7fac56824b54.jpg',
     preview:true
   },
   {
-    group:'Evening Tennis on the Water',
-    url:'https://picsum.photos/200',
-    preview:false
-  },
-  {
-    group:'Morning Soccer on the Water',
-    url:'https://picsum.photos/200',
+    group:'University of Miami Class of 2022',
+    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Miami_Hurricanes_logo.svg/1200px-Miami_Hurricanes_logo.svg.png',
     preview:true
   },
   {
-    group:'Afternoon Golf on the Water',
-    url:'https://picsum.photos/200',
+    group:'SD Run Club',
+    url:'https://picsum.photos/id/108/2000/1333.jpg',
     preview:true
   }
 ]
 const eventImages = [
   {
-    event:'Soccer First Meet and Greet',
-    url:'https://picsum.photos/200',
+    event:"Red (Taylor's Version) Release Party",
+    url:'https://upload.wikimedia.org/wikipedia/en/4/47/Taylor_Swift_-_Red_%28Taylor%27s_Version%29.png',
     preview:true
   },
   {
-    event:'Soccer First Meet and Greet',
-    url:'https://picsum.photos/200',
-    preview:false
-  },
-  {
-    event:'Tennis First Meet and Greet',
-    url:'https://picsum.photos/200',
+    event:"1989 (Taylor's Version) Release Party",
+    url:'https://www.rollingstone.com/wp-content/uploads/2023/10/1989-album-review.jpg',
     preview:true
   },
   {
-    event:'Golf First Meet and Greet',
-    url:'https://picsum.photos/200',
+    event:'Kansas City Chiefs vs Miami Dolphins',
+    url:'https://www.billboard.com/wp-content/uploads/2023/09/travis-kelce-taylor-swift-kc-chiefs-924-2023-billboard-1548.jpg',
+    preview:true
+  },
+  {
+    event:'Pre-season Social',
+    url:'https://images.squarespace-cdn.com/content/v1/647e44913fcd1f300e34b84d/1694985523446-S5KPPDTHZ33OMOQAT7NB/sdtaproom-happy-hour.jpeg',
+    preview:true
+  },
+  {
+    event:'Pb Run',
+    url:'https://picsum.photos/id/156/2177/3264.jpg',
     preview:true
   }
 ]
@@ -107,15 +107,15 @@ module.exports = {
     options.tableName = 'GroupImages';
     const {Op} = require('sequelize');
     await queryInterface.bulkDelete(options, {
-      url: {
-        [Op.in]: ['https://picsum.photos/200']
+      preview: {
+        [Op.in]: ['true','false']
       }
     });
 
     options.tableName = 'EventImages';
     await queryInterface.bulkDelete(options, {
-      url: {
-        [Op.in]: ['https://picsum.photos/200']
+      preview: {
+        [Op.in]: ['true','false']
       }
     })
   }

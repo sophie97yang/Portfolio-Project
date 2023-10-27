@@ -7,26 +7,26 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const venues = [
 {
-  group: 'Evening Tennis on the Water',
-  address:'92 Ludlow St',
-  city:'New York',
-  state:'NY',
+  group: 'University of Miami Class of 2022',
+  address:'1320 S Dixie Hwy',
+  city:'Coral Gables',
+  state:'FL',
   lat:40.7184,
   lng:-73.9890
 },
 {
-  group: 'Afternoon Golf on the Water',
-  address:'11480 N Torrey Pines Rd',
-  city:'San Diego',
-  state:'CA',
+  group: "Fan Club - Taylor's Version",
+  address:'23 Cornelia Street',
+  city:'New York',
+  state:'NY',
   lat:32.9047,
   lng:-117.2446
 },
 {
-  group: 'Morning Soccer on the Water',
-  address:'5801 S Ellis Ave',
-  city:'Chicago',
-  state:'IL',
+  group: 'SD Run Club',
+  address:'1309 Hornblend Street',
+  city:'San Diego',
+  state:'CA',
   lat:41.7886,
   lng:-87.5987
 }
@@ -73,7 +73,7 @@ module.exports = {
     const {Op} = require('sequelize');
     return queryInterface.bulkDelete(options, {
       city: {
-        [Op.in]: ['New York','San Diego','Chicago']
+        [Op.in]: ['New York','San Diego','Coral Gables','Chicago']
       }
     })
   }
