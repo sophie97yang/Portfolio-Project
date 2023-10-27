@@ -19,7 +19,7 @@ const demoGroups = [
   {
     organizerId:2,
     name:"Fan Club - Taylor's Version",
-    about:"Welcome to Taylor Swift's Fan Club aka the Swifties! If you want the inside scoop on all things Taylor, the group has a Blank Space made just for you. We're very Enchanted to meet you.You belong with Us.",
+    about:"Welcome to Taylor Swift's Fan Club aka the Swifties! If you want the inside scoop on all things Taylor, the group has a Blank Space made just for you. We're very Enchanted to meet you.You Belong With Us <3",
     type:'Online',
     private:true,
     city:'New York',
@@ -28,7 +28,7 @@ const demoGroups = [
   {
     organizerId:4,
     name:'SD Run Club',
-    about:'For people who hate,like,love to run! Come join us as we jog around the beautiful and sunny SD, the happiest place on earth! Beautiful views, wonderful people, what more could you ask for?!',
+    about:'For people who hate,like,love to run, all are welcome! Come join us as we jog around the beautiful and sunny SD, the happiest place on earth! Beautiful views, wonderful people, what more could you ask for?!',
     type:'In person',
     private:true,
     city:'San Diego',
