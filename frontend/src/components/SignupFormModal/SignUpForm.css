@@ -35,3 +35,8 @@ button:disabled {
 .form-signup > .submitButton {
     width:150%;
 }
+
+.redirect-buttons:hover{
+    font-weight:bold;
+    cursor:pointer;
+}

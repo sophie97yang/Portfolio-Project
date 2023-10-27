@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, useRef } from "react";
 import './navigation.css';
 import { useDispatch } from "react-redux";
 import { logOut } from "../../store/session";
@@ -6,12 +6,12 @@ import {useHistory} from 'react-router-dom';
 
 const ProfileButton = ({user}) => {
   const history = useHistory();
-
   const [clicked,setClicked] = useState(false);
-
   const dispatch = useDispatch();
+  const divRef = useRef();
 
   const handleClick = (e) => {
+    if (clicked) return;
     e.preventDefault();
     setClicked(true);
   };
@@ -25,6 +25,7 @@ const ProfileButton = ({user}) => {
 
   const viewGroups = (e) => {
     e.preventDefault();
+    setClicked(false);
     history.push('/groups/current');
 
   }
@@ -33,13 +34,16 @@ const ProfileButton = ({user}) => {
     if (!clicked) return;
 
     const closeMenu = (e) => {
-      setClicked(false);
+      if (!divRef.current.contains(e.target)) {
+        setClicked(false);
+      }
     };
 
     document.addEventListener('click', closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
   }, [clicked]);
+
 
     return (
     <div id='profile-button'>
@@ -49,7 +53,7 @@ const ProfileButton = ({user}) => {
           <i className="fa-solid fa-user-circle fa-lg"/>
         </button>
 
-        <div className={`${clicked} profileMenu`}>
+        <div className={`${clicked} profileMenu`} ref={divRef}>
           <div className='userInfo'>
             <p>{`Hello, ${user.firstName}`}</p>
             <p>{user.email}</p>
@@ -58,7 +62,7 @@ const ProfileButton = ({user}) => {
           className="submitButton"
           onClick={viewGroups}
           id='viewGroups'
-          > View Groups </button>
+          > View Your Groups </button>
           <button
           onClick={logout}
           className="submitButton"
