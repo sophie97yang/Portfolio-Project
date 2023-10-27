@@ -73,12 +73,13 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.DATE,
       allowNull:false,
       validate: {
-        isDate:true,
-        isAfter(value) {
-          if (new Date(value)< new Date()) {
-            throw new Error('Start date must be in the future')
-          }
-        }
+        isDate:true
+        // ,
+        // isAfter(value) {
+        //   if (new Date(value)< new Date()) {
+        //     throw new Error('Start date must be in the future')
+        //   }
+        // }
       }
     },
     endDate: {
@@ -100,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
       attributes: {
         exclude:['createdAt','updatedAt','capacity','price','description']
       },
-      order:[['startDate','DESC']]
+      order:[['startDate','ASC']]
     }
   });
   return Event;

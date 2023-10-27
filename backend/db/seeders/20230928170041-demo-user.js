@@ -9,25 +9,32 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const demoUsers = [
   {
-    firstName:'Test',
-    lastName:'One',
-    email:'test1@gmail.com',
-    username:'test1',
+    firstName:'Alix',
+    lastName:'Earle',
+    email:'aearle679@gmail.com',
+    username:'the_real_alix',
+    hashedPassword:bcrypt.hashSync('miami123')
+  },
+  {
+    firstName:'Taylor',
+    lastName:'Swift',
+    email:'tswift22@yahoo.com',
+    username:'t.swizzle',
+    hashedPassword:bcrypt.hashSync('ihatejohnm')
+  },
+  {
+    firstName:'Beyonce',
+    lastName:'Knowles',
+    email:'slayqueenpop@aol.com',
+    username:'queen.energy',
+    hashedPassword:bcrypt.hashSync('werq567')
+  },
+  {
+    firstName:'Demo',
+    lastName:'User',
+    email:'demoUser@gmail.com',
+    username:'demo-user',
     hashedPassword:bcrypt.hashSync('password')
-  },
-  {
-    firstName:'Test',
-    lastName:'Two',
-    email:'test2@gmail.com',
-    username:'test2',
-    hashedPassword:bcrypt.hashSync('password2')
-  },
-  {
-    firstName:'Test',
-    lastName:'Three',
-    email:'test3@gmail.com',
-    username:'test3',
-    hashedPassword:bcrypt.hashSync('password3')
   }
 ]
 
@@ -56,10 +63,11 @@ module.exports = {
      */
     options.tableName = 'Users';
     const {Op} = require('sequelize');
-    return queryInterface.bulkDelete(options, {
-      username: {
-        [Op.in]: ['test1','test2','test3']
-      }
-    })
+    return queryInterface.bulkDelete(options);
+    // return queryInterface.bulkDelete(options, {
+    //   username: {
+    //     [Op.in]: ['theRealAlix','tSwizzle','queenEnergy','demoUser']
+    //   }
+    // })
 }
 };

@@ -6,42 +6,24 @@ if (process.env.NODE_ENV === 'production') options.schema = process.env.SCHEMA;
 
 const memberships = [
 {
-  username:'test2',
-  group: 'Evening Tennis on the Water',
-  status:'member'
+  username:'the_real_alix',
+  group: 'University of Miami Class of 2022',
+  status:'co-host'
 },
 {
-  username:'test3',
-  group: 'Afternoon Golf on the Water',
-  status:'member'
+  username:'t.swizzle',
+  group: "Fan Club - Taylor's Version",
+  status:'co-host'
 },
 {
-  username:'test1',
-  group: 'Morning Soccer on the Water',
-  status:'pending'
-
-},
-{
-  username:'test1',
-  group: 'Afternoon Golf on the Water',
-  status:'member'
-
-},
-{
-  username:'test1',
-  group: 'Evening Tennis on the Water',
+  username:'demo-user',
+  group: 'SD Run Club',
   status:'co-host'
 
 },
 {
-  username:'test2',
-  group: 'Afternoon Golf on the Water',
-  status:'co-host'
-
-},
-{
-  username:'test3',
-  group: 'Morning Soccer on the Water',
+  username:'queen.energy',
+  group: "Fan Club - Taylor's Version",
   status:'co-host'
 
 }
