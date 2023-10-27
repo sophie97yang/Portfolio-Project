@@ -23,7 +23,7 @@ const demoGroups = [
     type:'Online',
     private:true,
     city:'New York',
-    state:'New York'
+    state:'NY'
   },
   {
     organizerId:4,
