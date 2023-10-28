@@ -26,6 +26,9 @@
     display: flex;
     flex-direction:column;
     align-items:center;
+    width:1000px;
+    margin:0px auto;
+    text-align:center;
 }
 
 .lp-groups a,.lp-events a,.lp-start-false a {

@@ -73,6 +73,7 @@ const GroupDetails = () => {
     });
 
     const handleJoinGroup = () => {
+        alert('Feature Coming Soon!');
         history.push(`/groups/${id}/join`);
     }
 

@@ -12,12 +12,31 @@ const Events = () => {
 
     useEffect(()=> {
         dispatch(allEvents())
-        .catch(res => console.log(res));
+        .catch(res => res);
     },[dispatch]);
 
     if (!events.events) return null;
 
-   events.events.forEach(event => {
+    const upcomingEvents = events.events.filter(event =>{
+        const startDate = new Date(event.startDate).toLocaleString();
+        return (new Date(startDate) > new Date());
+    });
+
+    const pastEvents = events.events.filter(event => {
+        const startDate = new Date(event.startDate).toLocaleString();
+        return (new Date(startDate) < new Date());
+    });
+
+   upcomingEvents.forEach(event => {
+    const startDate = new Date(event.startDate).toLocaleString();
+    const index = startDate.indexOf(',');
+    const date = startDate.slice(0,index);
+    const time = startDate.slice(index+1,startDate.length);
+    event.date = date;
+    event.time =time;
+   });
+
+   pastEvents.forEach(event => {
     const startDate = new Date(event.startDate).toLocaleString();
     const index = startDate.indexOf(',');
     const date = startDate.slice(0,index);
@@ -36,7 +55,25 @@ const Events = () => {
         <div>
             <span>Events in MeetU</span>
             <ul className='events-list'>
-                {events.events.map(({id,previewImage,name,Venue,time,date,description,Group}) => (
+                {upcomingEvents.map(({id,previewImage,name,Venue,time,date,description,Group}) => (
+                    <li key={id}>
+                    <NavLink to={`/events/${id}`}>
+                        <div className='event-details'>
+                            <div id='ed-left'>
+                                {previewImage!=='Preview image is not available' ?<img src={previewImage} alt={name}></img> : <img src={noImage} alt='not-available'></img> }
+                            </div>
+                            <div className='event-details-right'>
+                                <p className='time'>{date} · {time}</p>
+                                <h3>{name}</h3>
+                                {Group ? <p className="ed-grey-details">{Venue ? `${Venue.city},${Venue.state}` : `${Group.city}, ${Group.state}`}</p>: <p>city,state</p>}
+                                <p>{description}</p>
+                            </div>
+                        </div>
+                    </NavLink>
+                    </li>
+                ))}
+
+                {pastEvents.map(({id,previewImage,name,Venue,time,date,description,Group}) => (
                     <li key={id}>
                     <NavLink to={`/events/${id}`}>
                         <div className='event-details'>
