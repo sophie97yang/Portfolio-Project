@@ -32,7 +32,7 @@ const GroupDetails = () => {
         dispatch(groupEvents(id))
         .catch(async res => {
             const error = await res.json();
-            if (error.message==="Group couldn't be found") setRedirect(true);
+            if (error.message==="Group couldn't be found" || error.title.toLowerCase()==='validation error') setRedirect(true);
         });
         ;
     },[dispatch,id])
@@ -73,7 +73,7 @@ const GroupDetails = () => {
 
     const handleJoinGroup = () => {
         alert('Feature Coming Soon!');
-        history.push(`/groups/${id}/join`);
+        // history.push(`/groups/${id}/join`);
     }
 
     return (
