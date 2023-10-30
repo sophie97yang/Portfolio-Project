@@ -59,7 +59,7 @@ const EventForm = ({formType, groupInfo, isLoaded}) => {
         if (!startDate.match(DateRegEx)) errors.startDateFormat = 'Please enter a valid date format';
         if (new Date(startDate) < new Date()) errors.startDateTime = 'Start Date must be in the future';
         if (!endDate) errors.endDate='End Date is required';
-        if (new Date(endDate)< new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';
+        if (new Date(endDate)<= new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';
         if (!endDate.match(DateRegEx)) errors.endDateFormat = 'Please enter a valid date format';
 
         if (formType==='Create Event') {
@@ -204,7 +204,7 @@ const EventForm = ({formType, groupInfo, isLoaded}) => {
                         onChange={e=> setImageUrl(e.target.value)}
                         />
                      <div className='errors'>{validationErrors.imageUrl}</div>
-                     <div className='errors'>{validationErrors.url ? 'Please enter a valid URL' :''}</div>
+                     <div className='errors'>{validationErrors.url ? 'Please enter a valid URL - All URLS must start with https:// or http://' :''}</div>
                 </label>
             </div>
 

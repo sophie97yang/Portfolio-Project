@@ -20,7 +20,7 @@ const Events = () => {
 
     const upcomingEvents = events.events.filter(event =>{
         const startDate = new Date(event.startDate).toLocaleString();
-        return (new Date(startDate) > new Date());
+        return (new Date(startDate) >= new Date());
     });
 
     const pastEvents = events.events.filter(event => {
