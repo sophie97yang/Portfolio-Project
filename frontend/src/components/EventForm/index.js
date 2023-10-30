@@ -57,7 +57,7 @@ const EventForm = ({formType, groupInfo, isLoaded}) => {
         if (!startDate) errors.startDate='Start Date is required';
         const DateRegEx = /^(1[0-2]|0[1-9])\/(3[01]|[12][0-9]|0[1-9])\/[0-9]{4} ((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))$/g;
         if (!startDate.match(DateRegEx)) errors.startDateFormat = 'Please enter a valid date format';
-        if (new Date(startDate) < new Date()) errors.startDateTime = 'Start Date must be in the future';
+        if (new Date(startDate) <= new Date()) errors.startDateTime = 'Start Date must be in the future';
         if (!endDate) errors.endDate='End Date is required';
         if (new Date(endDate)<= new Date(startDate)) errors.endDateTime = 'End Date must be later than the Start Date';
         if (!endDate.match(DateRegEx)) errors.endDateFormat = 'Please enter a valid date format';

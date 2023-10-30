@@ -45,7 +45,7 @@ const GroupDetails = () => {
 
     const upcomingEvents = events.Events.filter(event =>{
         const startDate = new Date(event.startDate).toLocaleString();
-        return (new Date(startDate) > new Date());
+        return (new Date(startDate) >= new Date());
     });
 
     const pastEvents = events.Events.filter(event => {
