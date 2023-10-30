@@ -70,13 +70,13 @@ const ProfileButton = ({user}) => {
           className="submitButton"
           onClick={viewGroups}
           id='viewGroups'
-          > View Your Groups </button>
+          > Your Groups </button>
 
         <button
           className="submitButton"
           onClick={viewEvents}
           id='viewEvents'
-          > View Your Events </button>
+          > Your Events </button>
 
           <button
           onClick={logout}

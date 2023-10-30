@@ -64,7 +64,7 @@ function App() {
       </Route>
 
       <Route path='/events/current'>
-        <Events />
+        <CurrEvents />
       </Route>
 
       <Route path='/events/:id/edit'>

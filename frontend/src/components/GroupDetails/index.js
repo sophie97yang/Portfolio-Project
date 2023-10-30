@@ -2,7 +2,7 @@ import { useParams,NavLink } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchDetails,groupEvents } from "../../store/groups";
 import { useEffect, useState } from "react";
-import { Redirect,useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
 import noImage from './Image_not_available.png';
@@ -16,7 +16,7 @@ const GroupDetails = () => {
     const group = useSelector(state => state.groups.group);
     const events = useSelector(state=>state.groups.groupEvents);
     const sessionUser = useSelector(state => state.session.user);
-    const history = useHistory();
+    // const history = useHistory();
     const [redirect,setRedirect]=useState(false);
 
 
