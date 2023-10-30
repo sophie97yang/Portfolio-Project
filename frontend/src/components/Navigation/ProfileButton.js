@@ -30,6 +30,12 @@ const ProfileButton = ({user}) => {
 
   }
 
+  const viewEvents = (e) => {
+    e.preventDefault();
+    setClicked(false);
+    history.push('/events/current');
+  }
+
   useEffect(() => {
     if (!clicked) return;
 
@@ -63,6 +69,13 @@ const ProfileButton = ({user}) => {
           onClick={viewGroups}
           id='viewGroups'
           > View Your Groups </button>
+
+        <button
+          className="submitButton"
+          onClick={viewEvents}
+          id='viewEvents'
+          > View Your Events </button>
+
           <button
           onClick={logout}
           className="submitButton"

@@ -18,7 +18,7 @@ const LandingPage = () => {
     },[sessionUser])
 
 return (
-    <div>
+    <div id='landing-page'>
 
     <div className='lp-section-one'>
         <div id='lp-sec-one-text'>
@@ -27,12 +27,6 @@ return (
                 there are thousands of people who share it on MeetU.
                 Events are happening every day—sign up to join the fun. It's very nice to Meet You!
             </p>
-        <OpenModalButton
-            buttonText="Join MeetU"
-            className={sessionUser ? "hidden-join" : "active-join"}
-            modalComponent={<SignUpFormModal
-        />}
-        />
         </div>
         <img src={mainImage} alt='People'></img>
     </div>
@@ -51,7 +45,7 @@ return (
         </div>
         <div className='lp-events'>
             <img src={eventsIcon} alt='events'></img>
-            <h3><Link to='/events'>See All Events</Link></h3>
+            <h3><Link to='/events'>Find an Event</Link></h3>
             <p>See all of the local events for all the things you love.</p>
         </div>
         <div className={`lp-start-${disabled}`}>
@@ -59,6 +53,15 @@ return (
             <h3>{disabled ? <Link onClick={e => e.preventDefault()} to='/'>Start a New Group</Link> :<Link to='/groups/new'>Start a New Group</Link>}</h3>
             <p>Create your new MeetU group, and draw from a community of millions.</p>
         </div>
+    </div>
+
+    <div className='lp-section-four'>
+        <OpenModalButton
+            buttonText="Join MeetU"
+            className={sessionUser ? "hidden-join" : "active-join"}
+            modalComponent={<SignUpFormModal
+        />}
+        />
     </div>
 
     </div>

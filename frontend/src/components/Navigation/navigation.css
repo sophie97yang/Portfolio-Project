@@ -74,6 +74,11 @@ nav {
     border-color:teal;
 }
 
+#viewEvents {
+    background-color:teal;
+    border-style:outset;
+    border-color:teal;
+}
 .user-dropdown {
     display:flex;
     flex-direction:row;

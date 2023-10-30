@@ -32,7 +32,7 @@ const EventForm = ({formType, groupInfo}) => {
         const errors = {};
         if (!name) errors.name='Name is required';
         if (description.length<30) errors.description='Description must be at least 30 characters long';
-        if (!type) errors.type='Group type is required';
+        if (!type) errors.type='Event type is required';
         if (parseInt(capacity)!==Number(capacity)) errors.capacity='Capacity must be an integer';
         if (capacity<=0) errors.capacityMin='Capacity must be greater than 0';
         if (!startDate) errors.startDate='Start Date is required';
