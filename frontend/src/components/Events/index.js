@@ -2,7 +2,7 @@ import { Link,NavLink,Redirect } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import {useEffect, useState} from 'react';
 import { allEvents} from "../../store/events";
-import {currentGroups} from '../../store/groups';
+import {currentGroups,groupEvents} from '../../store/groups';
 import noImage from '../GroupDetails/Image_not_available.png';
 import './EventsList.css';
 
@@ -98,35 +98,40 @@ const Events = () => {
 
 };
 
-export const CurrEvents = () => {
-    const dispatch = useDispatch();
-    const groups = useSelector(state => state.groups);
-    const [redirect,setRedirect] = useState(false);
+// export const CurrEvents = () => {
+//     const dispatch = useDispatch();
+//     const groups = useSelector(state => state.groups);
+//     const [redirect,setRedirect] = useState(false);
+//     const eventsList=[];
+
+//     useEffect(()=> {
+//         const currentGroups = async () => {
+//             const groups = await dispatch(currentGroups())
+//             .catch((e) => {
+//                 console.error(e.statusText);
+//                 setRedirect(true);
+//                 }
+//             );
+
+//             return groups;
+//         }
+
+//     },[dispatch]);
+
+//     if (redirect) return <Redirect to='/events'/>;
+
+//     if (!groups.current) return null;
+
+//     if (!groups.current.length) return (
+//         <div className='eventsPage'id='no-events'>
+//         <h2> You have no events 🧍🏻</h2>
+//         <NavLink to='/groups/current'><button id='start-new-group'>Click here for a list of your groups you can make an event for</button></NavLink>
+//         </div>
+//     )
 
 
 
-    useEffect(()=> {
-        dispatch(currentGroups())
-        .catch((e) => {
-            console.error(e.statusText);
-            setRedirect(true);
-            }
-        );
-    },[dispatch]);
-
-    if (redirect) return <Redirect to='/events'/>;
-
-    if (!groups.current) return null;
-
-    if (!groups.current.length) return (
-        <div className='eventsPage'id='no-events'>
-        <h2> You have no events 🧍🏻</h2>
-        <NavLink to='/groups/current'><button id='start-new-group'>Click here for a list of your groups you can make an event for</button></NavLink>
-        </div>
-    )
-
-    console.log(groups.current);
-
-}
+//    return <h2>hello</h2>
+// }
 
 export default Events;

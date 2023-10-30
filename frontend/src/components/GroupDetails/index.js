@@ -23,9 +23,8 @@ const GroupDetails = () => {
     useEffect(()=> {
         dispatch(fetchDetails(id))
         .catch(async res => {
-            console.log('response',res);
             const error = await res.json();
-            if (error.message==="Group couldn't be found") setRedirect(true);
+            if (error.message==="Group couldn't be found" || error.title.toLowerCase()==='validation error') setRedirect(true);
         });
     },[dispatch,id]);
 

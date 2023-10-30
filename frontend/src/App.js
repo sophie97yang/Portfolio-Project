@@ -35,7 +35,7 @@ function App() {
       </Route>
 
       <Route exact path='/groups/new'>
-        <CreateGroup />
+        <CreateGroup isLoaded={isLoaded}/>
       </Route>
 
       <Route exact path='/groups/current'>
@@ -43,7 +43,7 @@ function App() {
       </Route>
 
       <Route path='/groups/:id/events/new'>
-        <CreateEvent />
+        <CreateEvent isLoaded={isLoaded}/>
       </Route>
 
       <Route path='/groups/:id/edit'>
@@ -64,7 +64,7 @@ function App() {
       </Route>
 
       <Route path='/events/current'>
-        <CurrEvents />
+        <Events />
       </Route>
 
       <Route path='/events/:id/edit'>

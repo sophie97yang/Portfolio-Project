@@ -95,7 +95,15 @@ nav {
 }
 
 #profile-button .User {
-    width:70px;
+    width:80px;
     padding:15px;
     border-style:outset;
+}
+
+#dropdown-arrow-up-true, #dropdown-arrow-down-false{
+    padding-left:10px;
+
+}
+#dropdown-arrow-up-false, #dropdown-arrow-down-true {
+    display:none;
 }
