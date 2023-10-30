@@ -10,7 +10,7 @@ const Groups = () => {
 
     useEffect(()=> {
         dispatch(allGroups())
-        .catch(res => console.log(res))
+        .catch(res => res)
         ;
     },[dispatch]);
 
