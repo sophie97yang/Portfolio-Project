@@ -33,7 +33,7 @@ const GroupForm = ({formDetails,formType}) => {
         if (!checkUrl.includes('.jpg') && !checkUrl.includes('.png') && !checkUrl.includes('.jpeg')) errors.imageUrl = 'Image URL must end in .png, .jpg, or .jpeg';
         // eslint-disable-next-line
         const urlRegEx = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/g;
-        if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL'
+        if (!imageUrl.match(urlRegEx)) errors.url = 'Please enter a valid URL - All URLs must start with https:// or http://'
         }
 
         const indexOfSeparation = location.indexOf(',');
@@ -203,12 +203,12 @@ const GroupForm = ({formDetails,formType}) => {
         <label>Please add an image url for your group below:
             <input
                 type='url'
-                placeholder='Image Url (https://exampl.com/image.png)'
+                placeholder='Image Url (https://example.com/image.png)'
                 value={imageUrl}
                 onChange={e => setImageUrl(e.target.value)}
             />
             <div className='errors'>{validationErrors.imageUrl}</div>
-            <div className='errors'>{validationErrors.url? "Please enter a valid URL": ""}</div>
+            <div className='errors'>{validationErrors.url? "Please enter a valid URL - All URLs must start with https:// or http:/": ""}</div>
         </label>
 
         </div>
