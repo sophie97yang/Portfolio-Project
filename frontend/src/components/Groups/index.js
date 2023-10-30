@@ -75,8 +75,12 @@ export const CurrentGroups = () => {
     )
     return (
     < div className='groupsPage'>
-        <h2>My Groups</h2>
+        <div className='groups-nav'>
+           <h2>Manage Groups</h2>
+        </div>
+
         <div>
+            <span>Your Groups in MeetU</span>
             <ul className='groups-list'>
                 {groups.current.map((group) => (
                     <li key={group.id}>

@@ -59,6 +59,11 @@
 .event-details-right {
     padding-left:20px;
     flex:1;
+    max-width:325px;
+}
+
+.event-details-right>h3 {
+    word-wrap:break-word;
 }
 
 .events-list a {
@@ -85,4 +90,9 @@
 .eventsPage span {
     color:grey;
     padding-left:20px
+}
+#no-events {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }

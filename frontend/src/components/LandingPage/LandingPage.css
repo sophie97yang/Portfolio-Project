@@ -53,6 +53,8 @@
     border-color:teal;
     box-shadow:none;
     cursor:pointer;
+    height:55px;
+    width:120px;
 }
 
 .lp-section-four {

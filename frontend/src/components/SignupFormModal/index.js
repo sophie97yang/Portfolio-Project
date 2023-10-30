@@ -35,9 +35,10 @@ const SignUpFormModal = () => {
         if (!lastName.length) errorsForm.lastName = true;
         if (username.length<4) errorsForm.username = true;
         if (password.length<6) errorsForm.password = true;
+        if (!email.length) errorsForm.email = true;
         if (password!==confirm) errorsForm.confirm = 'Confirm password does not match password';
         setFormErrors(errorsForm);
-    },[firstName,lastName,username,password,confirm])
+    },[firstName,lastName,username,password,confirm,email])
 
     useEffect(() => {
         const handleEnter = (e)=> {
