@@ -2,3 +2,8 @@
 * {
     font-family: Graphik Meetup,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
 }
+
+.feature-coming-soon {
+    display:block;
+    padding-left:50px;
+}

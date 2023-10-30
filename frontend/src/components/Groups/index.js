@@ -75,7 +75,7 @@ export const CurrentGroups = () => {
     )
     return (
     < div className='groupsPage'>
-        <h2>Your Groups</h2>
+        <h2>My Groups</h2>
         <div>
             <ul className='groups-list'>
                 {groups.current.map((group) => (

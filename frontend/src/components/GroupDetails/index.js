@@ -23,9 +23,8 @@ const GroupDetails = () => {
     useEffect(()=> {
         dispatch(fetchDetails(id))
         .catch(async res => {
-            console.log('response',res);
             const error = await res.json();
-            if (error.message==="Group couldn't be found") setRedirect(true);
+            if (error.message==="Group couldn't be found" || error.title.toLowerCase()==='validation error') setRedirect(true);
         });
     },[dispatch,id]);
 
@@ -73,6 +72,7 @@ const GroupDetails = () => {
     });
 
     const handleJoinGroup = () => {
+        alert('Feature Coming Soon!');
         history.push(`/groups/${id}/join`);
     }
 
@@ -89,15 +89,15 @@ const GroupDetails = () => {
                     <p>{events.Events.length} {events.Events.length===1 ? 'Event' : 'Events' } · {group.private ? 'Private' : 'Public'}</p>
                     <p> Organized by {group.Organizer.firstName} {group.Organizer.lastName}</p>
                     <div className='gd-manage-buttons'>
-                    <NavLink to={`/groups/${id}/events/new`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Create An Event</button></NavLink>
-                    <NavLink to={`/groups/${id}/edit`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Update Group</button></NavLink>
+                    <NavLink to={`/groups/${id}/events/new`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Create Event</button></NavLink>
+                    <NavLink to={`/groups/${id}/edit`}> <button className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer' : 'gd-hidden'}>Update</button></NavLink>
                     <OpenModalButton
-                        buttonText="Delete Group"
+                        buttonText="Delete"
                         modalComponent={<DeleteModal id={id} deleteType='Group'
                         />}
                         className={(sessionUser && sessionUser.id===group.organizerId) ? 'gd-active-organizer gd-delete-button' : 'gd-hidden'}
                     />
-                    <button onClick={handleJoinGroup} className={(sessionUser && sessionUser.id!==group.organizerId) ? 'gd-active' : 'gd-hidden'}>Join This Group</button>
+                    <button onClick={handleJoinGroup} className={(sessionUser && sessionUser.id!==group.organizerId) ? 'gd-active' : 'gd-hidden'} id="join-group">Join This Group</button>
                     </div>
                 </div>
             </div>
@@ -119,8 +119,7 @@ const GroupDetails = () => {
                         </div>
                     <div className='ged-right'>
                         <div className='time'>
-                            <p>{date} · </p>
-                            <p> {time}</p>
+                            <p>{date}  ·  {time} </p>
                         </div>
                         <h4>{name}</h4>
                         <p>{Venue ? Venue.city : group.city}, {Venue ? Venue.state : group.state} </p>
@@ -135,7 +134,7 @@ const GroupDetails = () => {
 
             {pastEvents.length ? <h3>Past Events <span> ({pastEvents.length}) </span></h3> : <span></span>}
             {pastEvents.length ? pastEvents.map(({id,previewImage,name,date,time,Venue,description}) => (
-                 <div className='group-event-details'>
+                 <div className='group-event-details' key={id}>
                  <NavLink to={`/events/${id}`} key={id}>
                      <div className='ged-sec-one'>
                      <div id='ged-left'>
@@ -143,8 +142,7 @@ const GroupDetails = () => {
                         </div>
                      <div className='ged-right'>
                          <div className='time'>
-                             <p>{date} · </p>
-                             <p> {time}</p>
+                             <p>{date}  ·  {time}</p>
                          </div>
                          <h4>{name}</h4>
                          <p>{Venue ? Venue.city : group.city}, {Venue ? Venue.state : group.state} </p>

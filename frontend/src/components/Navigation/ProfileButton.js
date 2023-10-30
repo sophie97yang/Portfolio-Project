@@ -30,6 +30,12 @@ const ProfileButton = ({user}) => {
 
   }
 
+  const viewEvents = (e) => {
+    e.preventDefault();
+    setClicked(false);
+    history.push('/events/current');
+  }
+
   useEffect(() => {
     if (!clicked) return;
 
@@ -51,6 +57,8 @@ const ProfileButton = ({user}) => {
         onClick={handleClick}
         >
           <i className="fa-solid fa-user-circle fa-lg"/>
+          <i className="fa-solid fa-angle-up fa-lg" id={`dropdown-arrow-up-${clicked}`}></i>
+          <i className="fa-solid fa-angle-down fa-lg" id={`dropdown-arrow-down-${clicked}`}></i>
         </button>
 
         <div className={`${clicked} profileMenu`} ref={divRef}>
@@ -62,7 +70,14 @@ const ProfileButton = ({user}) => {
           className="submitButton"
           onClick={viewGroups}
           id='viewGroups'
-          > View Your Groups </button>
+          > View My Groups </button>
+
+        <button
+          className="submitButton"
+          onClick={viewEvents}
+          id='viewEvents'
+          > View My Events </button>
+
           <button
           onClick={logout}
           className="submitButton"

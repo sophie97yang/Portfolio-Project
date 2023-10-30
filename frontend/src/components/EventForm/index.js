@@ -1,15 +1,18 @@
 import { useEffect,useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
-import {useHistory,NavLink} from 'react-router-dom';
+import {useHistory,NavLink, Redirect} from 'react-router-dom';
 import { fetchDetails } from "../../store/groups";
 import { createEvent } from "../../store/events";
 import './EventForm.css';
 
-const EventForm = ({formType, groupInfo}) => {
+const EventForm = ({formType, groupInfo, isLoaded}) => {
     const {id} = groupInfo;
     const dispatch = useDispatch();
     const history = useHistory();
     const group = useSelector(state => state.groups.group);
+    const sessionUser = useSelector(state => state.session.user);
+    const [redirect,setRedirect] = useState(false);
+    const [timeToRedirect,setTime] = useState(false);
     const [name,setName] = useState('');
     const [type,setType] = useState('');
     const [price,setPrice] = useState(0);
@@ -20,9 +23,25 @@ const EventForm = ({formType, groupInfo}) => {
     const [description,setDescription] = useState('');
     const [validationErrors,setValidationErrors] = useState({});
 
-    useEffect(()=>{
-        dispatch(fetchDetails(id))
-    },[dispatch,id]);
+    useEffect(()=> {
+        const groupDetails = async () => {
+           await dispatch(fetchDetails(id));
+        }
+
+      groupDetails()
+      .then(()=>setTime(isLoaded&&true))
+      .catch(() => setRedirect(true));
+
+
+    },[dispatch,id,isLoaded])
+
+    useEffect(()=> {
+        if (timeToRedirect && (!sessionUser || sessionUser.id!==group?.organizerId)) setRedirect(true);
+        else setRedirect(false);
+    },[sessionUser,group,timeToRedirect])
+
+
+    if (redirect===true) return <Redirect to='/'/>
 
     if (!group) return null;
 
@@ -32,7 +51,7 @@ const EventForm = ({formType, groupInfo}) => {
         const errors = {};
         if (!name) errors.name='Name is required';
         if (description.length<30) errors.description='Description must be at least 30 characters long';
-        if (!type) errors.type='Group type is required';
+        if (!type) errors.type='Event type is required';
         if (parseInt(capacity)!==Number(capacity)) errors.capacity='Capacity must be an integer';
         if (capacity<=0) errors.capacityMin='Capacity must be greater than 0';
         if (!startDate) errors.startDate='Start Date is required';

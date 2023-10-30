@@ -145,7 +145,8 @@
 .gd-manage-buttons .gd-active-organizer {
     width:100px;
     margin-top:10px;
-    margin-right:20px
+    margin-right:20px;
+    height:55px;
 }
 
 .gd-delete-button {
@@ -155,5 +156,10 @@
 #gd-organizer {
     color:grey;
     font-size:13px;
+
+}
+
+#join-group {
+    width:100px;
 
 }

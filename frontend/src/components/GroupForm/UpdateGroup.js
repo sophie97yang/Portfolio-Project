@@ -5,22 +5,30 @@ import { fetchDetails } from "../../store/groups";
 import { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
-const UpdateGroup = () => {
+const UpdateGroup = ({isLoaded}) => {
     const {id} = useParams();
     const group = useSelector(state => state.groups.group);
     const sessionUser = useSelector(state => state.session.user);
     const [redirect,setRedirect] = useState(false);
+    const [timeToRedirect,setTime] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(()=> {
-        if (!sessionUser || sessionUser.id!==group.organizerId) setRedirect(true);
-    },[sessionUser,group])
+        const groupDetails = async () => {
+           await dispatch(fetchDetails(id));
+        }
+
+      groupDetails()
+      .then(()=>setTime(isLoaded&&true))
+      .catch(() => setRedirect(true));
+
+
+    },[dispatch,id,isLoaded])
 
     useEffect(()=> {
-        dispatch(fetchDetails(id))
-        .catch(() => setRedirect(true))
-    },[dispatch,id])
-
+        if (timeToRedirect && (!sessionUser || sessionUser.id!==group?.organizerId)) setRedirect(true);
+        else setRedirect(false);
+    },[sessionUser,group,timeToRedirect])
 
 
     if (redirect===true) return <Redirect to='/'/>
