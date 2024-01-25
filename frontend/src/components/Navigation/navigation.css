@@ -107,3 +107,9 @@ nav {
 #dropdown-arrow-up-false, #dropdown-arrow-down-true {
     display:none;
 }
+
+@media screen and (max-width:600px) {
+    .user-dropdown>a {
+        display:none;
+    }
+}
