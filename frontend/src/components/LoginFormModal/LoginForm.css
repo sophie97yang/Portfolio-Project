@@ -81,3 +81,19 @@ input {
 .submitButton:disabled {
     cursor:default;
 }
+
+@media screen and (max-width:600px) {
+    .loginForm {
+        width:100%;
+    }
+    .form-login {
+        padding:10px;
+    }
+    .userInput {
+        width:95%
+    }
+    .form-login > .submitButton {
+        width:95%
+    }
+
+}

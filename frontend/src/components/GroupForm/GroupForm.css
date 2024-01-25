@@ -78,3 +78,13 @@
     padding:10px;
     border-style: outset;
 }
+
+@media screen and (max-width:600px) {
+    #group-form {
+        width:100%;
+    }
+    #group-form .submitButton {
+        width:80%;
+        margin:10px auto;
+    }
+}

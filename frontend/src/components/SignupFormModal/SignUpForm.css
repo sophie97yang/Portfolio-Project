@@ -40,3 +40,16 @@ button:disabled {
     font-weight:bold;
     cursor:pointer;
 }
+
+@media screen and (max-width:600px) {
+    .signUpForm {
+        width:100%
+    }
+    .form-signup {
+        padding:20px;
+    }
+    .form-signup >.submitButton {
+        width:95%
+    }
+
+}

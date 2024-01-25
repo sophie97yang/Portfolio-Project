@@ -72,3 +72,12 @@
     margin-left:10px;
     width:285px;
 }
+
+@media screen and (max-width:600px) {
+    #event-form {
+        width:100%
+    }
+    #event-form .submitButton {
+        width:80%;
+    }
+}
