@@ -94,3 +94,40 @@
 .hidden-join {
     display:none;
 }
+
+@media screen and (max-width:600px) {
+    #landing-page {
+        width:80%
+    }
+    #lp-sec-one-text h1 {
+        width:100%;
+        text-align:center;
+       font-size:30px;
+    }
+    #lp-sec-one-text p,.lp-section-two p {
+        width:100%;
+        text-align:justify;
+    }
+    .lp-section-one,.lp-section-two {
+        width:100%;
+    }
+    #lp-sec-one-text {
+        width:95%;
+        margin:0px auto;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+    }
+    .lp-section-one {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+    }
+    .lp-section-one img {
+        width:70%
+    }
+    .lp-section-three {
+        width:100%;
+        flex-direction:column;
+    }
+}
