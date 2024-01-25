@@ -176,3 +176,45 @@
     width:100px;
 
 }
+
+@media screen and (max-width:600px) {
+    .group-details-page {
+        width:100%;
+        padding:5px 20px;
+    }
+    .gd-section-one {
+        flex-direction:column;
+        align-items:center;
+    }
+    .gd-section-one > div {
+        width:100%;
+    }
+    .gd-section-one img {
+        width:90%;
+    }
+    .gd-manage-buttons {
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .gd-manage-buttons .gd-active-organizer{
+        width:90%
+    }
+    .gd-manage-buttons>a {
+        width:100%;
+    }
+    #join-group {
+        width:90%;
+    }
+
+    .group-event-details {
+        width:100%;
+    }
+    .ged-sec-one {
+        flex-direction:column;
+    }
+
+    .ged-sec-one img {
+        object-fit: cover;
+    }
+
+}
