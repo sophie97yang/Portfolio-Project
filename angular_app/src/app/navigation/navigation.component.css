@@ -1,0 +1,115 @@
+.false {
+    display:none;
+}
+
+.true {
+    position:absolute;
+    right:40px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    text-align:center;
+    border:1px solid rgb(230 230 230/1);
+    border-radius:0.8em;
+    padding: 10px 50px;
+    margin-top:10px;
+    background-color:white;
+    box-shadow:3px;
+
+}
+
+li {
+    list-style-type:none;
+}
+
+nav >ul {
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    padding: 20px 50px;
+    align-items:center;
+    margin-bottom:0px;
+
+}
+
+.NavLinks {
+    display:flex;
+    flex-direction:row;
+}
+
+.niceTo {
+    font-size:small;
+    font-style: italic;
+    margin:0px;
+}
+
+.logo img {
+    width:7em;
+}
+
+nav {
+    border-bottom:1px solid rgb(230 230 230/1);
+}
+
+.NavLinks button {
+    margin:0 10px;
+    background-color:#e32359;
+    border-color: #e32359;
+    border-radius:8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+    /* background-color:white;
+    color:black;
+    border:none; */
+}
+
+.userInfo {
+    border-bottom:1px solid rgb(206, 206, 206);
+}
+
+#viewGroups {
+    background-color:teal;
+    border-style:outset;
+    border-color:teal;
+}
+
+#viewEvents {
+    background-color:teal;
+    border-style:outset;
+    border-color:teal;
+}
+.user-dropdown {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.user-dropdown a {
+    text-decoration:none;
+    color:teal;
+}
+
+.user-dropdown a:hover {
+    font-weight:bold;
+}
+
+#profile-button .User {
+    width:80px;
+    padding:15px;
+    border-style:outset;
+}
+
+#dropdown-arrow-up-true, #dropdown-arrow-down-false{
+    padding-left:10px;
+
+}
+#dropdown-arrow-up-false, #dropdown-arrow-down-true {
+    display:none;
+}
+
+@media screen and (max-width:600px) {
+    .user-dropdown>a {
+        display:none;
+    }
+}
