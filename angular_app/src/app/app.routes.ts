@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { LandingComponent } from './landing/landing.component';
-import { GroupsComponent } from './groups/groups.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { GroupsComponent } from './components/groups/groups.component';
 
 export const routes: Routes = [
     {

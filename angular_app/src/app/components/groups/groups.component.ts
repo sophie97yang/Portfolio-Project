@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Group } from './groups';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-groups',
@@ -8,5 +10,10 @@ import { Component } from '@angular/core';
   styleUrl: './groups.component.css'
 })
 export class GroupsComponent {
+  groups!:Observable<Group[]>
+
+  ngOnInit() {
+
+  }
 
 }

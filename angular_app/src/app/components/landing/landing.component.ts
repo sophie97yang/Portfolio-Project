@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { User } from '../user';
+import { RouterModule } from '@angular/router';
+import { User } from '../../user';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css'
 })
