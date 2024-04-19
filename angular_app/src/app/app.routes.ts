@@ -6,11 +6,11 @@ export const routes: Routes = [
     {
         path:'',
         component:LandingComponent,
-        title:'Home Page'
+        title:'Meet U | Find Local Groups, Events, and Activities Near You'
     },
     {
         path:'groups',
         component: GroupsComponent,
-        title: 'Groups'
+        title: 'Meet U | All Groups'
     }
 ];

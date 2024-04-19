@@ -13,5 +13,8 @@ export class LandingComponent {
   disabled: string = "lp-start-true"
   hidden: string = 'active-join'
 
+  onClick() {
+    console.log('join!')
+  }
 
 }
